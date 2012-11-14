@@ -1,79 +1,75 @@
 package Domain;
 
-import java.sql.Date;
-
 public class Diagram {
-	private int diagramId;
-	private String diagramName;
-	private Date createdTime;
-	private boolean inEdition;
-	private int owerId;
-	private int projectId = 1; // default;
-	private String ecoreFilePath;
-	private String imageFilePath;
 
-	public int getDiagramId() {
-		return diagramId;
-	}
+    private int diagramId;
+    private String diagramName;
+    private String createdTime;
+    private boolean inEdition;
+    private int owerId;
+    private int projectId = 1; // default;
+    private String ecoreFilePath;
 
-	public void setDiagramId(int diagramId) {
-		this.diagramId = diagramId;
-	}
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
 
-	public String getDiagramName() {
-		return diagramName;
-	}
+    public String getCreatedTime() {
+        return createdTime;
+    }
 
-	public void setDiagramName(String diagramName) {
-		this.diagramName = diagramName;
-	}
+    public int getDiagramId() {
+        return diagramId;
+    }
 
-	public Date getCreatedTime() {
-		return createdTime;
-	}
+    public void setDiagramId(int diagramId) {
+        this.diagramId = diagramId;
+    }
 
-	public void setCreatedTime(Date createdTime) {
-		this.createdTime = createdTime;
-	}
+    public String getDiagramName() {
+        return diagramName;
+    }
 
-	public boolean isInEdition() {
-		return inEdition;
-	}
+    public void setDiagramName(String diagramName) {
+        this.diagramName = diagramName;
+    }
 
-	public void setInEdition(boolean inEdition) {
-		this.inEdition = inEdition;
-	}
+    public boolean isInEdition() {
+        return inEdition;
+    }
 
-	public int getOwerId() {
-		return owerId;
-	}
+    public void setInEdition(boolean inEdition) {
+        this.inEdition = inEdition;
+    }
 
-	public void setOwerId(int owerId) {
-		this.owerId = owerId;
-	}
+    public int getOwerId() {
+        return owerId;
+    }
 
-	public int getProjectId() {
-		return projectId;
-	}
+    public void setOwerId(int owerId) {
+        this.owerId = owerId;
+    }
 
-	public void setProjectId(int projectId) {
-		this.projectId = projectId;
-	}
+    public int getProjectId() {
+        return projectId;
+    }
 
-	public String getEcoreFilePath() {
-		return ecoreFilePath;
-	}
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
 
-	public void setEcoreFilePath(String ecoreFilePath) {
-		this.ecoreFilePath = ecoreFilePath;
-	}
+    public String getEcoreFilePath() {
+        return ecoreFilePath;
+    }
 
-	public String getImageFilePath() {
-		return imageFilePath;
-	}
-
-	public void setImageFilePath(String imageFilePath) {
-		this.imageFilePath = imageFilePath;
-	}
-
+    public void setEcoreFilePath(String ecoreFilePath) {
+        this.ecoreFilePath = ecoreFilePath;
+    }
+//	public String getImageFilePath() {
+//		return imageFilePath;
+//	}
+//
+//	public void setImageFilePath(String imageFilePath) {
+//		this.imageFilePath = imageFilePath;
+//	}
 }

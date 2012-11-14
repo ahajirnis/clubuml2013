@@ -3,40 +3,50 @@ package Domain;
 import java.sql.Date;
 
 public class Comment {
-	private int commentId;
-	private String content;
-	private Date commentTime;
-	private int diagramId;
 
-	public int getCommentId() {
-		return commentId;
-	}
+    private int commentId;
+    private String content;
+    private String commentTime;
+    private int diagramId;
+    private int userId;
 
-	public void setCommentId(int commentId) {
-		this.commentId = commentId;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public int getCommentId() {
+        return commentId;
+    }
 
-	public Date getCommentTime() {
-		return commentTime;
-	}
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
+    }
 
-	public void setCommentTime(Date commentTime) {
-		this.commentTime = commentTime;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public int getDiagramId() {
-		return diagramId;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setDiagramId(int diagramId) {
-		this.diagramId = diagramId;
-	}
+    public String getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
+    }
+
+    public int getDiagramId() {
+        return diagramId;
+    }
+
+    public void setDiagramId(int diagramId) {
+        this.diagramId = diagramId;
+    }
 }
