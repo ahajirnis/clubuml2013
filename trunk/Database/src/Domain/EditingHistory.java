@@ -9,11 +9,9 @@ public class EditingHistory {
 	private int userId;
 	private String EditingTime;
 	
-	public EditingHistory(int diagramId, int userId,
-			String editingTime) { 
+	public EditingHistory(int diagramId, int userId) { 
 		this.diagramId = diagramId;
 		this.userId = userId;
-		EditingTime = editingTime;
 	}
 	public EditingHistory(int editingHistoryId, int diagramId, int userId,
 			String editingTime) { 
