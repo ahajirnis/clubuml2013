@@ -1,5 +1,8 @@
 package Domain;
-
+/**
+ * @author
+ * Joanne Zhuo
+ */
 public class EditingHistory {
 	private int editingHistoryId;
 	private int diagramId;
