@@ -1,5 +1,8 @@
 package Domain;
-
+/**
+ * @author
+ * Joanne Zhuo
+ */
 public class User {
 
 	private int userId;
@@ -16,25 +19,22 @@ public class User {
 	}
 	
 	public User( String userName, String password, String email,
-			String securityQuestion, String securityAnswer, int projectId) { 
+			String securityQuestion, String securityAnswer) { 
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.securityQuestion = securityQuestion;
-		this.securityAnswer = securityAnswer;
-		this.projectId = projectId;
+		this.securityAnswer = securityAnswer; 
 
 	}
 	public User(int userId, String userName, String password, String email,
-			String securityQuestion, String securityAnswer, int projectId) {
+			String securityQuestion, String securityAnswer) {
 		this.userId = userId;
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.securityQuestion = securityQuestion;
-		this.securityAnswer = securityAnswer;
-		this.projectId = projectId;
-
+		this.securityAnswer = securityAnswer;  
 	}
 
 	public String getSecurityQuestion() {

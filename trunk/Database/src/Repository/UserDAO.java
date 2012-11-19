@@ -1,10 +1,14 @@
 package Repository;
-
+/**
+ * @author
+ * Joanne Zhuo
+ */
  
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import Domain.User;
 
@@ -12,11 +16,14 @@ public class UserDAO {
 	
 	/** Add an user into DB */
 	public static boolean addUser (User user) {
-		ResultSet rs;
+		ResultSet rs; 
+		// set projectId using the only one project in DB
+		user.setProjectId( ProjectDAO.getProjectId());
+		
 		try {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(
-			"INSERT into user(userName, password, email, project_Id, securityQuestion, securityAnswer) VALUES(?,?,?,?,?,?);");
+			"INSERT into user(userName, password, email, project_Id, securityQuestion, securityAnswer) VALUES(?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getEmail());
@@ -39,9 +46,7 @@ public class UserDAO {
 		} 
 		catch (SQLException e) {
 			throw new IllegalArgumentException (e.getMessage(), e);
-		}
-		 
-
+		} 
 		return true;
 	}
 	
@@ -62,8 +67,8 @@ public class UserDAO {
 				return null;
 			}
 			
-			User user = new User(rs.getInt("user_Id"), username, password, rs.getString("email"), rs.getString("securityQuestion"), rs.getString("securityAnswer"),rs.getInt("project_Id"));
-			System.out.println("User Id"+rs.getInt("user_Id") );
+			User user = new User(rs.getInt("user_Id"), username, password, rs.getString("email"), rs.getString("securityQuestion"), rs.getString("securityAnswer"));
+			 
 			rs.close();
 			pstmt.close();
 		    conn.close();
@@ -78,6 +83,8 @@ public class UserDAO {
 	/** Remove a user from DB */
 	public static boolean removeUser(User user) 
 	{
+		if(user == null)
+			return false;
 		try {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(

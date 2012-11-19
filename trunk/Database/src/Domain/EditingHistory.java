@@ -1,13 +1,24 @@
 package Domain;
 
-import java.sql.Date;
-
 public class EditingHistory {
 	private int editingHistoryId;
 	private int diagramId;
 	private int userId;
-	private Date EditingTime;
-
+	private String EditingTime;
+	
+	public EditingHistory(int diagramId, int userId,
+			String editingTime) { 
+		this.diagramId = diagramId;
+		this.userId = userId;
+		EditingTime = editingTime;
+	}
+	public EditingHistory(int editingHistoryId, int diagramId, int userId,
+			String editingTime) { 
+		this.editingHistoryId = editingHistoryId;
+		this.diagramId = diagramId;
+		this.userId = userId;
+		EditingTime = editingTime;
+	}
 	public int getEditingHistoryId() {
 		return editingHistoryId;
 	}
@@ -32,11 +43,11 @@ public class EditingHistory {
 		this.userId = userId;
 	}
 
-	public Date getEditingTime() {
+	public String getEditingTime() {
 		return EditingTime;
 	}
 
-	public void setEditingTime(Date editingTime) {
+	public void setEditingTime(String editingTime) {
 		EditingTime = editingTime;
 	}
 }

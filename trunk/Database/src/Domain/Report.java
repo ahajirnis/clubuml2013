@@ -1,5 +1,8 @@
 package Domain;
-
+/**
+ * @author
+ * Joanne Zhuo
+ */
 public class Report {
 
     private int reportId;

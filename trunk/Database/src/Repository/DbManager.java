@@ -1,5 +1,8 @@
  package Repository;
-
+ /**
+  * @author
+  * Joanne Zhuo
+  */
 	import java.io.File;
 	import java.io.FileReader;
 	import java.sql.Connection;
@@ -116,6 +119,9 @@
 				return false;
 			}
 		}
-
+		public static void main(String arg[]) {
+			DbManager con = new DbManager();
+			System.out.println("Connection : " + con.connect());
+		}
 	}
 

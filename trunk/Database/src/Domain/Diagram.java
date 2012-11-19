@@ -1,5 +1,8 @@
 package Domain;
-
+/**
+ * @author
+ * Joanne Zhuo
+ */
 public class Diagram {
 
     private int diagramId;
@@ -7,8 +10,7 @@ public class Diagram {
     private String createdTime;
     private boolean inEdition;
     private int owerId;
-    private int projectId = 1; // default;
-    private String ecoreFilePath;
+    private String filePath;
 
     public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
@@ -50,26 +52,11 @@ public class Diagram {
         this.owerId = owerId;
     }
 
-    public int getProjectId() {
-        return projectId;
-    }
+	public String getFilePath() {
+		return filePath;
+	}
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getEcoreFilePath() {
-        return ecoreFilePath;
-    }
-
-    public void setEcoreFilePath(String ecoreFilePath) {
-        this.ecoreFilePath = ecoreFilePath;
-    }
-//	public String getImageFilePath() {
-//		return imageFilePath;
-//	}
-//
-//	public void setImageFilePath(String imageFilePath) {
-//		this.imageFilePath = imageFilePath;
-//	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
 }

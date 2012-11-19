@@ -1,5 +1,9 @@
 package Domain;
 
+/**
+ * @author
+ * Joanne Zhuo
+ */
 import java.sql.Date;
 
 public class Comment {
