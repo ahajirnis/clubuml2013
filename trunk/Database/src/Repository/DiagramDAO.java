@@ -22,15 +22,14 @@ public class DiagramDAO {
         ResultSet rs;
         try {
             Connection conn = DbManager.getConnection();
-            String sql = "INSERT INTO diagram (diagramName , createdTime , inEdition , project_Id , owner_Id , EcoreFilePath) VALUES (?,?,?,?,?,?);";
+            String sql = "INSERT INTO diagram (diagramName , createdTime , inEdition , owner_Id , filePath) VALUES (?,?,?,?,?);";
             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             pstmt.setString(1, diagram.getDiagramName());
             pstmt.setString(2, diagram.getCreatedTime());
             pstmt.setBoolean(3, diagram.isInEdition());
-            pstmt.setInt(4, diagram.getProjectId());
             pstmt.setInt(5, diagram.getOwerId());
-            pstmt.setString(6, diagram.getEcoreFilePath());
+            pstmt.setString(6, diagram.getFilePath());
 
             pstmt.executeUpdate();
 
@@ -69,9 +68,8 @@ public class DiagramDAO {
                 diagram.setDiagramName(rs.getString("diagramName"));
                 diagram.setCreatedTime(rs.getString("createdTime"));
                 diagram.setInEdition(rs.getBoolean("inEdition"));
-                diagram.setProjectId(rs.getInt("project_Id"));
                 diagram.setOwerId(rs.getInt("owner_Id"));
-                diagram.setEcoreFilePath("EcoreFilePath");
+                diagram.setFilePath("filePath");
                 searchResult.add(diagram);
             }
 
@@ -104,9 +102,8 @@ public class DiagramDAO {
             dia.setDiagramName(rs.getString("diagramName"));
             dia.setCreatedTime(rs.getString("createdTime"));
             dia.setInEdition(rs.getBoolean("inEdition"));
-            dia.setProjectId(rs.getInt("project_Id"));
             dia.setOwerId(rs.getInt("owner_Id"));
-            dia.setEcoreFilePath(rs.getString("EcoreFilePath"));
+            dia.setFilePath(rs.getString("filePath"));
             
             pstmt.close();
             conn.close();
@@ -120,13 +117,13 @@ public class DiagramDAO {
     public static boolean updateDiagram(Diagram diagram) {
         try {
             Connection conn = DbManager.getConnection();
-            String sql = "UPDATE diagram SET diagramName = ? , createdTime = ? , inEdition = ? , EcoreFilePath = ? WHERE diagram_Id = ?;";
+            String sql = "UPDATE diagram SET diagramName = ? , createdTime = ? , inEdition = ? , filePath = ? WHERE diagram_Id = ?;";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             
             pstmt.setString(1, diagram.getDiagramName());
             pstmt.setString(2, diagram.getCreatedTime());
             pstmt.setBoolean(3, diagram.isInEdition());
-            pstmt.setString(4, diagram.getEcoreFilePath());
+            pstmt.setString(4, diagram.getFilePath());
             pstmt.setInt(5, diagram.getDiagramId());
             
             pstmt.executeUpdate();
