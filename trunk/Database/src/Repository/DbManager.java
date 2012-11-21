@@ -119,9 +119,6 @@
 				return false;
 			}
 		}
-		public static void main(String arg[]) {
-			DbManager con = new DbManager();
-			System.out.println("Connection : " + con.connect());
-		}
+	
 	}
 
