@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>umlClub</title>
+        <title><font color="#61210B">ClubUML</font></title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link href="style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/cufon-yui.js"></script>
@@ -22,7 +22,7 @@
   <div class="header">
     <div class="header_resize">
       <div class="logo">
-        <h1><a href="#">Welcome to ClubUML</a></h1>
+                             <p><a href="#">Welcome to ClubUML</a></p>
       </div>
         <div class="clr"></div>
     </div>
@@ -60,11 +60,11 @@
     <div class="content_resize">
       <div class="mainbar">
         <div class="article">
-          <h2>About ClubUML</h2>
+          <p><font color="#61210B">About ClubUML</font></p>
           <div class="clr"></div>
-          <p><span class="date">October 23, 2012</span> &nbsp;|&nbsp;</p>
+          <p><span class="date"><font color="#61210B">October 23, 2012</font></span> &nbsp;|&nbsp;</p>
           <img src="images/N0-UML-cluttered.jpg" width="263" height="146" alt="" class="fl" />
-          <p><font color="black"><br />
+          <p><font color="#61210B"><br />
         A UML tool or UML modeling tool is a software application that supports some or all of the notation and semantics associated with the Unified Modeling Language (UML), which is the industry standard general purpose modeling language for software engineering. </font></p>
           <p class="spec"><a href="#" class="rm">Read more</a> <a href="#" class="com">Comments (3)</a></p>
         </div>
@@ -73,8 +73,8 @@
           <div class="clr"></div>
           <p><span class="date">October 23, 2012</span> &nbsp;|&nbsp;</p>
           <img src="images/img2.jpg" width="263" height="146" alt="" class="fl" />
-          <p><font color="black">ClubUML is the leading open source UML modeling tool and includes support for all standard UML 1.4 diagrams. It runs on any Java platform and is available in ten languages. See the feature list for more details.</font></p>
-          <p><font color="black">ClubUML 0.26 and 0.26.2 were downloaded over 80,000 times and are in use all over the world. See the download statistics.</font></p>
+          <p><font color="black">ClubUML is the open source UML modeling tool and includes support for all standard UML  diagrams. It runs on any Java platform and is available in ten languages. See the feature list for more details.</font></p>
+          <p><font color="black">ClubUML tool can be used to upload UML diagram display this diagrams and compare between two UML diagrams</font></p>
 <p class="spec"><a href="#" class="rm">Read more</a> <a href="#" class="com">Comments (7)</a></p>
         </div>
       </div>
@@ -85,7 +85,7 @@
           <ul class="sb_menu">
             <li>Services</li>
             <li>History of the ClubUML</li>
-            <li>Userss</li>
+            <li>Users</li>
             <li>Specialities</li>
             <li></li>
             <li></li>
@@ -95,8 +95,7 @@
           <h2 class="star">Founders</h2>
           <div class="clr"></div>
           <ul class="ex_menu">
-            <li><font color="black">In September 2012, some students  announced that they were  ceasing work on BOUML other than bug fixes due to "copyright violations and mismanagement from wikipedia administrators".
-The . several patches were released after the announcement, the last being ClubUML 4.23 ultimate patch 7 in October 2012..</font></li>
+            <li><font color="black">By using this tool , user can comments on other UML diagrams and all the uploaded diagrams and related comments will be stored into the CulbUML database </font></li>
           </ul>
         </div>
       </div>
@@ -119,7 +118,7 @@ The . several patches were released after the announcement, the last being ClubU
   </div>
   <div class="footer">
     <div class="footer_resize">
-      <p class="lf">&copy; Copyright Ruma &amp; Tong</p>
+      <p class="lf">&copy; Copyright Ruma  Nayak </p>
       <p class="rf">&nbsp;</p>
       <div class="clr"></div>
     </div>

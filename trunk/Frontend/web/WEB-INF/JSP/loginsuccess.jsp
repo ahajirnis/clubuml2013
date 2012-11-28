@@ -8,19 +8,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+         <title><font color="#61210B">ClubUML</font></title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link href="style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/cufon-yui.js"></script>
         <script type="text/javascript" src="js/arial.js"></script>
         <script type="text/javascript" src="js/cuf_run.js"></script>
+        <script type="text/javascript" src = "js/register.js"></script>
     </head>
     <body>
-        <div class="main">
-            <div class="header">
-                <div class="header_resize">
-                    <div class="logo">
-                        
-                    </div>
+    <div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+                             <p><a href="#">Welcome to ClubUML</a></p>
+      </div>
+        <div class="clr"></div>
+    </div>
+  </div>
+  <div class="hbg">
                     <head> <title>login success</title> 
                         <style type="text/css"> 
                             <!--   #navbar ul 
@@ -86,9 +92,7 @@
                             <p><font color="black>"<span class="date">October 23, 2012</span> &nbsp;|&nbsp;</font></p>
                             <img src="images/Edraw_UML_Diagram-136763.jpg" width="263" height="146" alt="" class="fl" />
                             <p><font color="black"> <br />
-                                    ClubUML is the leading open source UML modeling tool and includes support for all standard UML 1.4 diagrams. It runs on any Java platform and is available in ten languages. See the feature list for more details.
-                                    ClubUML 0.26 and 0.26.2 were downloaded over 80,000 times and are in use all over the world. See the download statistics.
-                                    ClubUML is distributed under the  Public License (PL) 1.0.
+                                    ClubUML is a web application which allows users to register and store his/her information to the ClubUML database. Upload more than one diagram. Display this diagram user can compare between two diagrams. Also add comments on the diagram. In this way so many user can improve their uml model for any project. Basically this tool is designed for Software engineers. And this tool can be used in any software engineering project
                                 </font></p>
                             <p class="spec"><a href="#" class="rm">Read more</a> <a href="#" class="com">Comments (3)</a></p>
                         </div>

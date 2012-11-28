@@ -14,7 +14,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>umlClub</title>
+        <title><font color="#61210B">ClubUML</font></title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link href="style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="js/cufon-yui.js"></script>

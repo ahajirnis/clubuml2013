@@ -15,37 +15,28 @@
 #diagram {
 	display:block;
 	float:left;
-	width:70%;
-	height:450px;
-	border-style: solid;
+	width:50%;
+	height:100%;
 	
 	
 }
-#right {
+#comment {
 	display:block;
 	float:left;
-	height:450px;
-	width:28%;
-	border-style: solid;	
-	
+	height:100%;
+	width:23%;
+        background-color:lightcyan;
 }
 
-#comment {
+#list {
         display:block;
 	float:left;
-        width:70%;
-	height:100px;
-	border-style: solid;
+        width:25%;
+	height:100%;
         
 }
 
-#compare {
-        display:block;
-	float:left;
-        width:28%;
-	height:100px;
-	border-style: solid;
-}
+
 
 #show_diagram{
     font-size: 50px;

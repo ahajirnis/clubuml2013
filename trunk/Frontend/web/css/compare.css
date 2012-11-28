@@ -1,43 +1,37 @@
 
 
-.d1{
+
+
+.file1{
 
 display:block;
 float:left;
-width:35%;
-height:500px;
+width:46%;
+height:650px;
 border:double;
-border-color:#000000;
+border-color: #000;
+background-color:lightcyan;
 
 
 }
-.compareframe{
 
-background-color:#CCFFFF;
-display:block;
-float:left;
-width:28%;
-height:500px;
-
-
-
-}
-.d2{
+.file2{
 
 display:block;
-float:left;
-width:35%;
-height:500px;
+float:right;
+width:46%;
+height:650px;
 border:double;
-border-color:#000000;
+border-color: #000;
+background-color:lightcyan;
 
 
 }
-.d3{
+.compare{
 
 display:block;
 float:left;
-width:100%;
+width:7%;
 height:100px;
 
 
