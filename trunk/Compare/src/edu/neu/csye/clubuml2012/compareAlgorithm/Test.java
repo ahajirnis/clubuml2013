@@ -12,8 +12,10 @@ public class Test {
 	public static void main(String[] args) throws Exception
 	{
 		//Change the path as per thr file location
-		final String firstDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\DefaultName1.ecore";
-		final String secondDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\DefaultName.ecore";
+		//final String firstDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\DefaultName1.ecore";
+		//final String secondDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\DefaultName.ecore";
+		final String firstDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\Test1.ecore";
+		final String secondDiagram = "C:\\eclipse-jee-juno-win32\\Workspace\\ParsingProject-v2\\Test2.ecore";
 		final String reportPath = "C:\\reports\\";
 		try {
 			CompareDiagrams compareDigs = new CompareDiagrams(firstDiagram, secondDiagram, reportPath);

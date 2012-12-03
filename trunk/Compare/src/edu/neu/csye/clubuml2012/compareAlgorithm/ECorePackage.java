@@ -17,6 +17,7 @@ public class ECorePackage {
 	public ECorePackage(EList<EObject> diagram) {
 		if (diagram.get(0) instanceof EPackage) {
 			ePackage = (EPackage)diagram.get(0);
+
 			name = ePackage.getName().toString();
 		}
 	}

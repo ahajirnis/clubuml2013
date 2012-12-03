@@ -65,8 +65,18 @@ public class Algo {
 			reportUnmatchedClasses();
 
 		} else {
-			report.addToReport("Error! Terminating comparison. ");
+			report.addToReport("Checking individual classes due to absence of packages");
+			for (int i = 0; i < firstModel.size(); i++) {
+				EClass firstClass = (EClass)firstModel.get(i);
+				for (int j = 0; j < secondModel.size(); j++) {
+					EClass secondClass = (EClass)secondModel.get(j);
+					compareUnPackedClasses(firstClass, secondClass);
+				}
+			}
+			// Reporting unmatch classes
+			reportUnmatchedClasses();
 		}
+
 		// Close the report
 		report.finalize();
 
@@ -102,7 +112,7 @@ public class Algo {
 				return false;
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		} finally {
 			// report.terminateRoutine("Packages");
 		}
@@ -119,13 +129,11 @@ public class Algo {
 			if (secondModel.get(0) instanceof EPackage) {
 
 			} else {
-				report.addToReport(secondModel.toString()
-						+ " is corrupted, Please upload again");
+				report.addToReport("Could not find packages in second model");
 				return false;
 			}
 		} else {
-			report.addToReport(firstModel.toString()
-					+ " is corrupted, Please upload again");
+			report.addToReport("Could not find packages in first model");
 			return false;
 		}
 		return true;
@@ -162,6 +170,43 @@ public class Algo {
 		return Constants.NOT_MATCH;
 	}
 
+	private void compareUnPackedClasses(EClass class1, EClass class2) {
+		// report.startRoutine("classes");
+		try {
+			boolean classFound = false;
+			
+			// compare class names by soundex
+			int comparedValue = compareNames(class1.getName(),
+					class2.getName());
+
+			if (comparedValue == Constants.PERFECT_MATCH) {
+				// add classes to the list of matched classes
+				matchedClasses.add(class1.getName());
+				matchedClasses.add(class2.getName());
+
+				// add to the report
+				report.addToReport("Perfect Match : "
+						+ class1.getName() + " : " + class2.getName());
+
+				// send the classes for comparing details
+				compareClassDetails(class1, class2);
+
+				// set the flag
+				classFound = true;
+			} else {
+				// Pass the two classes for structural class comparison
+				this.structuralComparison(class1, class2);
+
+				// set the flag
+				classFound = true;
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			// report.terminateRoutine("Unpacked Classes");
+		}
+	}
 	/**
 	 * Compares Classes. Finds perfect and partial match
 	 * @param firstEClass
