@@ -75,7 +75,6 @@ public class UploadServlet extends HttpServlet {
 	    List<?> items = uploadHandler.parseRequest(request);
 	    Iterator<?> itr = items.iterator();
 	    while (itr.hasNext()) {
-		System.out.println("Uploading....");
 		FileItem item = (FileItem) itr.next();
 		if ((!item.isFormField()) && (!item.getName().equals("")) && (!id.equals(""))) {//check if item is a file
 		    String newName = renameFile(id, item.getName());//rename file
@@ -97,8 +96,6 @@ public class UploadServlet extends HttpServlet {
 		    String ecoreFileName = "uploads/" + newName;
 		    newName += ".png";
 		    this.storeDatabase(ecoreFileName, newName, Integer.parseInt(id));
-		    //String ecorePath = df.process();
-		    //request.setAttribute("returnValue", ecorePath);
 		}
 	    }
 
@@ -117,163 +114,6 @@ public class UploadServlet extends HttpServlet {
 	return newName;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP
-     * <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP
-     * <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
-	processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-	return "Short description";
-    }// </editor-fold>
-//    /**
-//     * Processes requests for both HTTP
-//     * <code>GET</code> and
-//     * <code>POST</code> methods.
-//     *
-//     * @param request servlet request
-//     * @param response servlet response
-//     * @throws ServletException if a servlet-specific error occurs
-//     * @throws IOException if an I/O error occurs
-//     */
-//    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        PrintWriter out = response.getWriter();
-//        HttpSession session = request.getSession();
-//
-//        String username =  (String)session.getAttribute("username");
-//        int userID = 11;
-//        String fileName = null;
-//        String path = null;
-//
-//        /*
-//         * upload process
-//         */
-//        boolean isMultipart= ServletFileUpload.isMultipartContent(request);
-//        if(isMultipart){
-//
-//            File file ;
-//
-//            int maxFileSize = 5000 * 1024;
-//            int maxMemSize = 5000 * 1024;
-//
-//            ServletContext context = this.getServletContext();
-//            path = "/temp";//get the store path from web.xml
-//
-//           // Verify the content type
-//            String contentType = request.getContentType();
-//            if ((contentType.indexOf("multipart/form-data") >= 0))
-//            {
-//                DiskFileItemFactory factory = new DiskFileItemFactory();
-//                // maximum size that will be stored in memory
-//                factory.setSizeThreshold(maxMemSize);
-//                // Location to save data that is larger than maxMemSize.
-//                factory.setRepository(new File("upload"));
-//
-//                // Create a new file upload handler
-//                ServletFileUpload upload = new ServletFileUpload(factory);
-//                // maximum file size to be uploaded.
-//                upload.setSizeMax( maxFileSize );
-//
-//                try{
-//                // Parse the request to get file items.
-//                    List fileItems = upload.parseRequest(request);
-//
-//                    // Process the uploaded file items
-//                    Iterator i = fileItems.iterator();
-//
-//                    while ( i.hasNext () )
-//                    {
-//                        FileItem fi = (FileItem)i.next();
-//			System.out.println("Reached form fields ! ");
-//                        if (!fi.isFormField())
-//                        {
-//			    System.out.println("Inside form field ! ");
-//                        // Get the uploaded file parameters
-//                             String fieldName = fi.getFieldName();
-//
-//                             fileName = fi.getName();
-//			     System.out.println(path);
-//                             boolean isInMemory = fi.isInMemory();
-//                             long sizeInBytes = fi.getSize();
-//                            // Write the file
-//                            if(fileName.lastIndexOf("\\") >= 0)
-//                            {
-//				System.out.println("inside file");
-//                                file = new File(path + fileName.substring(fileName.lastIndexOf("\\"))) ;
-//                             }else{
-//                                file = new File(path + "\\"+fileName.substring(fileName.lastIndexOf("\\")+1)) ;
-//				System.out.println(file.toString());
-//                             }
-//                           fi.write(file);
-//			   System.out.println("File uploaded ! ");
-//                         }
-//
-//                        path = path.substring(0, path.length()-2);
-//                        java.util.Date dt = new java.util.Date();
-//                        java.text.SimpleDateFormat sdf =
-//                        new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//
-//                        String currentTime = sdf.format(dt);
-//                        //store the upload diagram information into databse
-//                        storeDatabase(username,path,fileName, currentTime, userID);
-//
-//                        ArrayList<Diagram> diagrams = new Service().getDiagramList();
-//
-//                        session.setAttribute("diagrams", diagrams);
-//                        request.setAttribute("firstPath", "upload/"+ diagrams.get(0).getDiagramName());
-//                        request.setAttribute("firstDiagramId", diagrams.get(0).getDiagramId());
-//
-//                        ArrayList<Domain.Comment> comments = new Service().getComments(diagrams.get(0).getDiagramId());
-//
-//                        request.setAttribute("comments", comments);
-//
-//                        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
-//                        dispatcher.forward(request, response);
-//
-//
-//                    }
-//                    }catch(Exception ex) {
-//
-//                    }
-//
-//         }
-//
-//            }
-//    }
-//
     /*
      * function to store upload diagram informatio into database.
      */
@@ -295,49 +135,21 @@ public class UploadServlet extends HttpServlet {
 	EditingHistoryDAO.addHistory(editObj);
 	}
 	catch(IllegalArgumentException e){
-
 	}
     }
-//
-//
-//    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-//    /**
-//     * Handles the HTTP
-//     * <code>GET</code> method.
-//     *
-//     * @param request servlet request
-//     * @param response servlet response
-//     * @throws ServletException if a servlet-specific error occurs
-//     * @throws IOException if an I/O error occurs
-//     */
-//    @Override
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        processRequest(request, response);
-//    }
-//
-//    /**
-//     * Handles the HTTP
-//     * <code>POST</code> method.
-//     *
-//     * @param request servlet request
-//     * @param response servlet response
-//     * @throws ServletException if a servlet-specific error occurs
-//     * @throws IOException if an I/O error occurs
-//     */
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        processRequest(request, response);
-//    }
-//
-//    /**
-//     * Returns a short description of the servlet.
-//     *
-//     * @return a String containing servlet description
-//     */
-//    @Override
-//    public String getServletInfo() {
-//        return "Short description";
-//    }// </editor-fold>
+    /**
+     * Handles the HTTP
+     * <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	    throws ServletException, IOException {
+	processRequest(request,response);
+    }
+
 }

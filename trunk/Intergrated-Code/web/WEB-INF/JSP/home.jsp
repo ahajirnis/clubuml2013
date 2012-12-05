@@ -47,26 +47,17 @@
                 <div class="header_resize">
                     <div class="logo">
                     </div>
-		    <h1>Welcome to ClubUML!</h1>
-
+		    <h1 style="color: white">ClubUML</h1>
 		    <style>
 			body {background-color:#FFCC66;}
 		    </style>
 		    </head>
-
-
-		    <div id="navbar">
-			<ul>
-			    <form action="Display" method="get">
-				<li><input type ="submit" value="display"></li>
-			    </form>
-			</ul>
-		    </div>
-
 		    <div>
 			<hr>
-
-			<p><font color="blue">Hello ${username}!</font></p>
+			<p><font color="white">Hello ${username}!</font></p>
+			<div style="float:right; margin-top: -45px;">
+			    <a href="Display" style="text-decoration: none;"><button>Proceed to Project</button></a>
+			</div>
 		    </div>
 		    <div class="content">
 			<div class="content_resize">

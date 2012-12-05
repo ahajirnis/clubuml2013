@@ -39,16 +39,11 @@ public class DiagramFactory {
 	pngFileName = newName + ".png";
 
 	File javaFile = new File(absolutePath + pngFileName);
-	System.out.println("-----------------All paths -----------------");
-	System.out.println(DiagramFactory.absolutePath);
-	System.out.println(DiagramFactory.libPath);
-	System.out.println(ecoreFileName + " png - " + pngFileName + "dotFile -- " + dotFileName);
     }
 
     public String process() {
 	try {
 	    String ecoreFilePath = absolutePath + ecoreFileName;
-	    System.out.println("This is path " + ecoreFilePath);
 	    EcoreParser parserObj = new EcoreParser(ecoreFilePath);
 	    pkgs = parserObj.getList();
 	} catch (IOException e) {
@@ -220,7 +215,7 @@ public class DiagramFactory {
 	    }
 	    System.out.println("Exec 2nd command");
 	    //Graphviz_Path: C:\Program Files (x86)\Graphviz 2.28\bin
-	    String command2[] = {"C:\\Program Files (x86)\\Graphviz 2.28\\bin\\dot", "-Tpng", "-o", absolutePath + pngFileName, absolutePath + dotFileName};
+	    String command2[] = {"usr/bin/dot", "-Tpng", "-o", absolutePath + pngFileName, absolutePath + dotFileName};
 	    try {
 		Process procObj = Runtime.getRuntime().exec(command2);
 		int exitVal = procObj.waitFor();

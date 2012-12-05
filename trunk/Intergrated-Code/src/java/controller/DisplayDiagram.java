@@ -23,7 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import repository.CommentDAO;
 import repository.DiagramDAO;
+import repository.EditingHistoryDAO;
+import repository.UserDAO;
 import service.Service;
 
 /**
@@ -134,20 +137,38 @@ public class DisplayDiagram extends HttpServlet {
 
 	int diagramId1 = Integer.parseInt(checked[0]);
 
-	Service g = new Service();
+	// retrive diagram list from database.
+	ArrayList<Domain.EditingHistory> editedDiagrams = EditingHistoryDAO.getPriorityList();
+	if (!editedDiagrams.isEmpty()) {
+	    ArrayList<Domain.Diagram> diagrams = new ArrayList();
+	    for (int i = 0; i < editedDiagrams.size(); i++) {
+		Diagram diagObj = DiagramDAO.getDiagram(editedDiagrams.get(i).getDiagramId());
+		diagObj.setCreatedTime(editedDiagrams.get(i).getEditingTime());
+		diagrams.add(diagObj);
+	    }
+	    if (!diagrams.isEmpty()) {
 
-	ArrayList<Diagram> diagrams = g.getDiagramList();
-	ArrayList<Comment> comments = g.getComments(diagramId1);
+		for (int i = 0; i < diagrams.size(); i++) {
+		    if (diagrams.get(i).getDiagramId() == diagramId1) {
 
-	request.setAttribute("diagramId1", diagramId1);
-	HttpSession session = request.getSession();
-//        session.setAttribute("diagrams", diagrams);
-//        request.setAttribute("path1", "upload/" + g.getDiagramName(diagramId1));
-//        request.setAttribute("comments", comments);
+			//set the first diagram in diagram list as the default dispaly diagram..
+			request.setAttribute("firstPath", diagrams.get(i).getEcoreFilePath() + ".png");
+			request.setAttribute("diagramId1", diagrams.get(i).getDiagramId());
 
+			ArrayList<Comment> commentListObj = CommentDAO.getComment(diagramId1);
+			if (!commentListObj.isEmpty()) {
+			    for (int j = 0; j < commentListObj.size(); j++) {
+				commentListObj.get(j).setUserName(UserDAO.getUser(commentListObj.get(j).getUserId()).getUserName());
+			    }
+			    request.setAttribute("comments", commentListObj);
+			}
+		    }
+		}
+		request.setAttribute("diagrams", diagrams);
+	    }
+	}
 	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
 	dispatcher.forward(request, response);
-
     }
     /*
      * function to download the selected diagram.
@@ -159,7 +180,8 @@ public class DisplayDiagram extends HttpServlet {
 	int id = Integer.parseInt(checked[0]);
 	String fileName = new Service().getDiagramName(id);
 	// the absolute path of folder where all diagrams store.
-	String path = "C:\\Users\\wintor12\\Documents\\NetBeansProjects\\ClubUml2\\web\\upload\\";
+	ServletContext context = getServletContext();
+	String path = context.getRealPath("/uploads/");
 
 	try {
 	    OutputStream ops = response.getOutputStream();
@@ -168,7 +190,6 @@ public class DisplayDiagram extends HttpServlet {
 
 	    File fileLoad = new File(path, fileName);
 
-	    ServletContext context = getServletConfig().getServletContext();
 	    String mimetype = context.getMimeType(fileName);
 	    response.setHeader("Content-disposition", "attachment;filename=" + fileName);
 	    response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");

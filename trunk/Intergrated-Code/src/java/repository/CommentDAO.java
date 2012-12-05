@@ -48,7 +48,7 @@ public class CommentDAO {
 	ArrayList<Comment> searchResult = new ArrayList<>();
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM comment where diagram_Id = ?;";
+	    String sql = "SELECT * FROM comment where diagram_Id = ? ORDER BY `writtenTime` DESC;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setInt(1, diagram_id);
 

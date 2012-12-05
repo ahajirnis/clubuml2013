@@ -60,6 +60,7 @@ public class Compare extends HttpServlet {
 	    String path = compareObj.process();
 	    this.saveReport(path);
 	    //this.showPdf(path, request, response);
+	    request.setAttribute("reportPath", path);
 	    request.setAttribute("path1", "uploads/" + diagram1.getDiagramName());
 	    request.setAttribute("path2", "uploads/" + diagram2.getDiagramName());
 	    request.setAttribute("val1", diagram1.getDiagramId());
