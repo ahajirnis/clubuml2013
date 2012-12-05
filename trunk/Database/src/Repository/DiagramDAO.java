@@ -50,16 +50,14 @@ public class DiagramDAO {
         return false;
     }
 
-    public static ArrayList<Diagram> getDiagramList(int project_Id) {
+    public static ArrayList<Diagram> getDiagramList() {
         ArrayList<Diagram> searchResult = new ArrayList<>();
         try {
             Connection conn = DbManager.getConnection();
-            String sql = "SELECT * FROM diagram WHERE project_Id = ?;";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM diagram";
+            Statement stmt = conn.createStatement();
 
-            pstmt.setInt(1, project_Id);
-
-            ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = stmt.executeQuery(sql);
 
             //Initiate a list to get all returned report objects and set attributes
             while (rs.next()) {
@@ -74,7 +72,7 @@ public class DiagramDAO {
             }
 
             rs.close();
-            pstmt.close();
+            stmt.close();
             conn.close();
             return searchResult;
         } catch (SQLException ex) {
