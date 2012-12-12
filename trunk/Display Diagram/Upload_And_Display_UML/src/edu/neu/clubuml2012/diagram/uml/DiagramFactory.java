@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EReference;
 
 /**
  *
- * @author Kai
  */
 public class DiagramFactory {
     
@@ -62,6 +61,7 @@ public class DiagramFactory {
         DiagramFactory obj = new DiagramFactory(args[0],args[1], args[2]);
         obj.process();
     }
+    
     public DiagramFactory(String absolutePath, String newName, String libPath){
         DiagramFactory.absolutePath = absolutePath;
         DiagramFactory.libPath = libPath;
@@ -152,24 +152,21 @@ public class DiagramFactory {
                     " -output " +  absolutePath + dotFileName;
             Runtime.getRuntime().exec(command1);
             try {
-                // have to wait before go on, so that the shell has time to create the dot file
-                Thread.sleep(1000L);
+                Thread.sleep(3000L);
             } catch (Exception e) {
+                e.printStackTrace();
             }
             
             //Graphviz_Path: C:\Program Files (x86)\Graphviz 2.28\bin
             String command2[] = {"dot", "-Tpng", "-o", absolutePath + pngFileName,
                     absolutePath + dotFileName};
-            Process proc = Runtime.getRuntime().exec(command2);
+            Process proc2 = Runtime.getRuntime().exec(command2);
             command = command2.toString();
-            while(proc.waitFor() >= 0) {
+            while(proc2.waitFor() >= 0) {
                 Thread.sleep(2000L);
             }
             
-//            try {
-//                
-//            } catch (Exception e) {
-//            }
+
         } catch (Exception e) {
             System.out.println("Error in creating the png file");
             e.printStackTrace();
@@ -193,35 +190,61 @@ public class DiagramFactory {
                 ReadReference(ref);
             } 
             out.write(" */ \n");  //end of Javadoc comments
-
-            out.write("class " + cls.getName());
+            if (cls.isInterface()) {
+                out.write("interface " + cls.getName()); 
+            } else {
+                out.write("class " + cls.getName());
+            }
 
             //check if this class extends any other classes
-           // EList<EClass> superClsList = cls.getEAllSuperTypes();
             EList<EClass> superClsList = cls.getESuperTypes();
             if (superClsList.size() >= 1) {
-                EClass otherCls = superClsList.get(0);
-                out.write(" extends " + otherCls.getName());
+                //Need to determine if class inheritance or interface inheritance
+                //can only allow one extends for class inheritance
+                for (int i = 0; i <superClsList.size(); i++ ){
+                    EClass otherCls = superClsList.get(i);
+                    if (!otherCls.isInterface()) {
+                        out.write(" extends " + otherCls.getName());
+                        break;
+                    }
+                }
+                //allow multiple implements
+                boolean firstImplements = true;
+                for (int i = 0; i <superClsList.size(); i++ ){
+                    EClass otherCls = superClsList.get(i);
+                    if (otherCls.isInterface()) {
+                        if (firstImplements) { //only do this first time
+                            out.write(" implements " + otherCls.getName());
+                            firstImplements = false;
+                        } else {
+                            out.write(" , " + otherCls.getName());                        
+                        }
+                    }
+                }
             }
             out.write(" {\n");
             //for each variable in the class
-            EList<EAttribute> attr = cls.getEAllAttributes();
+            EList<EAttribute> attr = cls.getEAttributes();
             if (attr != null) {
                 String tempType = "";
                 for (int j = 0; j < attr.size(); j++) {
-                    try {//if there is no type name for this variable
+                    try {//in case there is no type name for this variable
                         tempType = attr.get(j).getEAttributeType().getInstanceClassName();
                     } catch (Exception e) {                   
                         tempType = DEFAULT_ATTRIBUTE_TYPE;
                     } finally {
-                        out.write("    " + tempType
-                            + " " + attr.get(j).getName() + ";\n");
+                        //this check verifies there is an attribute
+                        //(ecore sometimes gives an attribute named "" if user deleted an attribute
+                        if (!attr.get(j).getName().equals("")) {
+                            out.write("    " + tempType
+                                + " " + attr.get(j).getName() + ";\n");
+                        }
                     }
                 }
             }
 
             //get operation objects into a list
-            EList<EOperation> ope = cls.getEAllOperations();
+            EList<EOperation> ope = cls.getEOperations();
             for (int j = 0; j < ope.size(); j++) {
                 String tempType = "";
                 try {
@@ -230,7 +253,10 @@ public class DiagramFactory {
                 } catch (Exception e) {
                     tempType = "void";
                 } finally {
-                out.write("    " + tempType + " " + ope.get(j).getName() + "();\n");
+                    //if operation was deleted in emf, sometimes the ecore shows an operation named ""
+                    if (!ope.get(j).getName().equals("")) {
+                        out.write("    " + tempType + " " + ope.get(j).getName() + "();\n");
+                    }
                 }
             }
             out.write("}\n");  
@@ -238,52 +264,37 @@ public class DiagramFactory {
         } catch (Exception e) {
             System.out.println("Error in writing to .java file");
             e.printStackTrace();
-        }
-        
+        }        
     }
     
     public void ReadReference(EReference ref) {
+        
         try {    
-            if (ref.isContainment()) {   
-                out.write (" * @composed 1 ");
+            if (ref.isContainment()) {
+                out.write (" * @composed 1 - "); 
 
-                if (ref.getName() == null) {
-                    out.write(" - ");  
-                } else {
-                out.write(" ");
-                out.write(ref.getName());
-                out.write(" ");
-                }
-                
                 //This is the wrong upper bound, I need the bound at the other end
                 //This part needs work for multiplicities
-                if (ref.getLowerBound() == 0){
-                    out.write("0");
-                } else {
-                    out.write(ref.getLowerBound());
-                }
-                 //if there is a range of values
-                if (ref.getLowerBound() != ref.getUpperBound()) {//
+                int lowerBound = ref.getLowerBound() ;
+                int upperBound = ref.getUpperBound() ;
+
+                out.write(Integer.toString(lowerBound));
+
+                 //if there is a range of values              
+                if (lowerBound != upperBound) {
                     out.write("..");
-                    if (ref.getUpperBound() == -1) {
+                    if (upperBound== -1) {
                         out.write ("*");
-                    } else {
-                        out.write(ref.getUpperBound());
+                    } else if (upperBound != 0) {
+                        out.write(Integer.toString(upperBound));
                     }
-                }
-                out.write( " " + ref.getEReferenceType().getName() + "\n");   
+                } 
+                out.write( " " + ref.getEReferenceType().getName() + "\n");
        
             } else {  //not a containment, but another relationship
-                out.write (" * @has ");
-                if (ref.getLowerBound() == -1) {
-                    out.write ("1..*");
-                } else if (ref.getLowerBound() == 0){
-                    out.write("0");
-                } else if (ref.getLowerBound() == 1){
-                    out.write("1");
-                } else {
-                    out.write(ref.getLowerBound());
-                }
+                //can't put multiplicity at one end in emf
+                out.write (" * @assoc -"); //this has no num at this end            
+               
                 if (ref.getName() == null) {
                     out.write(" - ");  
                 } else {
@@ -291,22 +302,16 @@ public class DiagramFactory {
                     out.write("\"" + ref.getName() + "\""); //relationship in quotes
                     out.write(" "); //space
                 }
-                
-                //This might be the wrong upper bound, I need the bound at the other end
-                if (ref.getLowerBound() == 0){
-                    out.write("0");
-                } else if (ref.getLowerBound() == 1){
-                    out.write("1");
-                } else {
-                     out.write(ref.getLowerBound());
-                }
+
+                out.write(Integer.toString(ref.getLowerBound()));
+                              
                 //if there is a range of values
                 if (ref.getLowerBound() != ref.getUpperBound()) {//
                     out.write("..");
                     if (ref.getUpperBound() == -1) {
                         out.write ("*");
                     } else {
-                    out.write(ref.getUpperBound());
+                    out.write(Integer.toString(ref.getUpperBound()));
                     }
                 }
                 out.write( " " + ref.getEReferenceType().getName() + "\n");               
