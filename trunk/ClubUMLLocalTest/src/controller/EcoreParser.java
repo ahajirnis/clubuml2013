@@ -18,8 +18,8 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  */
 public class EcoreParser {
     
-    private static ArrayList<EObject> list = new ArrayList<EObject>();
-    private static String pathToEcore;
+    private ArrayList<EObject> list = new ArrayList<EObject>();
+    private String pathToEcore;
     
     public EcoreParser(final String path) throws IOException
     {
@@ -28,7 +28,7 @@ public class EcoreParser {
         generate();
     }
     
-    public static void generate() throws IOException
+    public void generate() throws IOException
     { 
        ResourceSet resourceSet = new ResourceSetImpl();
        Resource res = new ResourceImpl();
