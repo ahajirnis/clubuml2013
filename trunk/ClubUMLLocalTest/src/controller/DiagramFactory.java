@@ -22,32 +22,32 @@ import org.eclipse.emf.ecore.EReference;
  * @author Kai
  */
 public class DiagramFactory {
-	
+
 	// windows machine
 	private static final String GRAPHICVIZ_PATH = "C:\\Graphviz\\bin\\dot";
-	
+
 	// rho server path to GraphicViz
-	//private static final String GRAPHICVIZ_PATH = "usr/bin/dot";
-	
-	private static String absolutePath;
-	private static String libPath;
-	private static String ecoreFileName;
-	private static String javaFileName;
-	private static String dotFileName;
-	private static String pngFileName;
+	// private static final String GRAPHICVIZ_PATH = "usr/bin/dot";
+
+	private String absolutePath;
+	private String libPath;
+	private String ecoreFileName;
+	private String javaFileName;
+	private String dotFileName;
+	private String pngFileName;
 	private ArrayList<EObject> pkgs;
 	private BufferedWriter out;
 	String command;
 
 	public DiagramFactory(String absolutePath, String newName, String libPath) {
-		DiagramFactory.absolutePath = absolutePath;
-		DiagramFactory.libPath = libPath;
-		ecoreFileName = newName;
-		javaFileName = newName + ".java";
-		dotFileName = newName + ".dot";
-		pngFileName = newName + ".png";
+		this.absolutePath = absolutePath;
+		this.libPath = libPath;
+		this.ecoreFileName = newName;
+		this.javaFileName = newName + ".java";
+		this.dotFileName = newName + ".dot";
+		this.pngFileName = newName + ".png";
 
-		File javaFile = new File(absolutePath + pngFileName);
+		//File javaFile = new File(absolutePath + pngFileName);
 	}
 
 	public String process() {
@@ -75,7 +75,9 @@ public class DiagramFactory {
 				File javaFile = new File(absolutePath + javaFileName);
 				FileWriter fstream = new FileWriter(javaFile);
 				out = new BufferedWriter(fstream);
-
+				
+				System.out.println(pkgs.get(k));
+				
 				out.write("//Name of Ecore Package = " + pkgs.get(k) + "\n\n");
 				out.write("import java.util.Date;\n");
 				out.write("import java.util.*; \n");
@@ -215,7 +217,7 @@ public class DiagramFactory {
 			System.out.println("Got an error creating the file...."
 					+ e.getMessage());
 		}
-		
+
 		System.out.println("Complete creating java file.");
 	}
 
@@ -228,13 +230,13 @@ public class DiagramFactory {
 			// String toolPath =
 			// "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/tools.jar";
 			String umlGraphPath = libPath + "UmlGraph-5.6.jar";
-			
+
 			String command1[] = { "java", "-jar", umlGraphPath, "-all",
 					"-private", absolutePath + javaFileName, "-output",
 					absolutePath + dotFileName };
-			System.out.println("java "+ "-jar "+ umlGraphPath+ " -all "+
-					" -private "+ absolutePath + javaFileName+ " -output "+
-					absolutePath + dotFileName );
+			System.out.println("java " + "-jar " + umlGraphPath + " -all "
+					+ " -private " + absolutePath + javaFileName + " -output "
+					+ absolutePath + dotFileName);
 
 			Runtime.getRuntime().exec(command1);
 			try {
@@ -246,9 +248,11 @@ public class DiagramFactory {
 			System.out.println("Exec 2nd command");
 
 			// check constant for path to graphicviz bin folder
-			String command2[] = {GRAPHICVIZ_PATH, "-Tpng", "-o",
+			String command2[] = { GRAPHICVIZ_PATH, "-Tpng", "-o",
 					absolutePath + pngFileName, absolutePath + dotFileName };
-
+			
+			System.out.println( GRAPHICVIZ_PATH + " -Tpng -o " +
+					absolutePath + pngFileName + ' ' + absolutePath + dotFileName);
 			try {
 				Process procObj = Runtime.getRuntime().exec(command2);
 				int exitVal = procObj.waitFor();

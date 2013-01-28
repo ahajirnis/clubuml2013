@@ -16,6 +16,10 @@
     <servlet-name>UploadServlet</servlet-name>
     <servlet-class>controller.UploadServlet</servlet-class>
   </servlet>
+    <servlet>
+    <servlet-name>ValidateServlet</servlet-name>
+    <servlet-class>controller.ValidateServlet</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>DisplayDiagram</servlet-name>
     <servlet-class>controller.DisplayDiagram</servlet-class>
@@ -39,6 +43,10 @@
   <servlet-mapping>
     <servlet-name>DisplayDiagram</servlet-name>
     <url-pattern>/DisplayDiagram</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ValidateServlet</servlet-name>
+    <url-pattern>/ValidateServlet</url-pattern>
   </servlet-mapping>
   <session-config>
     <session-timeout>30</session-timeout>

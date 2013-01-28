@@ -13,10 +13,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import repository.UserDAO;
+import domain.User;
 
 /**
  *
@@ -38,31 +43,18 @@ public class ValidateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
-        /*
-         * check user before registion.
-         */
-        try {
-            String username = request.getParameter("username");
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/clubuml2", "root", "");
-            Statement stmnt = con.createStatement();
-            String sql = "SELECT * FROM user where username = '" + username + "'";
-            ResultSet rs = stmnt.executeQuery(sql);
-            
-            if(rs.next())
-                out.println("<font color='red'>name exist!");
-            else
-                out.println("<font color='green'>name ok!");
-            
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ValidateServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ValidateServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {            
-            out.close();
-        }
+
+		response.setContentType("text/html;charset=UTF-8");
+
+		String username = request.getParameter("username");
+
+		User checkUserExist = UserDAO.getUser(username, "");
+		
+		if (checkUserExist != null) {
+			out.println("<font color='red'>name exist!");
+		} else {
+			out.println("<font color='green'>name ok!");
+		}             
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
