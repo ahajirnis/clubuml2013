@@ -60,15 +60,10 @@ public class UserDAO {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt;
 
-			if (password.isEmpty()) {
-				pstmt = conn.prepareStatement("SELECT * FROM user where userName = ?;");
-				pstmt.setString(1, username);
-				
-			} else {
-				pstmt = conn.prepareStatement("SELECT * FROM user where userName = ? and password = ?;");
-				pstmt.setString(1, username);
-				pstmt.setString(2, password);
-			}
+
+			pstmt = conn.prepareStatement("SELECT * FROM user where userName = ? and password = ?;");
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
 			
 			// Execute the SQL statement and store result into the ResultSet
 			ResultSet rs = pstmt.executeQuery();
@@ -93,6 +88,37 @@ public class UserDAO {
 		return null;
 	}
 
+	public static User getUser(String username) {
+		try {
+			Connection conn = DbManager.getConnection();
+			PreparedStatement pstmt;
+
+			pstmt = conn.prepareStatement("SELECT * FROM user where userName = ?;");
+			pstmt.setString(1, username);
+			
+			// Execute the SQL statement and store result into the ResultSet
+			ResultSet rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				return null;
+			}
+
+			User user;
+			user = new User(rs.getInt("user_Id"), username, "",
+					rs.getString("email"), rs.getString("securityQuestion"),
+					rs.getString("securityAnswer"), 2);
+
+			rs.close();
+			pstmt.close();
+			conn.close();
+			return user;
+		} catch (SQLException e) {
+			System.out.println("Using default model.");
+		}
+
+		return null;
+	}
+	
 	/**
 	 * Remove a user from DB
 	 */

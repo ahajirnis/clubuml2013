@@ -48,7 +48,7 @@ public class ValidateServlet extends HttpServlet {
 
 		String username = request.getParameter("username");
 
-		User checkUserExist = UserDAO.getUser(username, "");
+		User checkUserExist = UserDAO.getUser(username);
 		
 		if (checkUserExist != null) {
 			out.println("<font color='red'>name exist!");
