@@ -1,10 +1,4 @@
 <%--
-    Document   : register
-    Created on : Oct 17, 2012, 1:12:04 AM
-    Author     : wintor12
---%>
-
-<%--
     Document   : index
     Created on : Oct 17, 2012, 1:09:40 AM
     Author     : wintor12
@@ -24,7 +18,7 @@
 
 </head>
 <body>
-	<form method="post" action="RegisterServlet" name="registerForm">
+	<form method="post" action="RegisterServlet" name="registerForm" onsubmit = "return validate()">
 		<div class="main">
 			<div class="header">
 				<div class="header_resize">
