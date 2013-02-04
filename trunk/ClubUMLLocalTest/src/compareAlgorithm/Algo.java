@@ -13,9 +13,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 /**
- * Algorithm class that comapares all the features of a class diagram.
+ * Algorithm class that compares all the features of a class diagram.
+ * 
  * @author Shoeb Shaikh
- *
+ * 
  */
 public class Algo {
 
@@ -34,11 +35,14 @@ public class Algo {
 	Report report; // for writing report to the pdf file
 
 	/**
-	 * Constructor to initialize necessary class members
-	 *
+	 * Constructor to initialize necessary class members.
+	 * 
 	 * @param firstModel
+	 *            first Ecore model to compare
 	 * @param secondModel
+	 *            second ECore model to compare
 	 * @param reportFile
+	 *            path to store report
 	 */
 	public Algo(EList<EObject> firstModel, EList<EObject> secondModel,
 			String reportFile) {
@@ -50,7 +54,7 @@ public class Algo {
 	}
 
 	/**
-	 * Main dispatch function for comparing the features of a class
+	 * Main dispatch function for comparing the features of a class.
 	 */
 	public void compare() {
 		report.addToReport("Begin Comparison....");
@@ -67,9 +71,9 @@ public class Algo {
 		} else {
 			report.addToReport("Checking individual classes due to absence of packages");
 			for (int i = 0; i < firstModel.size(); i++) {
-				EClass firstClass = (EClass)firstModel.get(i);
+				EClass firstClass = (EClass) firstModel.get(i);
 				for (int j = 0; j < secondModel.size(); j++) {
-					EClass secondClass = (EClass)secondModel.get(j);
+					EClass secondClass = (EClass) secondModel.get(j);
 					compareUnPackedClasses(firstClass, secondClass);
 				}
 			}
@@ -83,7 +87,8 @@ public class Algo {
 	}
 
 	/**
-	 * Checks packages and returns if the packages are similar or not
+	 * Checks packages and returns if the packages are similar or not.
+	 * 
 	 * @return true if similar else false
 	 */
 	private boolean comparePackage() {
@@ -112,7 +117,7 @@ public class Algo {
 				return false;
 			}
 		} catch (Exception ex) {
-			//ex.printStackTrace();
+			// ex.printStackTrace();
 		} finally {
 			// report.terminateRoutine("Packages");
 		}
@@ -121,7 +126,7 @@ public class Algo {
 
 	/**
 	 * Checking if files are in proper format
-	 *
+	 * 
 	 * @return true if files are valid, false otherwise
 	 */
 	private boolean checkPackages() {
@@ -140,22 +145,29 @@ public class Algo {
 	}
 
 	/**
-	 * Compare package names
-	 * @return
+	 * Compares package names.
+	 * 
+	 * @param firstName
+	 *            first name to compare
+	 * @param secondName
+	 *            second name to compare
+	 * @return true if names match else false
 	 */
 	private int packageNameSimilar(String firstName, String secondName) {
 		return this.compareNames(firstName, secondName);
 	}
 
 	/**
-	 * General method for comparing any pair of names
+	 * General method for comparing any pair of names.
+	 * 
 	 * @param name1
+	 *            - first name to compare
 	 * @param name2
+	 *            - second name to compare
 	 * @return PERFECT_MATCH if same names
 	 * @return PARTIAL_MATCH if names are similar based on soundex comparison
 	 * @return NOT_MATCH if names not matched at all
 	 */
-
 	private int compareNames(String name1, String name2) {
 		try {
 			if (new Soundex().difference(name1, name2) == 4) {
@@ -170,14 +182,22 @@ public class Algo {
 		return Constants.NOT_MATCH;
 	}
 
+	/**
+	 * Compare package information. If package are the same, compare class
+	 * details. If package are not the same, compare structure details. Adds
+	 * comments to report.
+	 * 
+	 * @param class1
+	 *            first class to compare
+	 * @param class2
+	 *            second class to compare
+	 */
 	private void compareUnPackedClasses(EClass class1, EClass class2) {
 		// report.startRoutine("classes");
 		try {
-			boolean classFound = false;
 
 			// compare class names by soundex
-			int comparedValue = compareNames(class1.getName(),
-					class2.getName());
+			int comparedValue = compareNames(class1.getName(), class2.getName());
 
 			if (comparedValue == Constants.PERFECT_MATCH) {
 				// add classes to the list of matched classes
@@ -185,20 +205,15 @@ public class Algo {
 				matchedClasses.add(class2.getName());
 
 				// add to the report
-				report.addToReport("Perfect Match : "
-						+ class1.getName() + " : " + class2.getName());
+				report.addToReport("Perfect Match : " + class1.getName()
+						+ " : " + class2.getName());
 
 				// send the classes for comparing details
 				compareClassDetails(class1, class2);
 
-				// set the flag
-				classFound = true;
 			} else {
 				// Pass the two classes for structural class comparison
 				this.structuralComparison(class1, class2);
-
-				// set the flag
-				classFound = true;
 			}
 
 		} catch (Exception ex) {
@@ -207,10 +222,15 @@ public class Algo {
 			// report.terminateRoutine("Unpacked Classes");
 		}
 	}
+
 	/**
-	 * Compares Classes. Finds perfect and partial match
+	 * Compares Classes. Finds perfect and partial match. Adds comments to
+	 * report object.
+	 * 
 	 * @param firstEClass
+	 *            first class to compare
 	 * @param secondEClass
+	 *            second class to compare
 	 */
 	private void compareClasses(ECoreClass firstEClass, ECoreClass secondEClass) {
 		// report.startRoutine("classes");
@@ -259,9 +279,12 @@ public class Algo {
 	}
 
 	/**
-	 * Compare classes details after classes match
+	 * Compare classes details after classes match.
+	 * 
 	 * @param cls1
+	 *            first class to compare
 	 * @param cls2
+	 *            second class to compare
 	 */
 	private void compareClassDetails(EClass cls1, EClass cls2) {
 		compareSuperClass(cls1, cls2);
@@ -273,9 +296,13 @@ public class Algo {
 	}
 
 	/**
-	 * Compares super classes of designated classes
+	 * Compares super classes of designated classes and adds comments to report
+	 * object.
+	 * 
 	 * @param cls1
+	 *            first class to compare super class
 	 * @param cls2
+	 *            second class to compare super class
 	 */
 	private void compareSuperClass(EClass cls1, EClass cls2) {
 		// report.startRoutine("super classes");
@@ -304,10 +331,12 @@ public class Algo {
 	}
 
 	/**
-	 * Compare class attributes
-	 *
+	 * Compare class attributes and adds comments to report object.
+	 * 
 	 * @param cls1
+	 *            first class containing attribute to compare
 	 * @param cls2
+	 *            second class containing attributes to compare
 	 */
 	private void compareAttributes(EClass cls1, EClass cls2) {
 		// report.startRoutine("attributes");
@@ -354,9 +383,13 @@ public class Algo {
 	}
 
 	/**
-	 * Compare methods by method name and type
+	 * Compare methods by method name and type and adds comments to report
+	 * object.
+	 * 
 	 * @param cls1
+	 *            first class containing operations to compare
 	 * @param cls2
+	 *            second class containing operations to compare
 	 */
 	private void compareMethods(EClass cls1, EClass cls2) {
 		// report.startRoutine("methods");
@@ -391,9 +424,13 @@ public class Algo {
 	}
 
 	/**
-	 * Compare references of a class
+	 * Compare references of a class. Adds comments to report object if
+	 * references match or not.
+	 * 
 	 * @param cls1
+	 *            first class containing references to compare
 	 * @param cls2
+	 *            second class containing references to compare
 	 */
 	private void compareReferences(EClass cls1, EClass cls2) {
 		// report.addToReport("references");
@@ -441,9 +478,12 @@ public class Algo {
 
 	/**
 	 * Compare ETypes
+	 * 
 	 * @param etype1
+	 *            first classifier to compare
 	 * @param etype2
-	 * @return
+	 *            second classifier to compare
+	 * @return true if equals else false
 	 */
 	private boolean compareETypes(EClassifier etype1, EClassifier etype2) {
 		return etype1.equals(etype2);
@@ -451,9 +491,11 @@ public class Algo {
 
 	/**
 	 * Structurally compare the two classes ie reference attribute n methods
-	 *
+	 * 
 	 * @param cls1
+	 *            first class to compare
 	 * @param cls2
+	 *            second class to compare
 	 */
 	private void structuralComparison(EClass cls1, EClass cls2) {
 		// report.startRoutine("structural class");
@@ -484,11 +526,13 @@ public class Algo {
 	}
 
 	/**
-	 * Compare attributes based on name
-	 *
+	 * Compare attributes based on name.
+	 * 
 	 * @param cls1
+	 *            first class containing attributes to compare
 	 * @param cls2
-	 * @return
+	 *            second class containing attributes to compare
+	 * @return float between 0 and 1. Percentage of attributes matching.
 	 */
 	private float structAttrCompare(EClass cls1, EClass cls2) {
 		// report.startRoutine("structural attributes");
@@ -515,8 +559,7 @@ public class Algo {
 				}
 			}
 			// If attribute list is not empty then return, percentage of the
-			// matched
-			// attribute
+			// matched attribute
 			// In this case a value between 0 and 1
 			if (attrList1.size() != 0)
 				return attrScore / attrList1.size();
@@ -533,10 +576,12 @@ public class Algo {
 
 	/**
 	 * Compare methods structurally based on name and return type
-	 *
+	 * 
 	 * @param cls1
+	 *            first class containing operations to compare
 	 * @param cls2
-	 * @return
+	 *            second class containing operations to compare
+	 * @return float between 0 to 1. Percentage of operations matching.
 	 */
 	private float structMethodCompare(EClass cls1, EClass cls2) {
 		// report.startRoutine("structural methods");
@@ -582,11 +627,15 @@ public class Algo {
 	}
 
 	/**
-	 * Compare the class references
-	 *
+	 * Compare two classes structure
+	 * 
 	 * @param cls1
+	 *            first class containing references to compare
 	 * @param cls2
-	 * @return
+	 *            second class containing references to compare
+	 * @return a float value between 1 and 0. 1 is perfect match and 0
+	 *         completely different
+	 * 
 	 */
 	private float structRefCompare(EClass cls1, EClass cls2) {
 		// report.startRoutine("structural references");
@@ -635,9 +684,11 @@ public class Algo {
 
 	/**
 	 * Add classes to the list of compared classes
-	 *
+	 * 
 	 * @param cls1
+	 *            first class that was compared
 	 * @param cls2
+	 *            second class that was compared
 	 */
 	private void listComparedClasses(EClass cls1, EClass cls2) {
 		if (!comparedClasses.contains(cls1.getName()))
