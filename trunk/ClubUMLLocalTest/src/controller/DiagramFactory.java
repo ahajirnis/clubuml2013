@@ -238,7 +238,13 @@ public class DiagramFactory {
 					+ " -private " + absolutePath + javaFileName + " -output "
 					+ absolutePath + dotFileName);
 
-			Runtime.getRuntime().exec(command1);
+			Process procObj1 = Runtime.getRuntime().exec(command1);
+			int exitVal = procObj1.waitFor();
+			if(exitVal == 0) {
+				
+			} else {
+				System.out.println("Error in creating the dot file");
+			}
 			try {
 				Thread.sleep(1000L);
 			} catch (Exception e) {
@@ -255,7 +261,12 @@ public class DiagramFactory {
 					absolutePath + pngFileName + ' ' + absolutePath + dotFileName);
 			try {
 				Process procObj = Runtime.getRuntime().exec(command2);
-				int exitVal = procObj.waitFor();
+				exitVal = procObj.waitFor();
+				if(exitVal == 0) {
+					
+				} else {
+					System.out.println("Error in creating the png file");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Error 2");
