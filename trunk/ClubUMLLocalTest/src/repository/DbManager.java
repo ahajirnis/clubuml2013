@@ -97,12 +97,18 @@ public class DbManager {
 			return false;
 		}
 
-		String url = "jdbc:" + DATABASE_TYPE + "://" + SERVER + "/" + DATABASE;
-		System.out.println("TEST" + url);
 		try {
+
 			// Get a connection to the database for a
 			// user with the given user name and password.
-			con = DriverManager.getConnection(url, USER, PASSWORD);
+			if (System.getProperty("os.name").equals("Linux") && System.getProperty("user.name").equals("tomcat7")) {
+				// Connection for rho (need to move this to a file. outside of webapps folder for security)
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ClubUML","csye7945", "north7945");
+			} else {
+				String url = "jdbc:" + DATABASE_TYPE + "://" + SERVER + "/" + DATABASE;
+				con = DriverManager.getConnection(url, USER, PASSWORD);
+			}
+			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
