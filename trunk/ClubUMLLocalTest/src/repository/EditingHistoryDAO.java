@@ -57,9 +57,9 @@ public class EditingHistoryDAO {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(
 			"SELECT * " +
-			"FROM editingHistory as e JOIN " +
+			"FROM editinghistory as e JOIN " +
 			"(SELECT MAX(EditingTime) as max_time, diagram_Id" +
-			" FROM editingHistory" +
+			" FROM editinghistory" +
 			" GROUP BY diagram_Id) as tmp ON e.diagram_Id = tmp.diagram_Id AND e.EditingTime = tmp.max_time ORDER BY e.EditingTime DESC");
 			// Execute the SQL statement and store result into the ResultSet
 			ResultSet rs = pstmt.executeQuery();
