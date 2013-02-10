@@ -15,7 +15,13 @@ import domain.EditingHistory;
 import java.util.ArrayList;
 
 public class EditingHistoryDAO {
-	/** Add a history into DB */
+	/** 
+	 * Add a history into DB
+	 * 		
+     * @param EditingHistory object
+     * 			diagramId, userId
+     * @return true if success; false if fail
+	 */
 	public static boolean addHistory (EditingHistory history) {
 		ResultSet rs;
 		try {
@@ -50,7 +56,10 @@ public class EditingHistoryDAO {
 		    return new java.sql.Timestamp(date.getTime());
 	}
 
-	 /** retrieve history priority queue from DB */
+	 /** Retrieve history priority queue from DB 
+	  * 
+	  * @return EditingHistory ArrayList
+	  */
 	public static ArrayList<EditingHistory> getPriorityList () {
 		ArrayList<EditingHistory> historyList = new ArrayList<EditingHistory>();
 		try {

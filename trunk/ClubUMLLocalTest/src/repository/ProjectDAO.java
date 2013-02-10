@@ -15,7 +15,9 @@ public class ProjectDAO {
     public final static byte PROJECT_Achived = 0;
 
     /**
-     * Get project from DB
+     * Get projectID
+     * 
+     * @return projectId int
      */
     public static int getProjectId() {
 	int projectId = -1;
@@ -36,7 +38,12 @@ public class ProjectDAO {
     }
 
     /**
-     * Get project from DB
+     * Retrieve projectID from DB
+     * 
+     * @param conn
+     * 			Established connection
+     * @return projectId int
+     *          return 0 if no exist 
      */
     public static int retrieveProject(Connection conn) {
 	int projectId = 0;
@@ -60,7 +67,11 @@ public class ProjectDAO {
     }
 
     /**
-     * Add our default project into DB
+     * Add our default project into DB (project name, description, archived)
+     * 			
+     * @param conn
+     * 			Established connection
+     * @return true if success; false if fail
      */
     public static boolean addProject(Connection conn) {
 	try {
@@ -82,6 +93,8 @@ public class ProjectDAO {
 
     /**
      * Remove a project from DB
+     * 
+     * @return true if success; false if fail  
      */
     public static boolean removeProject() {
 	try {

@@ -14,7 +14,11 @@ import domain.User;
 public class UserDAO {
 
 	/**
-	 * Add an user into DB
+	 * Add an user into DB (user name, password, email, project Id, security question, security answer)
+	 * 
+	 * @param User object
+     * 			userName, password, email, sercurityQuestion, securityAnswer
+     * @return true if success; false if fail
 	 */
 	public static boolean addUser(User user) {
 		ResultSet rs;
@@ -54,7 +58,11 @@ public class UserDAO {
 
 	/**
 	 * Get an user from DB by name and password
-	 */
+	 * 
+     * @param username
+     * @param password
+     * @return User object
+     */
 	public static User getUser(String username, String password) {
 		try {
 			Connection conn = DbManager.getConnection();
@@ -88,6 +96,12 @@ public class UserDAO {
 		return null;
 	}
 
+	/**
+	 * Get an user from DB by name
+	 * 
+     * @param username
+     * @return User object
+     */
 	public static User getUser(String username) {
 		try {
 			Connection conn = DbManager.getConnection();
@@ -120,7 +134,43 @@ public class UserDAO {
 	}
 	
 	/**
+	 * Get user from DB by userId
+	 * 
+     * @param userId
+     * @return User object
+	 */
+	public static User getUser(int userId) {
+		try {
+			Connection conn = DbManager.getConnection();
+			PreparedStatement pstmt = conn
+					.prepareStatement("SELECT * FROM user where user_Id = ?;");
+			pstmt.setInt(1, userId);
+
+			// Execute the SQL statement and store result into the ResultSet
+			ResultSet rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				return null;
+			}
+
+			User user;
+			user = new User(rs.getInt("user_Id"), rs.getString("username"), "",
+					rs.getString("email"), "", "", 2);
+			rs.close();
+			pstmt.close();
+			conn.close();
+			return user;
+		} catch (SQLException e) {
+			System.out.println("Using default model.");
+		}
+		return null;
+	}
+	
+	/**
 	 * Remove a user from DB
+	 * 
+     * @param User object
+     * @return true if success; false if fail
 	 */
 	public static boolean removeUser(User user) {
 		if (user == null) {
@@ -145,6 +195,10 @@ public class UserDAO {
 
 	/**
 	 * Update user in DB
+	 * 
+     * @param User object
+     * 			userName, password, email, securityQuestion, securityAnswer, userId
+     * @return true if success; false if fail
 	 */
 	public static boolean updateUser(User user) {
 		try {
@@ -166,40 +220,5 @@ public class UserDAO {
 		} catch (SQLException e) {
 			throw new IllegalArgumentException(e.getMessage(), e);
 		}
-	}
-
-	/**
-	 * Get user from userId
-	 */
-	/**
-	 * Get an user from DB by name and password
-	 */
-	public static User getUser(int userId) {
-		try {
-			Connection conn = DbManager.getConnection();
-			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT * FROM user where user_Id = ?;");
-			pstmt.setInt(1, userId);
-
-			// Execute the SQL statement and store result into the ResultSet
-			ResultSet rs = pstmt.executeQuery();
-
-			if (!rs.next()) {
-				return null;
-			}
-
-			User user;
-			user = new User(rs.getInt("user_Id"), rs.getString("username"), "",
-					rs.getString("email"), "", "", 2);
-
-			rs.close();
-			pstmt.close();
-			conn.close();
-			return user;
-		} catch (SQLException e) {
-			System.out.println("Using default model.");
-		}
-
-		return null;
 	}
 }

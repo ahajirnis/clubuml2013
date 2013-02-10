@@ -15,6 +15,13 @@ import java.util.logging.Logger;
 
 public class ReportDAO {
 
+    /**
+     * Add Report into DB (diagram A, diagram B, compared Time, report file Path)
+     * 			
+     * @param Report object
+     * 			diagramA_Id, diagramB_Id, reportFilePath
+     * @return true if success; false if fail
+     */
     public static boolean addReport(Report report) {
 	ResultSet rs;
 	try {
@@ -44,6 +51,15 @@ public class ReportDAO {
 	return false;
     }
 
+    /**
+     * Get Report from DB
+     * 
+     * @param diagramA int
+     * 			The ID of the diagram A
+     * @param diagramB int
+     * 			The ID of the diagram B
+     * @return Report
+     */
     public static Report getReport(int diagram_A, int diagram_B) {
 	try {
 	    Connection conn = DbManager.getConnection();
@@ -77,6 +93,13 @@ public class ReportDAO {
 	return null;
     }
 
+    /**
+     * Update Report from DB
+     * 
+     * @param Report object
+     * 			diagramA_Id, diagramB_Id, reportFilePath, reportId 
+     * @return true if success; false if fail
+     */
     public static boolean updateReport(Report report) {
 	try {
 	    Connection conn = DbManager.getConnection();
@@ -98,6 +121,12 @@ public class ReportDAO {
 	return false;
     }
 
+    /**
+     * Delete Report from DB
+     * 
+     * @param Report object
+     * @return true if success; false if fail
+     */
     public static boolean deleteReport(Report report) {
 	try {
 	    Connection conn = DbManager.getConnection();

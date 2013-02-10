@@ -16,6 +16,13 @@ import java.util.logging.Logger;
 
 public class DiagramDAO {
 
+    /**
+     * Add Diagram into DB (diagram name, created time, in edition, owner Id, file path)
+     * 			
+     * @param Diagram object
+     * 			diagramName, inEdition, ownerId, ecoreFilePath
+     * @return true if success; false if fail
+     */
     public static boolean addDiagram(Diagram diagram) {
 	ResultSet rs;
 	try {
@@ -47,6 +54,13 @@ public class DiagramDAO {
 	return false;
     }
 
+    /**
+     * Get Diagram ArrayList from DB
+     * 
+     * @param project_Id
+     * 			The ID of the project
+     * @return Diagram ArrayList
+     */
     public static ArrayList<Diagram> getDiagramList(int project_Id) {
 	ArrayList<Diagram> searchResult = new ArrayList<>();
 	try {
@@ -80,6 +94,13 @@ public class DiagramDAO {
 	return null;
     }
 
+    /**
+     * Get Diagram from DB
+     * 
+     * @param diagram_Id
+     * 			The ID of the diagram
+     * @return Diagram object
+     */
     public static Diagram getDiagram(int diagram_Id) {
 	try {
 	    Connection conn = DbManager.getConnection();
@@ -111,6 +132,13 @@ public class DiagramDAO {
 	return null;
     }
 
+    /**
+     * Update Diagram from DB
+     * 
+     * @param Diagram object
+     * 			diagramName, createdTime, inEdition, ecoreFilePath
+     * @return true if success; false if fail
+     */
     public static boolean updateDiagram(Diagram diagram) {
 	try {
 	    Connection conn = DbManager.getConnection();
@@ -134,6 +162,12 @@ public class DiagramDAO {
 	return false;
     }
 
+    /**
+     * Delete Diagram from DB
+     * 
+     * @param Diagram object
+     * @return true if success; false if fail
+     */    
     public static boolean deleteDiagram(Diagram diagram) {
 	try {
 	    Connection conn = DbManager.getConnection();
