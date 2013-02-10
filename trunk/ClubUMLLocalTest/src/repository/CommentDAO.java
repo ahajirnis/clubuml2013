@@ -16,6 +16,13 @@ import java.util.logging.Logger;
 
 public class CommentDAO {
 
+    /**
+     * Add Comment into DB (user id, content, written time, diagram id)
+     * 			
+     * @param Comment object
+     * 			userId, content, diagramId
+     * @return true if success; false if fail
+     */
     public static boolean addComment(Comment comment) {
 	ResultSet rs;
 	try {
@@ -44,6 +51,13 @@ public class CommentDAO {
 	return true;
     }
 
+    /**
+     * Get Comment ArrayList from DB
+     * 
+     * @param diagram_id
+     * 			The ID of the diagram
+     * @return Comment ArrayList
+     */
     public static ArrayList<Comment> getComment(int diagram_id) {
 	ArrayList<Comment> searchResult = new ArrayList<>();
 	try {
@@ -75,6 +89,13 @@ public class CommentDAO {
 	return null;
     }
 
+    /**
+     * Update Comment from DB
+     * 
+     * @param Comment object
+     * 			content, commentTime, commentId 
+     * @return true if success; false if fail
+     */
     public static boolean updateComment(Comment comment) {
 	try {
 	    Connection conn = DbManager.getConnection();
@@ -95,6 +116,13 @@ public class CommentDAO {
 	return false;
     }
 
+    
+    /**
+     * Delete Diagram from DB
+     * 
+     * @param Comment object
+     * @return true if success; false if fail
+     */  
     public static boolean deleteComment(Comment comment) {
 	try {
 	    Connection conn = DbManager.getConnection();
