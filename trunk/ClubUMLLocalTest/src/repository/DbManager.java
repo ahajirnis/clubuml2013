@@ -17,7 +17,7 @@ public class DbManager {
 	 */
 	private static final String SERVER = "localhost:3306";
 	private static final String USER = "root";
-	private static final String PASSWORD = "alsgml";
+	private static final String PASSWORD = "1234";
 	private static final String DATABASE = "clubuml";
 	// as long as you're using mysql, leave this alone.
 	private static final String DATABASE_TYPE = "mysql";
