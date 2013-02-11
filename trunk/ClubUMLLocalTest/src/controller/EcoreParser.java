@@ -16,6 +16,13 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
  *
  * @author Kai
  */
+
+/**
+ * Information class that contains all the features of one EcoreParser
+ * @ doc author	Rui Hou
+ */
+
+
 public class EcoreParser {
     
     private ArrayList<EObject> list = new ArrayList<EObject>();

@@ -25,6 +25,11 @@ import repository.UserDAO;
  *
  * @author wintor12
  */
+
+/**
+ * Information class that contains all the features of one Display
+ * @ doc author	Rui Hou
+ */
 public class Display extends HttpServlet {
 
     /**
@@ -44,7 +49,7 @@ public class Display extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
-	// retrive diagram list from database.
+	// retrieve diagram list from database.
 	ArrayList<domain.EditingHistory> editedDiagrams = EditingHistoryDAO.getPriorityList();
 	if (!editedDiagrams.isEmpty()) {
 	    ArrayList<domain.Diagram> diagrams = new ArrayList();

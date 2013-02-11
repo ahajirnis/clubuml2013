@@ -27,6 +27,12 @@ import domain.User;
  *
  * @author wintor12
  */
+
+/**
+ * Information class that contains all the features of one ValidateServlet
+ * @ doc author	Rui Hou
+ */
+
 public class ValidateServlet extends HttpServlet {
 
     /**

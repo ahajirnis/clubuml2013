@@ -17,6 +17,12 @@ import repository.UserDAO;
 /**
  * @author Zhang Junyu
  */
+
+/**
+ * Information class that contains all the features of one LoginServlet
+ * @ doc author	Rui Hou
+ */
+
 public class LoginServlet extends HttpServlet {
 
     /**
@@ -40,7 +46,7 @@ public class LoginServlet extends HttpServlet {
 	String username = request.getParameter("username");
 	String password = request.getParameter("password");
 
-	//authorize user from databse, if exist, store it in session.
+	//authorize user from database, if exist, store it in session.
 	User userObj = UserDAO.getUser(username, password);
 	if (userObj != null) {
 	    HttpSession session = request.getSession(true);

@@ -21,6 +21,13 @@ import repository.EditingHistoryDAO;
  *
  * @author Pratham
  */
+
+/**
+ * Information class that contains all the features of one Promote
+ * @ doc author	Rui Hou
+ */
+
+
 @WebServlet(name = "Promote", urlPatterns = {"/Promote"})
 public class Promote extends HttpServlet {
 

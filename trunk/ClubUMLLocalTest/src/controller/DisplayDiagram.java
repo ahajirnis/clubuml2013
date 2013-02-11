@@ -32,6 +32,13 @@ import repository.UserDAO;
  *
  * @author wintor12
  */
+
+/**
+ * Information class that contains all the features of one DisplayDiagram
+ * @ doc author	Rui Hou
+ */
+
+
 public class DisplayDiagram extends HttpServlet {
 
     private String[] checked;// selected checkbox list from display jsp page.

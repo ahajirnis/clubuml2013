@@ -29,6 +29,12 @@ import repository.ReportDAO;
  * 
  * @author Pratham
  */
+
+/**
+ * Information class that contains all the features of one Compare
+ * @ doc author	Rui Hou
+ */
+
 @WebServlet(name = "Compare", urlPatterns = { "/Compare" })
 public class Compare extends HttpServlet {
 

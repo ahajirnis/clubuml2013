@@ -21,6 +21,12 @@ import org.eclipse.emf.ecore.EReference;
  * 
  * @author Kai
  */
+
+/**
+ * Information class that contains all the features of one DiagramFactory
+ * @ doc author	Rui Hou
+ */
+
 public class DiagramFactory {
 
 	// windows machine

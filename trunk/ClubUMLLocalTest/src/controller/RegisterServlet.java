@@ -25,6 +25,12 @@ import repository.UserDAO;
  * 
  * @author wintor12
  */
+
+/**
+ * Information class that contains all the features of one RegisterServlet
+ * @ doc author	Rui Hou
+ */
+
 public class RegisterServlet extends HttpServlet {
 
 	/**

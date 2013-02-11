@@ -31,6 +31,12 @@ import domain.EditingHistory;
  *
  * @author wintor12
  */
+
+/**
+ * Information class that contains all the features of one UploadServlet
+ * @ doc author	Rui Hou
+ */
+
 public class UploadServlet extends HttpServlet {
 
     private static final String TMP_DIR_PATH = "/uploads/";
