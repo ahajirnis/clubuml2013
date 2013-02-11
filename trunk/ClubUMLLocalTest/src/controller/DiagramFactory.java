@@ -59,6 +59,7 @@ public class DiagramFactory {
 	public String process() {
 		try {
 			String ecoreFilePath = absolutePath + ecoreFileName;
+			//get the path of ecore file
 			EcoreParser parserObj = new EcoreParser(ecoreFilePath);
 			pkgs = parserObj.getList();
 		} catch (IOException e) {

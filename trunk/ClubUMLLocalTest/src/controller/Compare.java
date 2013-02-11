@@ -136,6 +136,13 @@ public class Compare extends HttpServlet {
 		return "Short description";
 	}// </editor-fold>
 
+	
+	/**
+	 * 
+	 * @param path 
+	 * the path which the report file was set
+	 * @ doc author	Rui Hou
+	 */
 	private void saveReport(String path) {
 		Report reportObj = new Report();
 		reportObj.setDiagramA_Id(this.diagramID1);
@@ -144,6 +151,8 @@ public class Compare extends HttpServlet {
 		ReportDAO.addReport(reportObj);
 	}
 
+
+	
 	public void showPdf(String fileName, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
