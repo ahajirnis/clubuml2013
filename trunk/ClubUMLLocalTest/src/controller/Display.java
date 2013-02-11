@@ -60,7 +60,7 @@ public class Display extends HttpServlet {
 	    }
 	    if (!diagrams.isEmpty()) {
 		request.setAttribute("diagrams", diagrams);
-		//set the first diagram in diagram list as the default dispaly diagram..
+		//set the first diagram in diagram list as the default display diagram..
 		request.setAttribute("firstPath", diagrams.get(0).getEcoreFilePath() + ".png");
 		request.setAttribute("diagramId1", diagrams.get(0).getDiagramId());
 	    }

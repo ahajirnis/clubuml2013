@@ -129,8 +129,12 @@ public class DisplayDiagram extends HttpServlet {
     }// </editor-fold>
     /*
      * function to get two diagrams'id and path in diagram list , stroe them in ruquest and go to the compare page.
+     * @throws ServletException
+     * 			if a servlet-specific error occurs
+     * @throws IOException
+     * 			if an I/O error occurs
      */
-
+    
     public void goToCompare(String[] checked, HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
@@ -147,15 +151,20 @@ public class DisplayDiagram extends HttpServlet {
 
     }
 
-    /*
+    /**
      * function to display the selected diagram and its comments.
+     * @throws ServletException
+     * 			if a servlet-specific error occurs
+     * @throws IOException
+     * 			if an I/O error occurs
      */
+    
     public void displayDiagram(String[] checked, HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
 	int diagramId1 = Integer.parseInt(checked[0]);
 
-	// retrive diagram list from database.
+	// retrieve diagram list from database.
 	ArrayList<domain.EditingHistory> editedDiagrams = EditingHistoryDAO.getPriorityList();
 	if (!editedDiagrams.isEmpty()) {
 	    ArrayList<domain.Diagram> diagrams = new ArrayList();

@@ -141,7 +141,6 @@ public class Compare extends HttpServlet {
 	 * 
 	 * @param path 
 	 * the path which the report file was set
-	 * @ doc author	Rui Hou
 	 */
 	private void saveReport(String path) {
 		Report reportObj = new Report();
@@ -152,7 +151,10 @@ public class Compare extends HttpServlet {
 	}
 
 
-	
+	 /**
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	public void showPdf(String fileName, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
@@ -166,6 +168,11 @@ public class Compare extends HttpServlet {
 		sos.flush();
 	}
 
+	
+	/**
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	public ByteArrayOutputStream getByteArrayOutputStream(String fileName)
 			throws IOException {
 		File file = new File(fileName);
