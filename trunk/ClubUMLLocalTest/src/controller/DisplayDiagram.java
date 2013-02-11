@@ -34,19 +34,23 @@ import repository.UserDAO;
  */
 public class DisplayDiagram extends HttpServlet {
 
+    private String[] checked;// selected checkbox list from display jsp page.
+    private String option; // function button from display jsp page.
+	
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
      * <code>POST</code> methods.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * 			servlet request
+     * @param response
+     * 			servlet response
+     * @throws ServletException
+     * 			if a servlet-specific error occurs
+     * @throws IOException
+     * 			if an I/O error occurs
      */
-    private String[] checked;// selected checkbox list from display jsp page.
-    private String option; // function button from display jsp page.
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 	response.setContentType("text/html;charset=UTF-8");
@@ -73,10 +77,14 @@ public class DisplayDiagram extends HttpServlet {
      * Handles the HTTP
      * <code>GET</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * 			servlet request
+     * @param response
+     * 			servlet response
+     * @throws ServletException
+     * 			if a servlet-specific error occurs
+     * @throws IOException
+     * 			if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -88,10 +96,14 @@ public class DisplayDiagram extends HttpServlet {
      * Handles the HTTP
      * <code>POST</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * 			servlet request
+     * @param response
+     * 			servlet response
+     * @throws ServletException
+     * 			if a servlet-specific error occurs
+     * @throws IOException
+     * 			if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

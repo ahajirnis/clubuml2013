@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import repository.UserDAO;
 
 /**
- *
  * @author Zhang Junyu
  */
 public class LoginServlet extends HttpServlet {
@@ -24,10 +23,14 @@ public class LoginServlet extends HttpServlet {
      * Handles the HTTP
      * <code>POST</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request
+     * 			servlet request
+     * @param response
+     * 			servlet response
+     * @throws ServletException
+     * 			If a servlet-specific error occurs
+     * @throws IOException
+     * 			If an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

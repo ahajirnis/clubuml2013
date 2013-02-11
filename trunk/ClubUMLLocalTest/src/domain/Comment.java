@@ -1,5 +1,7 @@
 package domain;
 
+import java.sql.Date;
+
 /**
  * Information class that contains all the features of one comment
  * @ doc author	Dong Guo
