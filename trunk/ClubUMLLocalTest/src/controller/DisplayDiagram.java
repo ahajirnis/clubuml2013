@@ -178,7 +178,7 @@ public class DisplayDiagram extends HttpServlet {
 		for (int i = 0; i < diagrams.size(); i++) {
 		    if (diagrams.get(i).getDiagramId() == diagramId1) {
 
-			//set the first diagram in diagram list as the default dispaly diagram..
+			//set the first diagram in diagram list as the default display diagram..
 			request.setAttribute("firstPath", diagrams.get(i).getEcoreFilePath() + ".png");
 			request.setAttribute("diagramId1", diagrams.get(i).getDiagramId());
 
