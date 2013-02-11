@@ -3,9 +3,6 @@ package domain;
 /**
  * Information class that contain all the features of one Diagram
  * @ doc author	Dong Guo
- * 
- * not finished: inEdition. line: 31; 110-117
- * 				 projectId. line: 150
  */
 
 public class Diagram {
@@ -18,7 +15,6 @@ public class Diagram {
     private int projectId = 2; // default;
     private String ecoreFilePath;
     
-
 	/**
 	 * Constructor to initialize necessary class members
 	 *
@@ -29,7 +25,7 @@ public class Diagram {
 	 * @param createdTime
 	 * 			The time that this diagram was created
 	 * @param inEdition
-	 * 			
+	 * 			Status of is diagram
 	 * @param ownerId
 	 * 			The ID of the owner of this diagram
 	 * @param ecoreFilePath
@@ -108,11 +104,21 @@ public class Diagram {
         this.diagramName = diagramName;
     }
 
-    
+	/**
+	 * Gete the inEdition
+	 * 
+	 * @return inEdition boolean
+	 */
     public boolean isInEdition() {
         return inEdition;
     }
 
+	/**
+	 * Set inEdition
+	 * 
+	 * @param inEdition
+	 * 			Status of is diagram
+	 */
     public void setInEdition(boolean inEdition) {
         this.inEdition = inEdition;
     }
@@ -149,7 +155,7 @@ public class Diagram {
 	 * Set projectId
 	 * 
 	 * @param projectId
-	 * 			
+	 * 			The ID of this project
 	 */
     public void setProjectId(int projectId) {
         this.projectId = projectId;

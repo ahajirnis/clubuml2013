@@ -88,7 +88,7 @@ public class Report {
     public void setCompareTime(String compareTime) {
         this.compareTime = compareTime;
     }
-
+    
 	/**
 	 * Gete the reportFilePath
 	 * 

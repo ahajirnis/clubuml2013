@@ -1,7 +1,5 @@
 package domain;
 
-import java.sql.Date;
-
 /**
  * Information class that contains all the features of one editing record
  * @ doc author	Dong Guo
