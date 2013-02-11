@@ -55,7 +55,8 @@ public class LoginServlet extends HttpServlet {
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/home.jsp");
 	    dispatcher.forward(request, response);
 	} else {
-	    response.sendRedirect("invalid.jsp");
+	    response.sendRedirect("invalid.jsp");	
+	    //redirect user to invalid.jsp page if the input does not match
 	}
     }
 }

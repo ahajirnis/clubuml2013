@@ -59,16 +59,20 @@ public class RegisterServlet extends HttpServlet {
 		String question = request.getParameter("securityQuestion");
 		String answer = request.getParameter("securityAnswer");
 
+		
+		//check the existence of user's registration
 		User checkUserExist = UserDAO.getUser(username, password);
 		
 		if (checkUserExist != null) {
-			Failed(request, response, dispatcher);
+			Failed(request, response, dispatcher);		//user already existed, registration failed
 		} else {
 			User userObj = new User(username, password, email, question, answer, 2);
-			Success(request, response, dispatcher, userObj);
+			Success(request, response, dispatcher, userObj);	//registration succeeded
 		}
 	}
 
+
+	
 	private void Success(HttpServletRequest request,
 			HttpServletResponse response, RequestDispatcher dispatcher,
 			User userObj) throws ServletException, IOException {

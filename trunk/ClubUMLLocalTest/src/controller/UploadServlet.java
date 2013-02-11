@@ -117,7 +117,7 @@ public class UploadServlet extends HttpServlet {
     }
 
     /*
-     * function to store upload diagram informatio into database.
+     * function to store upload diagram information into database.
      */
 
     private void storeDatabase(String path, String fileName, int userID) {
