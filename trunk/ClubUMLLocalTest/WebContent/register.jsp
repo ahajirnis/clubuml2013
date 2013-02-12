@@ -85,8 +85,7 @@
 							<td><input type="text" name="securityAnswer"></td>
 						</tr>
 						<tr>
-							<td colspan="2" style="text-align:center"><input id='SubmitButton' type="submit" value="Create Account"
-								disabled="true"></td>
+							<td colspan="2" style="text-align:center"><input id='SubmitButton' type="submit" value="Create Account"></td>
 						</tr>
 					</table>
 				</table>
