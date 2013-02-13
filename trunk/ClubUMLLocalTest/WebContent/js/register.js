@@ -1,23 +1,32 @@
+// valid user flag. Used by Ajax call.
+var validUser = false;
+
 /**
  * Validates all required fields.
  * 
  * @returns true if all fields are valid, else false
  */
 function validateForm() {
-	if (document.forms.register.username.value == "") {
-		alert("User Name can not be empty!");
+
+	var username = document.forms.registerForm.username.value;
+	var password = document.forms.registerForm.password.value;
+	var password2 = document.forms.registerForm.password2.value;
+	var email = document.forms.registerForm.email.value;
+
+	if (!validUser) {
+		alert("Require valid user!");
 		return false;
-	} else if (document.forms.register.password.value == "") {
+	} else if (password == "") {
 		alert("Password can not be empty!");
 		return false;
-	} else if (document.forms.register.password.value != document.forms.register.password2.value) {
+	} else if (document.forms.registerForm.password.value != document.forms.registerForm.password2.value) {
 		alert("Password does not match!");
 		return false;
-	} else if (document.forms.register.email.value == "") {
-		alert("Email can not be empty!");
+	} else if (!validateEmail(email)) {
+		alert("Require valid email!");
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -33,7 +42,17 @@ function checkUsername(value) {
 	ajax = createAjax();
 	ajax.onreadystatechange = function() {
 		if (ajax.readyState == 4 && ajax.status == 200) {
-			block.innerHTML = ajax.responseText;
+			var patt1 = new RegExp("ok");
+			var response = ajax.responseText;
+
+			block.innerHTML = response;
+
+			// Set flag for validUser
+			if (patt1.test(response)) {
+				validUser = true;
+			} else {
+				validUser = false;
+			}
 		}
 	};
 	ajax.open("get", "ValidateServlet?username=" + value + "", true);
@@ -60,22 +79,38 @@ function checkPassword() {
 }
 
 /**
- * Validate email format.
- * 
  * Displays message for valid and invalid email.
  * 
  * @param email to verify
  */
 function checkEmail(email) {
 	var block = document.getElementById("email");
-	var patt1 = new RegExp(".+@.+\.[com|net|org|biz|gov|edu]$");
+	var emailFlag = validateEmail(email);
 
 	if (email == "") {
 		block.innerHTML = "";
-	} else if (patt1.test(email)) {
+	} else if (emailFlag) {
 		block.innerHTML = "<font color = 'green'>Email ok";
 	} else {
 		block.innerHTML = "<font color = 'red'> Invalid email";
+	}
+}
+
+/**
+ * Validates if email is in correct format
+ * 
+ * @param email to verify
+ * @return true if valid email, else false
+ */
+function validateEmail(email) {
+	var patt1 = new RegExp(".+@.+\.[com|net|org|biz|gov|edu]$");
+
+	if (email == "") {
+		return false;
+	} else if (patt1.test(email)) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -96,6 +131,7 @@ function createAjax() {
 
 /**
  * (Have not seen used. Candidate for removal)
+ * 
  * @returns
  */
 function checkPromote() {
