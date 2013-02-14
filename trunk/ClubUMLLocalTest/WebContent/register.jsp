@@ -18,7 +18,7 @@
 
 </head>
 <body>
-	<form method="post" action="RegisterServlet" name="registerForm" onsubmit = "return validate()">
+	<form method="post" action="RegisterServlet" name="registerForm" onsubmit="return validateForm()">
 		<div class="main">
 			<div class="header">
 				<div class="header_resize">
@@ -48,24 +48,24 @@
 						<tr>
 							<td><font color="#61210B">Username:</font></td>
 							<td><input type="text" name="username"
-								onblur="checkUsername(this.value);ProcessSubmitState()"></td>
+								onblur="checkUsername(this.value);"></td>
 							<td><span id="username"></span></td>
 						</tr>
 						<tr>
 							<td><font color="#61210B">Password:</font></td>
 							<td><input type="password" name="password"
-								onblur="checkPassword(); ProcessSubmitState()"></td>
+								onblur="checkPassword();"></td>
 						</tr>
 						<tr>
 							<td><font color="#61210B">Confirm Password:</font></td>
 							<td><input type="password" name="password2"
-								onblur="checkPassword(); ProcessSubmitState()"></td>
+								onblur="checkPassword(); "></td>
 							<td><span id="password"></span></td>
 						</tr>
 						<tr>
 							<td><font color="#61210B">Email:</font></td>
 							<td><input type="text" name="email"
-								onblur="checkEmail(this.value); ProcessSubmitState()"></td>
+								onblur="checkEmail(this.value);"></td>
 							<td><span id="email"></span></td>
 						</tr>
 						<tr>
