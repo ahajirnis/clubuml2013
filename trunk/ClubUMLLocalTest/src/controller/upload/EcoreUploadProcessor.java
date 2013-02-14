@@ -229,16 +229,10 @@ public class EcoreUploadProcessor implements UploadProcessor {
 	}
 
 	/**
-	 * Genereates PNG file
+	 * Generates PNG file
 	 */
 	public void createPngFile() {
 		try {
-			// String command1 =
-			// "java -jar C:\\java\\Project\\UMLGraph-5.6\\lib\\UmlGraph.jar -all -private "
-			// + javaFileName + ".java";
-
-			// String toolPath =
-			// "/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/tools.jar";
 			String umlGraphPath = libPath + "UmlGraph-5.6.jar";
 
 			// Command to create the dot file from a Java file

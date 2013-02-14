@@ -41,6 +41,8 @@ public class UploadProcessorFactory {
 			return new EcoreUploadProcessor(pDestFilePath, pFileName, pLibPath);
 
 		case XMI_FILE_CLASS:
+			// Stub
+			// return new XmiUploadProcessor(pDestFilePath, pFileName, pLibPath);
 			break;
 		}
 
