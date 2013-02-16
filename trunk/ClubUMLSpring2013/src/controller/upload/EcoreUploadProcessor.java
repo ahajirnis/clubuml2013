@@ -21,14 +21,12 @@ import controller.EcoreParser;
  * @author RD2012
  * 
  */
-public class EcoreUploadProcessor implements UploadProcessor {
+public class EcoreUploadProcessor extends ClassUploadProcessor {
 
 	private String absolutePath;
 	private String libPath;
 	private String ecoreFileName;
 	private String javaFileName;
-	private String dotFileName;
-	private String pngFileName;
 
 	private ArrayList<EObject> pkgs;
 	private BufferedWriter out;
@@ -37,9 +35,10 @@ public class EcoreUploadProcessor implements UploadProcessor {
 	 * Constructor for Ecore file
 	 * 
 	 * @param pDestFilePath
-	 *            destination path to create new files
+	 *            destination path to create new files.
 	 * @param pFileName
-	 *            new file name
+	 *            Ecore file name. Also used to generate other related file
+	 *            names (.dot, .java, .png).
 	 * @param pLibPath
 	 *            path to the library directory for web application.
 	 */
@@ -49,8 +48,6 @@ public class EcoreUploadProcessor implements UploadProcessor {
 		this.libPath = pLibPath;
 		this.ecoreFileName = pFileName;
 		this.javaFileName = pFileName + ".java";
-		this.dotFileName = pFileName + ".dot";
-		this.pngFileName = pFileName + ".png";
 	}
 
 	@Override
@@ -64,8 +61,8 @@ public class EcoreUploadProcessor implements UploadProcessor {
 			e.printStackTrace();
 		}
 
-		createJavaFile();
-		createPngFile();
+		this.createJavaFile();
+		this.createPngFile(ecoreFileName, javaFileName, absolutePath, libPath);
 
 	}
 
@@ -226,56 +223,6 @@ public class EcoreUploadProcessor implements UploadProcessor {
 		}
 
 		System.out.println("Complete creating java file.");
-	}
-
-	/**
-	 * Generates PNG file
-	 */
-	public void createPngFile() {
-		try {
-			String umlGraphPath = libPath + "UmlGraph-5.6.jar";
-
-			// Command to create the dot file from a Java file
-			String command1[] = { "java", "-jar", umlGraphPath, "-all",
-					"-private", absolutePath + javaFileName, "-output",
-					absolutePath + dotFileName };
-
-			Process procObj1 = Runtime.getRuntime().exec(command1);
-			int exitVal = procObj1.waitFor();
-			if (exitVal == 0) {
-
-			} else {
-				System.out.println("Error in creating the dot file");
-			}
-			try {
-				Thread.sleep(1000L);
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Error 1");
-			}
-			System.out.println("Exec 2nd command");
-
-			// Command to generate PNG file from dot file
-			String command2[] = { UploadProcessor.GRAPHICVIZ_PATH_WINDOWS,
-					"-Tpng", "-o", absolutePath + pngFileName,
-					absolutePath + dotFileName };
-
-			try {
-				Process procObj = Runtime.getRuntime().exec(command2);
-				exitVal = procObj.waitFor();
-				if (exitVal == 0) {
-
-				} else {
-					System.out.println("Error in creating the png file");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Error 2");
-			}
-		} catch (Exception e) {
-			System.out.println("Error in creating the png file.............");
-			e.printStackTrace();
-		}
 	}
 
 }
