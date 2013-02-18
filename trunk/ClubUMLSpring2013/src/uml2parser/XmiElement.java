@@ -3,6 +3,7 @@ package uml2parser;
 import java.util.ArrayList;
 import java.util.List;
 import org.xml.sax.Attributes;
+import java.util.Stack;
 
 public class XmiElement {
 	
@@ -28,6 +29,9 @@ public class XmiElement {
 	 * 
 	 */
 	private List <Attribute> attr;
+	/**
+	 * 
+	 */
 	private String elem_xmi_id;
 
 	/**
@@ -57,24 +61,47 @@ public class XmiElement {
 	public List<Attribute> getAttrib()  { 
 		return attr; 
 	}
-	
-	public XmiElement GetParentElem() { 
+	/**
+	 * 
+	 * @return
+	 */
+	public XmiElement getParentElem() { 
 		return parentElem;
 	}
-	public List<XmiElement> childElemList() {
+	/**
+	 * 
+	 * @return
+	 */
+	public List<XmiElement> getChildElemList() {
 		return childElem;
 	}
-	
+	/**
+	 * 
+	 * @param elem
+	 */
 	public void addChildElement(XmiElement elem) {
 		childElem.add(elem);
 	}
-	
+	/**
+	 * 
+	 * @param elem
+	 */
 	public void setParentElem(XmiElement elem) {
 		if (parentElem == null) {
 			parentElem = elem;
 		}
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public String getElementId() {
 		return elem_xmi_id;
 	}
+	
+	public String getElementName() { 
+		return elementName;
+	}
+	
+	
 }

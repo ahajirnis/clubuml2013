@@ -31,7 +31,7 @@ public class Attribute {
 	 * 
 	 * @return The Value of the Attribute
 	 */
-	public String value() { 
+	public String getValue() { 
 		return value;
 	}
 }
