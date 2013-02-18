@@ -1,5 +1,7 @@
 package controller.upload;
 
+import java.util.List;
+import logging.Log;
 /**
  * UploadProcessFactory - Returns an instance of an Upload object depending on
  * the file that is passed in.
@@ -16,33 +18,35 @@ public class UploadProcessorFactory {
 
 	// extensions
 	private final static String ECORE_EXTENSION = "ecore";
-	private final static String XMI_EXTENSION = "xmi";
+	public final static String UML_EXTENSION = "uml";
+	public final static String NOTATION_EXTENSION = "notation";
+	public final static String DI_EXTENSION = "di";
 
 	/**
 	 * For a valid target file, instantiates and returns an upload processor
 	 * 
-	 * @param pTargetFilePath
-	 *            file to process
-	 * @param pDestFilePath
-	 *            destination path to create new files
-	 * @param pFileName
-	 *            new file name
-	 * @param pLibPath
-	 *            path to the library directory for web application.
-	 * @return upload processor object for valid target file, else null
+	 * 	 @param  pTargetFilePath
+	 *  
+	 *   @param  fileList
+	 *   
+ 	 *   @return upload processor object for valid target file, else null
 	 */
 	public static UploadProcessor getUploadProcessorMethod(
-			String pTargetFilePath, String pDestFilePath, String pFileName,
-			String pLibPath) {
+			String pTargetFilePath, List<FileInfo> fileList) {
 
 		switch (getFileType(pTargetFilePath)) {
 
 		case ECORE_FILE_CLASS:
-			return new EcoreUploadProcessor(pDestFilePath, pFileName, pLibPath);
-
+			if (fileList.size() == 1) {
+				return new EcoreUploadProcessor(fileList.get(0).getDestFilePath(), 
+						fileList.get(0).getFileName(), fileList.get(0).getLibPath());
+			}
+			break;
 		case XMI_FILE_CLASS:
 			// Stub
-			// return new XmiUploadProcessor(pDestFilePath, pFileName, pLibPath);
+			if (fileList.size() == 3) {
+				return new UmlUploadProcessor(fileList);
+			}
 			break;
 		}
 
@@ -66,7 +70,9 @@ public class UploadProcessorFactory {
 
 			return ECORE_FILE_CLASS;
 
-		} else if (extension.equalsIgnoreCase(XMI_EXTENSION)) {
+		} else if (extension.equalsIgnoreCase(UML_EXTENSION) || extension.equalsIgnoreCase(NOTATION_EXTENSION)
+					||  extension.equalsIgnoreCase(DI_EXTENSION)
+				) {
 
 			return XMI_FILE_CLASS;
 
