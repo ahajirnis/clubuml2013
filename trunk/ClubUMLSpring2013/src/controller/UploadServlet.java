@@ -28,7 +28,10 @@ import controller.upload.UploadProcessor;
 import controller.upload.UploadProcessorFactory;
 import domain.Diagram;
 import domain.EditingHistory;
-
+import logging.Log;
+import java.util.ArrayList;
+import java.util.List;
+import controller.upload.FileInfo;
 /**
  * 
  * @author wintor12
@@ -48,6 +51,11 @@ public class UploadServlet extends HttpServlet {
 	private File tmpDir;
 	private File destinationDir;
 	private File libDir;
+	private List<FileInfo> fileList;
+	
+	public UploadServlet() {
+		fileList = new ArrayList<FileInfo>();
+	}
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,19 +78,26 @@ public class UploadServlet extends HttpServlet {
 		String id = session.getAttribute("userId").toString();
 
 		ServletContext context = getServletContext();
+		
 		tmpDir = new File(context.getRealPath(TMP_DIR_PATH));
+
 		destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
+
 		libDir = new File(context.getRealPath(LIB_DIR_PATH));
+
 		DiskFileItemFactory dfif = new DiskFileItemFactory();
 		dfif.setSizeThreshold(1 * 1024 * 1024);// 1MB
 		dfif.setRepository(tmpDir);
-
+		String filename ="";
 		ServletFileUpload uploadHandler = new ServletFileUpload(dfif);
 		try {
 			List<?> items = uploadHandler.parseRequest(request);
+
 			Iterator<?> itr = items.iterator();
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
+				filename = item.getName();
+
 				if ((!item.isFormField()) && (!item.getName().equals(""))
 						&& (!id.equals(""))) {// check if item is a file
 					String newName = renameFile(id, item.getName());// rename
@@ -101,15 +116,8 @@ public class UploadServlet extends HttpServlet {
 					request.setAttribute("relativePath", relativePath + newName);
 					request.setAttribute("javaFile", relativePath + newName
 							+ ".java");
-
-					// Obtains upload processor to perform parsing and file
-					// generations
-					UploadProcessor processor = UploadProcessorFactory
-							.getUploadProcessorMethod(item.getName(),
-									absolutePath, newName, libPath);
-					processor.process();
-
-					// Save ecore file to database
+					fileList.add(new FileInfo(absolutePath,newName,libPath));
+					//Log.LogCreate().Info(" File list " + absolutePath  +"  "  + newName + " "  + libPath);
 					String ecoreFileName = "uploads/" + newName;
 					newName += ".png";
 					this.storeDatabase(ecoreFileName, newName,
@@ -119,8 +127,19 @@ public class UploadServlet extends HttpServlet {
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+
 		}
 
+		// Obtains upload processor to perform parsing and file
+		// generations		
+		if (!fileList.isEmpty()) {
+			UploadProcessor processor = UploadProcessorFactory
+					.getUploadProcessorMethod(filename,fileList );
+			if (processor != null){
+
+				processor.process();
+			}
+		}	
 		RequestDispatcher rd = request.getRequestDispatcher("Display");
 		rd.forward(request, response);
 
