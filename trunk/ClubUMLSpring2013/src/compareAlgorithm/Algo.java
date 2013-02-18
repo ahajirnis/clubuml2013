@@ -17,6 +17,9 @@ import org.eclipse.emf.ecore.EReference;
  * 
  * @author Shoeb Shaikh
  * 
+ * marks by Dong Guo
+ * Line 40;93;540;746
+ * 
  */
 public class Algo {
 
@@ -31,6 +34,12 @@ public class Algo {
 
 	private ArrayList<String> matchedClasses; // Records matched classes
 	private ArrayList<String> comparedClasses; // Records compared classes
+	
+	
+	
+	//private ArrayList<String> similarClasses;
+	//private ArrayList<String> aloneClasses;
+	
 
 	Report report; // for writing report to the pdf file
 
@@ -77,10 +86,17 @@ public class Algo {
 					compareUnPackedClasses(firstClass, secondClass);
 				}
 			}
+
 			// Reporting unmatch classes
 			reportUnmatchedClasses();
 		}
 
+		//********************************For testing matchedClasses, plz keep, Dong Guo
+		for(int i = 0; i < matchedClasses.size(); i++){
+			report.addToReport(i + ": " + matchedClasses.get(i));
+		}
+		//**********************************************************
+		
 		// Close the report
 		report.finalize();
 
@@ -291,8 +307,16 @@ public class Algo {
 		compareAttributes(cls1, cls2);
 		compareMethods(cls1, cls2);
 		compareReferences(cls1, cls2);
-		matchedClasses.add(cls1.getName());
-		matchedClasses.add(cls2.getName());
+		
+		/*
+		 * If the classes match each other,
+		 * they will be added into matchedClasses in compareClasses()
+		 * These two lines are duplicated.
+		 * 
+		 * Dong Guo 02/17/2013
+		 */
+		//matchedClasses.add(cls1.getName());
+		//matchedClasses.add(cls2.getName());
 	}
 
 	/**
@@ -512,6 +536,15 @@ public class Algo {
 						&& structRefCompare(cls1, cls2) >= 0.5) {
 					report.addToReport("Structural Match " + cls1.getName()
 							+ " : " + cls2.getName());
+					
+					/*
+					 * set list of classes with different names but might be same 
+					 * Dong Guo
+					 * 
+					 * similarClasses.add(cls1.getName());
+					 * similarClasses.add(cls2.getName());
+					 */
+					
 					this.compareClassDetails(cls1, cls2);
 				} else {
 					// Add the unmatched classes to the list of classes compared
@@ -709,4 +742,18 @@ public class Algo {
 			}
 		}
 	}
+	
+	/*
+	 * The aloneClasses list that might be useful
+	 * Dong Guo
+	 * 
+	 * private void setAloneClasses(){
+	 * 		for(int i = 0; i < comparedClasses.size(); i++) {
+	 * 			if(!matchedClasses.contains(comparedClasses.get(i)) 
+	 * 				&& !similarClasses.contains(comparedClasses.get(i))){
+	 * 					aloneClasses.add(comparedClasses.get(i));
+	 * 			}
+	 * 		}
+	 * }
+	 */
 }
