@@ -10,7 +10,7 @@ public class Log {
 	private static Log log = null; 
 	public static Log LogCreate() {
 		if (log == null) {
-			log = new Log("temp.log");
+			log = new Log("C:\\temp\\temp.log");
 		}
 		return log;
 	}
