@@ -1,30 +1,29 @@
 package uml2parser;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 import logging.Log;
-
 import org.xml.sax.Attributes;
 
 /**
  * 
- * @author 
+ * @author Prashant Shukla
+ * When we parse a XMI file. This we have a list of elements that are present in the file
+ * This list only contains the top level elements. 
  *
  */
 public class ModelFileInfo {
 	
 	/**
-	 * 
+	 * Name of the file that was parsed. 
 	 */
 	private String fileName;
 	/**
-	 * 
+	 * List of top level elements in this XMI file
 	 */
 	private List<XmiElement> list; 
 	/**
-	 * 
+	 * Constructor
 	 * @param fileName
 	 */
 	public ModelFileInfo(String fileName) {
@@ -32,14 +31,14 @@ public class ModelFileInfo {
 		list= new ArrayList<XmiElement>();
 	}
 	/**
-	 * 
+	 * returns the name of the file.
 	 * @return
 	 */
 	public String getFileName() {
 		return fileName;
 	}
 	/**
-	 * 
+	 * Add a element to the list. 
 	 * @param elem
 	 */
 	public void addElement(XmiElement elem) {
@@ -47,12 +46,16 @@ public class ModelFileInfo {
 		list.add(elem);
 	}
 	/**
-	 * 
+	 * Returns the
 	 * @param idx
 	 * @return
 	 */
 	public XmiElement getElement(int idx) {
-		return list.get(idx);
+		XmiElement retElem = null;
+		if (idx >= 0  && idx < list.size()) {
+			retElem = list.get(idx);
+		}
+		return retElem;
 	}
 	/**
 	 * 
@@ -66,7 +69,13 @@ public class ModelFileInfo {
 		}
 		
 	}
-	
+	/**
+	 * 
+	 * @param parentElem
+	 * @param childElem
+	 * @param listElem
+	 * @return
+	 */
 	private boolean ElementIteratorToAddChildElem(XmiElement parentElem, XmiElement childElem, XmiElement listElem) {
 		boolean retval = false;
 		if (parentElem.getElementId() == null ) {
@@ -91,7 +100,11 @@ public class ModelFileInfo {
 		}
 		return retval;
 	}
-	
+	/**
+	 * 
+	 * @param ElemName
+	 * @return
+	 */
 	public List<XmiElement> findElementsByName(String ElemName) {
 		List<XmiElement> elementList = new ArrayList<XmiElement>();
 		//Log.LogCreate().Info("findElementsByName: elementList size" + String.valueOf(elementList.size()) );
@@ -102,7 +115,12 @@ public class ModelFileInfo {
 		return elementList;
 
 	}
-	
+	/**
+	 * 
+	 * @param name
+	 * @param elemname
+	 * @param elementList
+	 */
 	private void ElementIterator(XmiElement name, String elemname,List<XmiElement> elementList) {
 		
 		List <XmiElement> childElementlist = name.getChildElemList();
@@ -121,8 +139,12 @@ public class ModelFileInfo {
 		}
 		return;
 	}
-	
-	public boolean fileElementsById(String id) {
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public boolean findElementsById(String id) {
 		boolean retval = false;
 		for (int i = 0; i < list.size(); i++) {
 			XmiElement elem= getElement(i);
@@ -132,11 +154,17 @@ public class ModelFileInfo {
 		}
 		return retval;
 	}
-	
+	/**
+	 * 
+	 * @param name
+	 * @param elemId
+	 * @return
+	 */
 	private boolean ElementIteratorById(XmiElement name, String elemId) {
 		List <XmiElement> childElementlist = name.getChildElemList();
 		
 		if(name.getElementId() != null && name.getElementId().equals(elemId)) {
+			name.setFoundMatch(true);
 			return true;
 		}
 		if(childElementlist != null) {

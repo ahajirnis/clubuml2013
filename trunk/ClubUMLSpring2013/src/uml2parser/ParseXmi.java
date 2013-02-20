@@ -7,15 +7,24 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 
 /**
- * 
+ *  
  * @author Prashant Shukla
- *
+ * We are using a SAX parser to parse the XMI file. Once we parse the file we save the 
+ * elements, it's associated attributes and their values, each element's parent and child element 
+ * information. This information is saved in ModelFileInfo.
+ *  
  */
 public class ParseXmi extends org.xml.sax.helpers.DefaultHandler {
 	
-	
 	public String fileName; 
+	/*
+	 *  Using a stack to determine which the parent and child relation between 
+	 *  the elements
+	 */
 	public Stack stack;
+	/*
+	 *  once we parse the file we save the information in the ModelFileInfo
+	 */
 	public ModelFileInfo fileInfo;
 	
 	/**
