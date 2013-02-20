@@ -13,6 +13,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 	List <FileInfo> fileList; 
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
 	private final static String PAPYRUS_NOTATION_ELEM = "notation:Diagram"; 
+	private final static String PAPYRUS_PACKAGED_ELEM = "packagedElement";
 	private boolean isClassDiag = false;
 	private boolean isSeqDiag = false;
 	private List<String> activeIdList;
@@ -84,14 +85,22 @@ public class UmlUploadProcessor implements UploadProcessor {
 			boolean foundError = false;
 			// now find the elements in the class 
 			for (int i = 0 ; i < activeIdList.size(); i++) {
-				if (modelUmlInfo.fileElementsById(activeIdList.get(i)) == false) {
+				if (modelUmlInfo.findElementsById(activeIdList.get(i)) == false) {
 					foundError = true;
 					break;
 				}
 				
 			}
 			if (foundError == false) {
-				// Convert this into a java file. 
+				// Convert this into a java file.
+				
+				// Build a list of Class. 
+				List <XmiElement> classList = new ArrayList<XmiElement> ();
+				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
+				for (int i = 0 ; i < packagedElemList.size(); i++) {
+					if (packagedElemList.get(i).getFoundMatch())
+						Log.LogCreate().Info( "Element Name = " + packagedElemList.get(i).getElementName());
+				}
 			}
 			
 		}		
