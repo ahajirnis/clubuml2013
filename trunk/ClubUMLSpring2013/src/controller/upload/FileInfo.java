@@ -33,7 +33,7 @@ public class FileInfo {
 	 * @return
 	 */
 	public String getFileName() { 
-		return (getDestFilePath() + pFileName);
+		return pFileName;
 	}
 	/**
 	 * 

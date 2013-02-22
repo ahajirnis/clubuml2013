@@ -54,7 +54,7 @@ public class UploadServlet extends HttpServlet {
 	private List<FileInfo> fileList;
 	
 	public UploadServlet() {
-		fileList = new ArrayList<FileInfo>();
+		
 	}
 
 	/**
@@ -84,11 +84,14 @@ public class UploadServlet extends HttpServlet {
 		destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
 
 		libDir = new File(context.getRealPath(LIB_DIR_PATH));
-
+		
+		fileList = new ArrayList<FileInfo>();
+		
 		DiskFileItemFactory dfif = new DiskFileItemFactory();
 		dfif.setSizeThreshold(1 * 1024 * 1024);// 1MB
 		dfif.setRepository(tmpDir);
-		String filename ="";
+		String filename = "";
+		
 		ServletFileUpload uploadHandler = new ServletFileUpload(dfif);
 		try {
 			List<?> items = uploadHandler.parseRequest(request);
@@ -96,6 +99,12 @@ public class UploadServlet extends HttpServlet {
 			Iterator<?> itr = items.iterator();
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
+				
+				if (item.getName().isEmpty()) {
+					// Skip if there is no name for the file
+					continue;
+				}
+				
 				filename = item.getName();
 
 				if ((!item.isFormField()) && (!item.getName().equals(""))
