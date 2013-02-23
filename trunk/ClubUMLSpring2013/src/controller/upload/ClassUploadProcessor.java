@@ -1,5 +1,7 @@
 package controller.upload;
 
+
+import logging.Log;
 /**
  * Abstract class for Class diagram upload processors. Implements a
  * createPngFile() that should be common for Class diagrams.
@@ -31,7 +33,7 @@ public abstract class ClassUploadProcessor implements UploadProcessor {
 			String umlGraphPath = pLibPath + "UmlGraph-5.6.jar";
 			String dotFileName = pFileName + ".dot";
 			String pngFileName = pFileName + ".png";
-
+			
 			// Command to create the dot file from a Java file
 			String command1[] = { "java", "-jar", umlGraphPath, "-all",
 					"-private", pFileDir + pJavaFileName, "-output",
@@ -42,14 +44,14 @@ public abstract class ClassUploadProcessor implements UploadProcessor {
 			int exitVal = procObj1.waitFor();
 
 			if (exitVal != 0) {
-				System.out.println("Error in creating the dot file");
+				Log.LogCreate().Info("Error in creating the dot file");
 			}
 
 			try {
 				Thread.sleep(1000L);
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error 1: creating dot file failed");
+				Log.LogCreate().Info("Error 1: creating dot file failed");
 			}
 
 			// Command to generate PNG file from dot file
@@ -61,15 +63,15 @@ public abstract class ClassUploadProcessor implements UploadProcessor {
 				Process procObj = Runtime.getRuntime().exec(command2);
 				exitVal = procObj.waitFor();
 				if (exitVal != 0) {
-					System.out.println("Error in creating the png file");
+					Log.LogCreate().Info("Error in creating the png file");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error 2: generating png file failed");
+				Log.LogCreate().Info("Error 2: generating png file failed");
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error in creating the png file.............");
+			Log.LogCreate().Info("Error in creating the png file.............");
 			e.printStackTrace();
 		}
 	}
