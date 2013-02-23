@@ -28,7 +28,7 @@ public class ParseXmi extends org.xml.sax.helpers.DefaultHandler {
 	public ModelFileInfo fileInfo;
 	
 	/**
-	 * 
+	 * We have instance of the 
 	 * @param fileInfo
 	 */
 	public ParseXmi(ModelFileInfo fileInfo ) {

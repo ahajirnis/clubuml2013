@@ -17,7 +17,7 @@ public class XmiElement {
 	 */
 	private String elementName; 
 	/**
-	 * This flag is only when we are trying to determine 
+	 * This flag is only used when we are trying to determine 
 	 * if the ID is active in UML file or if it is an unused(inactive)
 	 * entry. 
 	 */
@@ -140,6 +140,17 @@ public class XmiElement {
 	 */
 	public boolean getFoundMatch() {
 		return foundmatch;
+	}
+	
+	public String getAttributeValue(String attribName) {
+		String temp = null;
+		for (int k = 0; k < attr.size(); k++) {
+			if (attr.get(k).getName().equals(attribName)) {
+				temp = attr.get(k).getValue();
+				break;
+			}
+		}
+		return temp;
 	}
 	
 }

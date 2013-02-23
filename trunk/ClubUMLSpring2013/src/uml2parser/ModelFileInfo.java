@@ -14,6 +14,8 @@ import org.xml.sax.Attributes;
  */
 public class ModelFileInfo {
 	
+	
+	XmiIdToElementMap xmiIdElement;
 	/**
 	 * Name of the file that was parsed. 
 	 */
@@ -28,6 +30,7 @@ public class ModelFileInfo {
 	 */
 	public ModelFileInfo(String fileName) {
 		this.fileName = fileName;
+		xmiIdElement = new XmiIdToElementMap();
 		list= new ArrayList<XmiElement>();
 	}
 	/**
@@ -44,6 +47,10 @@ public class ModelFileInfo {
 	public void addElement(XmiElement elem) {
 		//Log.LogCreate().Info(elem.getElementName());
 		list.add(elem);
+		String id = elem.getElementId();
+		if (id != null) {
+			xmiIdElement.addElement(id,elem);
+		}
 	}
 	/**
 	 * Returns the
@@ -82,11 +89,19 @@ public class ModelFileInfo {
 			if (parentElem.getElementName().equals(listElem.getElementName())) {
 				//Log.LogCreate().Info("AddChildElement : " + parentElem.getElementName() + " childElem " + childElem.getElementName());
 				parentElem.addChildElement(childElem);
+				String id = childElem.getElementId();
+				if(id != null) {
+					xmiIdElement.addElement(id,childElem);
+				}
 				retval = true;
 			}
 		} else if (parentElem.getElementId().equals(listElem.getElementId())){
 			//Log.LogCreate().Info("AddChildElement : " + parentElem.getElementName() + " childElem " + childElem.getElementName());
 			parentElem.addChildElement(childElem);
+			String id = childElem.getElementId();
+			if(id != null) {
+				xmiIdElement.addElement(id,childElem);
+			}
 			retval = true;
 		} else {
 			List <XmiElement> list = listElem.getChildElemList();
@@ -176,5 +191,9 @@ public class ModelFileInfo {
 		
 		}	
 		return false;
+	}
+	
+	public XmiElement getXmiElementFromId(String id) {
+		return xmiIdElement.getElementFromId(id);
 	}
 }
