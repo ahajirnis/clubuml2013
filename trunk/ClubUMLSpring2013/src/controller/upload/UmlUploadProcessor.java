@@ -2,13 +2,23 @@ package controller.upload;
 import uml2parser.*;
 import logging.Log;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EReference;
 /**
  * 
  * @author shuklp
  *
  */
-public class UmlUploadProcessor implements UploadProcessor {
+public class UmlUploadProcessor extends ClassUploadProcessor {
 		
 	List <FileInfo> fileList; 
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
@@ -18,6 +28,8 @@ public class UmlUploadProcessor implements UploadProcessor {
 	private boolean isSeqDiag = false;
 	private List<String> activeIdList;
 	private XmiElement classXmiDiag;  
+	ModelFileInfo modelUmlInfo;
+	private String Umlfilename; 
 	
 	public UmlUploadProcessor(List <FileInfo> list) {
 		fileList = list;
@@ -27,18 +39,20 @@ public class UmlUploadProcessor implements UploadProcessor {
 	@Override
 	public void process() {
 		
+
+				
 		// first process the .notation file 
 		FileInfo info = getFile(UploadProcessorFactory.NOTATION_EXTENSION);
-		ModelFileInfo notationmodelInfo = new ModelFileInfo(info.getFileName());
+		ModelFileInfo notationmodelInfo = new ModelFileInfo(info.getDestFilePath() + info.getFileName());
 		ParseXmi notationXmi = new ParseXmi(notationmodelInfo);
 		
 		notationXmi.parseDoc();
 		
 		// Parse the UML File 
 		FileInfo umlInfo = getFile(UploadProcessorFactory.UML_EXTENSION);
-		ModelFileInfo modelUmlInfo  = new ModelFileInfo(umlInfo.getFileName());
+		modelUmlInfo = new ModelFileInfo(umlInfo.getDestFilePath() + umlInfo.getFileName());
 		ParseXmi umlXmi = new ParseXmi(modelUmlInfo);
-		
+		Umlfilename = umlInfo.getFileName();
 		umlXmi.parseDoc();
 		
 
@@ -64,6 +78,8 @@ public class UmlUploadProcessor implements UploadProcessor {
 							switch(attr.getValue()){
 								case PAPYRUS_CLASS_DIAG:
 								{
+									// TODO: We are currently only supporting one class diagram per
+									// Notation file. We can enhance this in future. 
 									classXmiDiag =xmi;
 									isClassDiag = true;
 								}
@@ -98,13 +114,124 @@ public class UmlUploadProcessor implements UploadProcessor {
 				List <XmiElement> classList = new ArrayList<XmiElement> ();
 				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
 				for (int i = 0 ; i < packagedElemList.size(); i++) {
-					if (packagedElemList.get(i).getFoundMatch())
-						Log.LogCreate().Info( "Element Name = " + packagedElemList.get(i).getElementName());
+					if (packagedElemList.get(i).getFoundMatch()) {
+						List <Attribute> attrlist = packagedElemList.get(i).getAttrib();
+						for (int k = 0; k < attrlist.size(); k++) {
+							if (attrlist.get(k).getName().equals("xmi:type") && 
+									attrlist.get(k).getValue().equals("uml:Class")) {
+								Log.LogCreate().Info("Valid class name = " + packagedElemList.get(i).getAttributeValue("name"));
+								classList.add(packagedElemList.get(i));
+							}
+						}	
+
+					}
 				}
+				Log.LogCreate().Info("Calling CreateJava file");
+				CreateJavaFile(classList);
+				createPngFile(Umlfilename, Umlfilename + ".java", umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
 			
 		}		
 	}
+	
+	private void CreateJavaFile(List <XmiElement> classList ) {
+		// Create Stream Writer
+		BufferedWriter out; 
+				try {
+					// for each package
+
+						File javaFile = new File(fileList.get(0).getDestFilePath() + Umlfilename + ".java");
+						FileWriter fstream = new FileWriter(javaFile);
+						out = new BufferedWriter(fstream);
+
+						out.write("import java.util.Date;\n");
+						out.write("import java.util.*; \n");
+						out.write("import java.io.*; \n");
+
+						boolean firstClass = true;
+						// iterate thru an array list of classes
+
+						for (int i = 0; i < classList.size(); i++) {
+							
+							XmiElement cls =  classList.get(i);
+							List <XmiElement> childlist = cls.getChildElemList();
+							
+							String className ="";
+							className = cls.getAttributeValue("name");
+							Log.LogCreate().Info(className);
+							//To determine if we have any generalizaton
+							for (int j = 0 ; j < childlist.size(); j++ ) {
+								// Check if there is any element named "generalizaion
+								XmiElement childElem = childlist.get(j);
+								if (childElem.getElementName().equals("generalization")){
+									Log.LogCreate().Info("found generalization" + childElem.getAttributeValue("general"));
+									// Parent element xmiElement 
+									String id = childElem.getAttributeValue("general");
+									XmiElement parentElement  = modelUmlInfo.getXmiElementFromId(id);
+									className += " extends " + parentElement.getAttributeValue("name");
+								}
+							}
+							out.write("public class " + className + "{\n");
+							
+							out.write("\n");
+							//out.write("/**\n");
+							
+							for (int j = 0 ; j < childlist.size(); j++ ) {
+								XmiElement childElem = childlist.get(j);
+								if (childElem.getFoundMatch() ) {
+									// Operations
+									if (childElem.getElementName().equals("ownedOperation")) {
+										List <Attribute>attriblistchild  = childElem.getAttrib();
+										for (int idx = 0;idx  < attriblistchild.size(); idx++) {
+											if (attriblistchild.get(idx).getName().equals("name")) {
+												String operationName = attriblistchild.get(idx).getValue();
+												out.write("\tvoid " + operationName + "();\n" );
+												break;
+											}
+										}
+									} else if(childElem.getElementName().equals("ownedAttribute")) {
+										// Here we only will process the Attributes	
+										List <Attribute>attriblistchild  = childElem.getAttrib();
+										String attrStr = "";
+										String visibility = "private";
+										String name ="";
+										for (int idx = 0;idx  < attriblistchild.size(); idx++) {
+
+											if (attriblistchild.get(idx).getName().equals("name")) {
+												name = attriblistchild.get(idx).getValue();												
+											} else if(attriblistchild.get(idx).getName().equals("visibility")) {
+												visibility = attriblistchild.get(idx).getValue();
+											}
+											 
+										}
+										List <XmiElement> attrList = childElem.getChildElemList();
+										for (int idx = 0; idx < attrList.size(); idx++) {
+											if (attrList.get(idx).getElementName().equals("type")) {
+												
+											}
+										}
+										out.write("\tint " + name  + ";\n");
+									} else if(childElem.getElementName().equals("ownedAttribute")) {
+										// Here we will address the association
+									}
+									 
+								}									
+							}	
+							out.write("}\n");
+
+						}
+						out.close();
+						fstream.close();
+				} catch (Exception e) {
+					Log.LogCreate().Info("Got an error creating the file...."
+							+ e.getMessage());
+				}
+
+				
+	}
+	
+	//private 
+	
 	/**
 	 * 
 	 * @param name
@@ -145,7 +272,17 @@ public class UmlUploadProcessor implements UploadProcessor {
 		return info;
 	}
 	
+	/**
+	 * 
+	 * Still thinking if we need to break this up into two class 
+	 * Sequence diagram and the Class diagram. 
+	 *
+	 */
 	private class Uml2ClassUploadProcessor {
+		
+	}
+	
+	private class Uml2SequenceDiagramUploadProcessor {
 		
 	}
 
