@@ -119,14 +119,14 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 						for (int k = 0; k < attrlist.size(); k++) {
 							if (attrlist.get(k).getName().equals("xmi:type") && 
 									attrlist.get(k).getValue().equals("uml:Class")) {
-								Log.LogCreate().Info("Valid class name = " + packagedElemList.get(i).getAttributeValue("name"));
+								//Log.LogCreate().Info("Valid class name = " + packagedElemList.get(i).getAttributeValue("name"));
 								classList.add(packagedElemList.get(i));
 							}
 						}	
 
 					}
 				}
-				Log.LogCreate().Info("Calling CreateJava file");
+				//Log.LogCreate().Info("Calling CreateJava file");
 				CreateJavaFile(classList);
 				createPngFile(Umlfilename, Umlfilename + ".java", umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
@@ -148,7 +148,6 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 						out.write("import java.util.*; \n");
 						out.write("import java.io.*; \n");
 
-						boolean firstClass = true;
 						// iterate thru an array list of classes
 
 						for (int i = 0; i < classList.size(); i++) {
@@ -158,13 +157,12 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 							
 							String className ="";
 							className = cls.getAttributeValue("name");
-							Log.LogCreate().Info(className);
 							//To determine if we have any generalizaton
 							for (int j = 0 ; j < childlist.size(); j++ ) {
 								// Check if there is any element named "generalizaion
 								XmiElement childElem = childlist.get(j);
 								if (childElem.getElementName().equals("generalization")){
-									Log.LogCreate().Info("found generalization" + childElem.getAttributeValue("general"));
+
 									// Parent element xmiElement 
 									String id = childElem.getAttributeValue("general");
 									XmiElement parentElement  = modelUmlInfo.getXmiElementFromId(id);
@@ -193,28 +191,58 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 										// Here we only will process the Attributes	
 										List <Attribute>attriblistchild  = childElem.getAttrib();
 										String attrStr = "";
-										String visibility = "private";
+										String type = "";
 										String name ="";
 										for (int idx = 0;idx  < attriblistchild.size(); idx++) {
 
 											if (attriblistchild.get(idx).getName().equals("name")) {
-												name = attriblistchild.get(idx).getValue();												
-											} else if(attriblistchild.get(idx).getName().equals("visibility")) {
-												visibility = attriblistchild.get(idx).getValue();
+												name = attriblistchild.get(idx).getValue();	
+												break;
 											}
 											 
 										}
 										List <XmiElement> attrList = childElem.getChildElemList();
 										for (int idx = 0; idx < attrList.size(); idx++) {
 											if (attrList.get(idx).getElementName().equals("type")) {
+												XmiElement elem  = attrList.get(idx);
+												if (elem.getAttributeValue("xmi:type").equals("uml:PrimitiveType")) {
+													String hrefVal = elem.getAttributeValue("href");
+													hrefVal = hrefVal.substring(hrefVal.indexOf('#') + 1, hrefVal.length());
+													switch (hrefVal) {
+														case "String":
+															type = "String";
+															break;
+														case "Integer" :
+															type = "int";
+															break;
+														case "Real":
+															type = "double";
+															break;
+														case "Boolean":
+															type = "boolean";
+															break;
+														case "UnlimitdNatural":
+															type = "long";
+															break;
+														
+													}
+												}
+												
 												
 											}
 										}
-										out.write("\tint " + name  + ";\n");
-									} else if(childElem.getElementName().equals("ownedAttribute")) {
-										// Here we will address the association
-									}
+										if (!type.isEmpty())
+											out.write("\t" + type +" " + name  + ";\n");
+										else 
+											out.write("\t int" +" " + name  + ";\n");
+									} 
 									 
+								}else if(childElem.getElementName().equals("ownedAttribute")) {
+									
+									String xmiID = childElem.getAttributeValue("type");
+									XmiElement elem = modelUmlInfo.getXmiElementFromId(xmiID);
+									String type = elem.getAttributeValue("name");
+									out.write("\t "+ type + " " + childElem.getAttributeValue("name") + ";\n");
 								}									
 							}	
 							out.write("}\n");
