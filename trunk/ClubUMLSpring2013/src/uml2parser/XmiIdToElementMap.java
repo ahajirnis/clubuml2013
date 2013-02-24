@@ -25,7 +25,6 @@ public class XmiIdToElementMap {
 	 * @param element
 	 */
 	public void addElement(String XmiId, XmiElement element ) {
-		Log.LogCreate().Info("Inserting " + XmiId);
 		idToElementMap.put(XmiId, element);
 	}
 	/**
