@@ -50,10 +50,10 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	// Do not use this method yet. We need to change the interface to accept a
 	// list of FileInfo, since Xmi requires more than 1 file per diagram
 	@Override
-	public List<Object> compare(String filePath1, String filePath2) {
-		// TODO Auto-generated method stub
+	public List<Object> compare(String filePath1, String filePath2, String compareLayer) {
 		return null;
 	}
+
 
 	/**
 	 * Refactor this method since it can be used in other sources (ex:
