@@ -6,10 +6,13 @@ public class ComparerProvider {
 	private static ComparerProvider instance = null;
 	private ArrayList<String> comparerLookUpTable = new ArrayList<String>();
 	
+	
 	private ComparerProvider(){		
-		comparerLookUpTable.add("classDiagram");
-		comparerLookUpTable.add("sequenceDiagram");
+		comparerLookUpTable.add("xmiClassDiagram");
+		comparerLookUpTable.add("ecoreClassDiagram");
+		comparerLookUpTable.add("xmiSequenceDiagram");
 	}
+	
 	
 	public static ComparerProvider getInstance(){
 		if(instance == null){
@@ -22,6 +25,7 @@ public class ComparerProvider {
 		return instance;
 	}	
 	
+	
 	public ComparerIntf createComparer(String diagramType)
 	{
 		ComparerIntf comparer = null;
@@ -31,11 +35,15 @@ public class ComparerProvider {
 		}
 		else
 		{
-			if(diagramType.equals("classDiagram"))
+			if(diagramType.equals("xmiClassDiagram"))
 			{
-				comparer = new ClassDiagramComparer();
+				comparer = new XmiClassDiagramComparer();
 			}
-			else if(diagramType.equals("sequenceDiagram"))
+			else if(diagramType.equals("ecoreClassDiagram"))
+			{
+				comparer = new EcoreClassDiagramComparer();
+			}
+			else if(diagramType.equals("xmiSequenceDiagram"))
 			{
 				comparer = new SequenceDiagramComparer();
 			}
