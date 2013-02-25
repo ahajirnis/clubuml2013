@@ -17,8 +17,6 @@ import org.eclipse.emf.ecore.EReference;
  * 
  * @author Shoeb Shaikh
  * 
- * marks by Dong Guo
- * Line 40;93;540;746
  * 
  */
 public class Algo {
@@ -745,7 +743,6 @@ public class Algo {
 	
 	/*
 	 * The aloneClasses list that might be useful
-	 * Dong Guo
 	 * 
 	 * private void setAloneClasses(){
 	 * 		for(int i = 0; i < comparedClasses.size(); i++) {
