@@ -1,14 +1,14 @@
 package controller.compare;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class ComparerProvider {
 	
 	private static ComparerProvider instance = null;
-	private HashMap<String,ComparerIntf> comparerLookUpTable = new HashMap<String,ComparerIntf>();
+	private ArrayList<String> comparerLookUpTable = new ArrayList<String>();
 	
 	private ComparerProvider(){		
-		comparerLookUpTable.put("classDiagram", new ClassDiagramComparer());
-		comparerLookUpTable.put("sequenceDiagram", new SequenceDiagramComparer());
+		comparerLookUpTable.add("classDiagram");
+		comparerLookUpTable.add("sequenceDiagram");
 	}
 	
 	public static ComparerProvider getInstance(){
@@ -24,7 +24,23 @@ public class ComparerProvider {
 	
 	public ComparerIntf createComparer(String diagramType)
 	{
-	    return comparerLookUpTable.get(diagramType);
+		ComparerIntf comparer = null;
+		if (!comparerLookUpTable.contains(diagramType))
+		{
+			return comparer;
+		}
+		else
+		{
+			if(diagramType.equals("classDiagram"))
+			{
+				comparer = new ClassDiagramComparer();
+			}
+			else if(diagramType.equals("sequenceDiagram"))
+			{
+				comparer = new SequenceDiagramComparer();
+			}
+		}
+		return comparer;
 	}
 
 }

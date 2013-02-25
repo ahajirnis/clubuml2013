@@ -5,7 +5,7 @@ import java.util.List;
 public class SequenceDiagramComparer implements ComparerIntf{
 
 	@Override
-	public List<Object> compare(String filePath1, String filePath2) {
+	public List<Object> compare(String filePath1, String filePath2, String compareLayer) {
 		// TODO Auto-generated method stub
 		return null;
 	}

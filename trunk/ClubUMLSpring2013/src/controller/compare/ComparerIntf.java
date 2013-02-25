@@ -9,6 +9,6 @@ public interface ComparerIntf {
 	 * 
 	 * @return A list of generic element, here I just put Object there which can hold any type of the element.
 	 */
-	public List<Object> compare(String filePath1, String filePath2);
+	public List<Object> compare(String filePath1, String filePath2, String compareLayer);
 	
 }
