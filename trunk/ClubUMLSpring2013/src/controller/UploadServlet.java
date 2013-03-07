@@ -127,10 +127,13 @@ public class UploadServlet extends HttpServlet {
 							+ ".java");
 					fileList.add(new FileInfo(absolutePath,newName,libPath));
 					//Log.LogCreate().Info(" File list " + absolutePath  +"  "  + newName + " "  + libPath);
-					String ecoreFileName = "uploads/" + newName;
-					newName += ".png";
-					this.storeDatabase(ecoreFileName, newName,
-							Integer.parseInt(id));
+					
+					if (isFileType(newName,"ecore") || isFileType(newName, "uml")){
+						String ecoreFileName = "uploads/" + newName;
+						newName += ".png";					
+						this.storeDatabase(ecoreFileName, newName,
+								Integer.parseInt(id));
+					}
 				}
 			}
 
@@ -209,4 +212,10 @@ public class UploadServlet extends HttpServlet {
 		processRequest(request, response);
 	}
 
+	private boolean isFileType(String fileName, String fileType) {
+		// Retrieve file extension
+		String extension = fileName.substring(
+					fileName.lastIndexOf(".") + 1, fileName.length());
+		return (extension.equals(fileType) ? true : false);	
+	}
 }
