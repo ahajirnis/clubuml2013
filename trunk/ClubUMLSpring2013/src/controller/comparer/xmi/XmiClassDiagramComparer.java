@@ -2,8 +2,6 @@ package controller.comparer.xmi;
 
 import java.util.List;
 
-import uml2parser.XmiElement;
-
 import controller.compare.ComparerIntf;
 import controller.upload.FileInfo;
 import controller.upload.UploadProcessorFactory;
@@ -50,11 +48,11 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	// Do not use this method yet. We need to change the interface to accept a
 	// list of FileInfo, since Xmi requires more than 1 file per diagram
 	@Override
-	public List<Object> compare(List<FileInfo> file1, List<FileInfo> file2, String compareLayer) {
+	public List<Object> compare(List<FileInfo> file1, List<FileInfo> file2,
+			String compareLayer) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	/**
 	 * Refactor this method since it can be used in other sources (ex:
@@ -80,29 +78,40 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		return info;
 	}
 
-	//*************************************************************************
+	// *************************************************************************
 	// Implement and change these stubs to however you like
-	//*************************************************************************
+	// *************************************************************************
+
+	// Compare names
 	public String compareClassNames() {
-		List<XmiElement> list1 = ClassDiagram1.getClassList();
-		List<XmiElement> list2 = ClassDiagram2.getClassList();
+		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
+		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
 
 		return "";
 	}
-	
+
+	// Compare attributes
 	public String compareProperties() {
-		List<XmiElement> list1 = ClassDiagram1.getClassList();
-		List<XmiElement> list2 = ClassDiagram2.getClassList();
-
-		return "";
-	}
-	
-	public String compareAssociations() {
-		List<XmiElement> list1 = ClassDiagram1.getClassList();
-		List<XmiElement> list2 = ClassDiagram2.getClassList();
+		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
+		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
 
 		return "";
 	}
 
+	// Compare operations
+	public String compareOperations() {
+		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
+		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+
+		return "";
+	}
 	
+	// Compare Generalization
+	public String compareGeneralizations() {
+		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
+		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+
+		return "";
+	}
+
 }
