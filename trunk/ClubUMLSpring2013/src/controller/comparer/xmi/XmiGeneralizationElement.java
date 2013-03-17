@@ -20,6 +20,6 @@ public class XmiGeneralizationElement extends XmiBaseElement {
 
 	@Override
 	public String toString() {
-		return "Generalization: Parent=" + parent + ", " + super.toString();
+		return "Generalization - Parent = " + parent + ", " + super.toString();
 	}
 }

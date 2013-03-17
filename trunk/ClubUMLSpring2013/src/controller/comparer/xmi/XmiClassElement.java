@@ -45,7 +45,7 @@ public class XmiClassElement extends XmiBaseElement{
 	
 	@Override
 	public String toString() {
-		return "Class: " + super.toString();
+		return super.getVisibility() + " " + super.getName();
 	}
 
 	public ArrayList<XmiGeneralizationElement> getGeneralization() {

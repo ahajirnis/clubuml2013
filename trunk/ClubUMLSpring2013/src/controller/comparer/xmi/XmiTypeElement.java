@@ -1,14 +1,15 @@
 package controller.comparer.xmi;
 
-public class XmiAttributeElement extends XmiBaseElement {
+public class XmiTypeElement extends XmiBaseElement {
 
-	public XmiAttributeElement(String id, String name, String type,
+	public XmiTypeElement(String id, String name, String type,
 			String visibility) {
 		super(id, name, type, visibility);
 	}
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return super.getName();
 	}
+	
 }

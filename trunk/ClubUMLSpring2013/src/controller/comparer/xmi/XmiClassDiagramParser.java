@@ -5,10 +5,10 @@ package controller.comparer.xmi;
  *
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-import logging.Log;
 import uml2parser.Attribute;
 import uml2parser.ModelFileInfo;
 import uml2parser.ParseXmi;
@@ -23,7 +23,12 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_PROPERTY_ELEM = "ownedAttribute";
 	private final static String PAPYRUS_PARAMETER_ELEM = "ownedParameter";
 	private final static String PAPYRUS_GENERALIZATION_ELEM = "generalization";
-	
+
+	private final static String PAPYRUS_PACKAGE_TYPE_CLASS = "uml:Class";
+	private final static String PAPYRUS_PACKAGE_TYPE_INTERFACE = "uml:Interface";
+	private final static String PAPYRUS_PACKAGE_TYPE_PRIMITIVE = "uml:PrimitiveType";
+	private final static String PAPYRUS_PACKAGE_TYPE_Association = "uml:Association";
+
 	private final static String PAPYRUS_XMI_ATTRIBUTE_TYPE = "xmi:type";
 	private final static String PAPYRUS_ATTRIBUTE_NAME = "name";
 	private final static String PAPYRUS_ATTRIBUTE_ID = "xmi:id";
@@ -31,11 +36,10 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_ATTRIBUTE_VISIBILITY = "visibility";
 	private final static String PAPYRUS_ATTRIBUTE_DIRECTION = "direction";
 	private final static String PAPYRUS_GENERALIZATION_DIRECTION = "general";
-	
+
 	private String umlFileName;
 	private String notationFileName;
 
-	private ArrayList<XmiBaseElement> elements;
 	private ModelFileInfo modelUmlInfo;
 	private ModelFileInfo notationmodelInfo;
 
@@ -48,33 +52,48 @@ public class XmiClassDiagramParser {
 	// Store elements used by compare algorithm
 	private Stack<XmiElement> stack = new Stack<XmiElement>();
 
+	private ArrayList<XmiBaseElement> rootElements = new ArrayList<XmiBaseElement>();
 	private ArrayList<XmiClassElement> classElements = new ArrayList<XmiClassElement>();
+	private ArrayList<XmiTypeElement> primitiveElements = new ArrayList<XmiTypeElement>();
 
 	XmiClassDiagramParser(String umlFile, String notationFile) {
 		umlFileName = umlFile;
 		notationFileName = notationFile;
 		activeIdList = new ArrayList<String>();
+
 		System.out.println("CREATED");
 		this.process();
-		
+		this.postProcess();
+
 		// TESTing
 		System.out.println("TEST OUTPUT ELEMENTS");
-		for(XmiClassElement Class: classElements) {
-			System.out.println(Class.toString());
-			for(XmiAttributeElement elelment: Class.getAttributes()) {
-				System.out.println(elelment.toString());
-			}
-			
-			for(XmiOperationElement element: Class.getOperations()) {
-				System.out.println(element.toString());
-			}
-			
-			for(XmiClassElement elelment: Class.getNestedClass()) {
-				System.out.println("Nexted: " + elelment.toString());
-			}
-			
-			for(XmiGeneralizationElement elelment: Class.getGeneralization()) {
-				System.out.println("Generalization: " + elelment.toString());
+		for (XmiBaseElement Class : rootElements) {
+
+			if (Class instanceof XmiClassElement) {
+
+				System.out.println("Class " + Class.toString());
+
+				for (XmiAttributeElement elelment : ((XmiClassElement) Class)
+						.getAttributes()) {
+					System.out.println("Attribute " + elelment.toString());
+				}
+
+				for (XmiOperationElement element : ((XmiClassElement) Class)
+						.getOperations()) {
+					System.out.println("Operation " + element.toString());
+				}
+
+				for (XmiClassElement elelment : ((XmiClassElement) Class)
+						.getNestedClass()) {
+					System.out.println("Nested: " + elelment.toString());
+				}
+
+				for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
+						.getGeneralization()) {
+					System.out.println("Generalization " + elelment.toString());
+				}
+			} else if (Class instanceof XmiTypeElement) {
+				System.out.println("Primitive " + Class.toString());
 			}
 		}
 	}
@@ -119,7 +138,6 @@ public class XmiClassDiagramParser {
 							isClassDiag = true;
 						}
 							break;
-						// Add other Diagrams
 						default: {
 							break;
 						}
@@ -130,9 +148,9 @@ public class XmiClassDiagramParser {
 		}
 		// need to find the active elements in the class diagram
 		if (isClassDiag) {
-			System.out.println("ClassXmiDia: " + classXmiDiag);
 			ActiveElementIterator(classXmiDiag);
 
+			// Check for error
 			boolean foundError = false;
 			// now find the elements in the class
 			for (int i = 0; i < activeIdList.size(); i++) {
@@ -144,13 +162,41 @@ public class XmiClassDiagramParser {
 				}
 
 			}
-			if (foundError == false) {
+			if (!foundError) {
 				// Build a list of Class.
 				System.out.println("BUILD COMPARE ELEMENT STRUCTURE");
 				BuildXmiCompareElementStructure(modelUmlInfo);
+			}
+		}
+	}
 
+	private void postProcess() {
+
+		for (XmiClassElement Class : classElements) {
+
+			for (XmiAttributeElement element : Class.getAttributes()) {
+				if (element.getUmlType().startsWith("_")) {
+					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+				}
 			}
 
+			for (XmiOperationElement element : Class.getOperations()) {
+				if (element.getUmlType().startsWith("_")) {
+					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+				}
+			}
+
+			for (XmiClassElement element : Class.getNestedClass()) {
+				if (element.getUmlType().startsWith("_")) {
+					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+				}
+			}
+
+			for (XmiGeneralizationElement element : Class.getGeneralization()) {
+				if (element.getUmlType().startsWith("_")) {
+					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+				}
+			}
 		}
 	}
 
@@ -164,11 +210,11 @@ public class XmiClassDiagramParser {
 
 		List<XmiElement> packagedElemList = modelUmlInfo
 				.findElementsByName(PAPYRUS_PACKAGED_ELEM);
-		for (int i = 0; i < packagedElemList.size(); i++) {
 
-			System.out.println(PAPYRUS_PACKAGED_ELEM + ": "
-					+ packagedElemList.get(i) + " "
-					+ packagedElemList.get(i).getFoundMatch());
+		System.out.println("Print active count: " + activeIdList.size());
+		System.out.println("Print packaged count: " + packagedElemList.size());
+
+		for (int i = 0; i < packagedElemList.size(); i++) {
 
 			if (packagedElemList.get(i).getFoundMatch()) {
 
@@ -177,18 +223,41 @@ public class XmiClassDiagramParser {
 				for (int j = 0; j < attrlist.size(); j++) {
 					if (isClassLevel(attrlist.get(j))) {
 
-						System.out.println("Valid class name = "
-								+ packagedElemList.get(i).getAttributeValue(
-										"name"));
+						String tag = attrlist.get(j).getValue();
 
-						// classList.add(packagedElemList.get(i));
-						classElements
-								.add(createXmiClassElement(packagedElemList
-										.get(i)));
-						stack.push(packagedElemList.get(i));
+						switch (tag) {
+						case PAPYRUS_PACKAGE_TYPE_PRIMITIVE: {
+							XmiTypeElement typeElement = createXmiTypeElement(packagedElemList
+									.get(i));
 
-						packagedElemList.get(i).getChildElemList();
-						
+							rootElements.add(typeElement);
+
+							primitiveElements.add(typeElement);
+
+							break;
+						}
+						case PAPYRUS_PACKAGE_TYPE_CLASS: {
+
+							XmiClassElement classElement = createXmiClassElement(packagedElemList
+									.get(i));
+
+							rootElements.add(classElement);
+
+							classElements.add(classElement);
+
+							break;
+						}
+						case PAPYRUS_PACKAGE_TYPE_INTERFACE: {
+
+							XmiClassElement classElement = createXmiClassElement(packagedElemList
+									.get(i));
+
+							rootElements.add(classElement);
+
+							classElements.add(classElement);
+							break;
+						}
+						}
 					}
 				}
 
@@ -204,32 +273,40 @@ public class XmiClassDiagramParser {
 		}
 	}
 
+	private XmiTypeElement createXmiTypeElement(XmiElement xmiElement) {
+		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
+		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+
+		return new XmiTypeElement(id, name, type, "");
+	}
+
 	private XmiClassElement createXmiClassElement(XmiElement xmiElement) {
 		List<XmiElement> childElements = xmiElement.getChildElemList();
-		
+
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
 
 		XmiClassElement xmiClass = new XmiClassElement(id, name, type, "");
 
-		System.out.println("Create Class Element " + xmiClass.toString());
-
 		for (int j = 0; j < childElements.size(); j++) {
 			String tag = childElements.get(j).getElementName();
-			System.out.println("TAG: " + tag);
 			switch (tag) {
 			case PAPYRUS_PROPERTY_ELEM:
-				xmiClass.addAttribute(createXmiAttributeElement(childElements.get(j)));
+				xmiClass.addAttribute(createXmiAttributeElement(childElements
+						.get(j)));
 				break;
 			case PAPYRUS_OPERATION_ELEM:
-				xmiClass.addOperation(createXmiOperationElement(childElements.get(j)));
+				xmiClass.addOperation(createXmiOperationElement(childElements
+						.get(j)));
 				break;
 			case PAPYRUS_GENERALIZATION_ELEM:
-				xmiClass.addGeneralization(createXmiGeneralizationElement(childElements.get(j)));
+				xmiClass.addGeneralization(createXmiGeneralizationElement(childElements
+						.get(j)));
 				break;
 			}
-			
+
 		}
 
 		return xmiClass;
@@ -247,9 +324,10 @@ public class XmiClassDiagramParser {
 		String name = attribute.getName();
 		String value = attribute.getValue();
 
-		System.out.println("isClassLevel name: " + name + " value: " + value);
 		if (name.equals(PAPYRUS_XMI_ATTRIBUTE_TYPE)
-				&& (value.equals("uml:Class") || value.equals("uml:Interface"))) {
+				&& (value.equals(PAPYRUS_PACKAGE_TYPE_CLASS)
+						|| value.equals(PAPYRUS_PACKAGE_TYPE_INTERFACE) || value
+							.equals(PAPYRUS_PACKAGE_TYPE_PRIMITIVE))) {
 			return true;
 		}
 
@@ -262,76 +340,74 @@ public class XmiClassDiagramParser {
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
-		String visibility = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
-		
-		XmiAttributeElement xmiClass = new XmiAttributeElement(id, name, type, visibility);
+		String visibility = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
 
-		System.out.println(xmiClass.toString());
-
-		for (int j = 0; j < attrlist.size(); j++) {
-
-		}
+		XmiAttributeElement xmiClass = new XmiAttributeElement(id, name, type,
+				visibility);
 
 		return xmiClass;
 	}
-	
+
 	private XmiOperationElement createXmiOperationElement(XmiElement xmiElement) {
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
-		String visibility = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
-		
-		XmiOperationElement xmiClass = new XmiOperationElement(id, name, type, visibility);
+		String visibility = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
 
-		System.out.println(xmiClass.toString());
+		XmiOperationElement xmiClass = new XmiOperationElement(id, name, type,
+				visibility);
 
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
-		
-		for(XmiElement child : childrenElement) {
+
+		for (XmiElement child : childrenElement) {
 			String tag = child.getElementName();
-			
+
 			switch (tag) {
 			case PAPYRUS_PARAMETER_ELEM:
 				xmiClass.addParameter(createXmiParameterElement(child));
 				break;
 			}
 		}
-		
+
 		return xmiClass;
 	}
-	
+
 	private XmiParameterElement createXmiParameterElement(XmiElement xmiElement) {
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
-		String visibility = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
-		String direction = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_DIRECTION);
-		
-		XmiParameterElement xmiClass = new XmiParameterElement(id, name, type, visibility, direction);
-		
-		System.out.println(xmiClass.toString());
+		String visibility = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
+		String direction = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_DIRECTION);
+
+		XmiParameterElement xmiClass = new XmiParameterElement(id, name, type,
+				visibility, direction);
 
 		return xmiClass;
 	}
-	
-	private XmiGeneralizationElement createXmiGeneralizationElement(XmiElement xmiElement) {
+
+	private XmiGeneralizationElement createXmiGeneralizationElement(
+			XmiElement xmiElement) {
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
-		String generalization = xmiElement.getAttributeValue(PAPYRUS_GENERALIZATION_DIRECTION);
+		String generalization = xmiElement
+				.getAttributeValue(PAPYRUS_GENERALIZATION_DIRECTION);
 
-		XmiGeneralizationElement xmiClass = new XmiGeneralizationElement(id, generalization);
-		
-		System.out.println(xmiClass.toString());
+		XmiGeneralizationElement xmiClass = new XmiGeneralizationElement(id,
+				generalization);
 
 		return xmiClass;
 	}
-	
+
 	/**
 	 * Returns the list of Active Class elements
 	 * 
 	 * @return List object of XmiElement
 	 */
-	public List<XmiClassElement> getClassElements() {
-		return classElements;
+	public List<XmiBaseElement> getRootElements() {
+		return rootElements;
 	}
 
 	/**

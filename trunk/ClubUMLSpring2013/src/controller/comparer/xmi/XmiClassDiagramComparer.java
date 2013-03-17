@@ -84,32 +84,32 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 
 	// Compare names
 	public String compareClassNames() {
-		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
-		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
+		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
 
 		return "";
 	}
 
 	// Compare attributes
 	public String compareProperties() {
-		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
-		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
+		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
 
 		return "";
 	}
 
 	// Compare operations
 	public String compareOperations() {
-		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
-		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
+		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
 
 		return "";
 	}
 	
 	// Compare Generalization
 	public String compareGeneralizations() {
-		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
-		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
+		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
+		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
 
 		return "";
 	}

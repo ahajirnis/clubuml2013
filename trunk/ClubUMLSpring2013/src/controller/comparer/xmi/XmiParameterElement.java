@@ -2,7 +2,12 @@ package controller.comparer.xmi;
 
 public class XmiParameterElement extends XmiBaseElement{
 
-	private static final String DIRECTION_DEFAULT = "in";
+	public static final String DIRECTION_IN = "in";
+	public static final String DIRECTION_OUT = "out";
+	public static final String DIRECTION_INOUT = "inout";
+	public static final String DIRECTION_RETURN = "return";
+	
+	private static final String DIRECTION_DEFAULT = DIRECTION_IN;
 	
 	private String direction;
 	
@@ -27,7 +32,7 @@ public class XmiParameterElement extends XmiBaseElement{
 	
 	@Override
 	public String toString() {
-		return "Parameter: " + super.toString();
+		return this.direction + " " + super.getVisibility() + " " + super.getVerboseType() + " " + super.getName();
 	}
 
 }
