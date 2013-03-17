@@ -1,0 +1,118 @@
+/*
+Created: 2013/2/15
+Modified: 2013/3/14
+Model: MySQL 5.0
+Database: MySQL 5.0
+*/
+
+-- Create tables section -------------------------------------------------
+
+-- Table project
+
+CREATE TABLE project
+(
+  projectId Int(11) NOT NULL,
+  projectName Varchar(45) NOT NULL,
+  starDate Varchar(45),
+  desceiption Varchar(255)
+)
+;
+
+ALTER TABLE project ADD PRIMARY KEY (projectId)
+;
+
+-- Table user
+
+CREATE TABLE user
+(
+  userId Int(11) NOT NULL,
+  userName Varchar(45) NOT NULL,
+  email Varchar(45) NOT NULL,
+  password Varchar(45) NOT NULL,
+  securityQ Varchar(60),
+  securityA Varchar(60)
+)
+;
+
+ALTER TABLE user ADD PRIMARY KEY (userId)
+;
+
+-- Table diagram
+
+CREATE TABLE diagram
+(
+  diagramId Int(11) NOT NULL,
+  projectId Int(11) NOT NULL,
+  userId Int(11) NOT NULL,
+  diagramType Varchar(45) NOT NULL,
+  diagramName Varchar(45) NOT NULL,
+  createTime Timestamp NOT NULL,
+  filePath Varchar(45) NOT NULL,
+  fileType Varchar(20) NOT NULL,
+  merged Tinyint NOT NULL,
+  notationFileName Varchar(45),
+  notationFilePath Varchar(45),
+  diFlieName Varchar(45),
+  diFilepath Varchar(45)
+)
+;
+
+ALTER TABLE diagram ADD PRIMARY KEY (diagramId)
+;
+
+-- Table report
+
+CREATE TABLE report
+(
+  reportId Int(11) NOT NULL,
+  diagramA Int(11) NOT NULL,
+  diagramB Int(11) NOT NULL,
+  mergedDiagram Int(11),
+  type Varchar(20) NOT NULL,
+  time Timestamp NOT NULL,
+  reportFilePath Varchar(45) NOT NULL,
+  reportFileName Varchar(45) NOT NULL
+)
+;
+
+ALTER TABLE report ADD PRIMARY KEY (reportId)
+;
+
+-- Table comment
+
+CREATE TABLE comment
+(
+  commentId Int(11) NOT NULL,
+  userId Int(11) NOT NULL,
+  reportId Int(11) NOT NULL,
+  content Varchar(255),
+  writenTime Timestamp NULL
+)
+;
+
+ALTER TABLE comment ADD PRIMARY KEY (userId,reportId,commentId)
+;
+
+-- Create relationships section ------------------------------------------------- 
+
+ALTER TABLE diagram ADD CONSTRAINT diagramHaveOwnerId FOREIGN KEY (userId) REFERENCES user (userId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE diagram ADD CONSTRAINT diagramHaveProjectType FOREIGN KEY (projectId) REFERENCES project (projectId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE report ADD CONSTRAINT Relationship4 FOREIGN KEY (diagramA) REFERENCES diagram (diagramId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE report ADD CONSTRAINT Relationship5 FOREIGN KEY (diagramB) REFERENCES diagram (diagramId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE comment ADD CONSTRAINT userComment FOREIGN KEY (userId) REFERENCES user (userId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE comment ADD CONSTRAINT commentDiagram FOREIGN KEY (reportId) REFERENCES report (reportId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE report ADD CONSTRAINT Relationship6 FOREIGN KEY (mergedDiagram) REFERENCES diagram (diagramId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
