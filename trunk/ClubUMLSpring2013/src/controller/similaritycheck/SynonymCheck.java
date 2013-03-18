@@ -2,9 +2,6 @@ package controller.similaritycheck;
 
 public class SynonymCheck {
 	
-	private String lowName1;
-	private String lowName2;
-	
 	/**
 	 * Check if the two names are synonyms for each other.
 	 * 
@@ -15,13 +12,15 @@ public class SynonymCheck {
 	 *            
 	 * @return true if the two names are synonyms for each other
 	 */
-	public boolean isSimilarThesaurus(String name1, String name2){
+	public static boolean isSimilarThesaurus(String name1, String name2){
 		
-		lowName1 = name1.toLowerCase();
-		lowName2 = name2.toLowerCase();
+		name1 = name1.toLowerCase();
+		name2 = name2.toLowerCase();
+		
 		/*
-		 * 
+		 *
 		 */
+		
 		return true;
 	}
 }

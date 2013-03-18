@@ -6,7 +6,7 @@ package controller.similaritycheck;
  * @author CSERRANO
  */
 
-public class Spellcheck {
+public class SpellCheck {
 
 	/**
 	 * Spellcheck
@@ -124,3 +124,4 @@ public class Spellcheck {
 		return true;
 	}
 }
+

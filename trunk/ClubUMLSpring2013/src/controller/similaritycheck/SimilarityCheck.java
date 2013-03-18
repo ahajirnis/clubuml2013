@@ -23,20 +23,23 @@ public class SimilarityCheck {
 	 */
 	public boolean doSimilarityCheck(){
 		
-		LowerUpperCheck firstCheck = new LowerUpperCheck();
-		
 		//If there is only a lower/Uppercase problem,
 		//we don't need to do other checks any more
-		if(firstCheck.isSimilarWord(elementName1, elementName2)){
+		if(LowerUpperCheck.isSimilarWord(elementName1, elementName2)){
 			return true;
 		}else{
 			/*invoke more check functions
-			 * isSimilarSpelling();
-			 * isSimilarThesaurus();
-			 * etc.
+			 * isSimilarSpelling() and isSimilarNoun();
+			 * if all return false
+			 * do isSimilarThesaurus();
 			 */
+			if(SpellCheck.isSimilarSpelling(elementName1, elementName2)
+					|| PluralCheck.isSimilarNoun(elementName1, elementName2)){
+				return true;
+			}else{
+				return SynonymCheck.isSimilarThesaurus(elementName1, elementName2);
+			}
 		}
-		return false;
 	}
 
 	public String getElementName2() {
