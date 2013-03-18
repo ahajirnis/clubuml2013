@@ -1,4 +1,6 @@
 package controller.upload;
+import repository.DiagramDAO;
+import repository.EditingHistoryDAO;
 import uml2parser.*;
 import logging.Log;
 
@@ -13,12 +15,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
+
+import domain.Diagram;
+import domain.EditingHistory;
 /**
  * 
  * @author shuklp
  *
  */
-public class UmlUploadProcessor extends ClassUploadProcessor {
+public class UmlUploadProcessor  implements UploadProcessor {
 		
 	List <FileInfo> fileList; 
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
@@ -28,18 +33,20 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 	private boolean isSeqDiag = false;
 	private List<String> activeIdList;
 	private XmiElement classXmiDiag;  
-	ModelFileInfo modelUmlInfo;
+	private ModelFileInfo modelUmlInfo;
 	private String Umlfilename; 
-	
-	public UmlUploadProcessor(List <FileInfo> list) {
+	private FileInfo umlInfo;
+	private String diagramPath;
+	private int id;
+	public UmlUploadProcessor(List <FileInfo> list, String path, int id) {
 		fileList = list;
 		activeIdList = new ArrayList<String>();
+		diagramPath = path;
+		this.id = id;
 	}
 	
 	@Override
 	public void process() {
-		
-
 				
 		// first process the .notation file 
 		FileInfo info = getFile(UploadProcessorFactory.NOTATION_EXTENSION);
@@ -49,7 +56,7 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 		notationXmi.parseDoc();
 		
 		// Parse the UML File 
-		FileInfo umlInfo = getFile(UploadProcessorFactory.UML_EXTENSION);
+		umlInfo = getFile(UploadProcessorFactory.UML_EXTENSION);
 		modelUmlInfo = new ModelFileInfo(umlInfo.getDestFilePath() + umlInfo.getFileName());
 		ParseXmi umlXmi = new ParseXmi(modelUmlInfo);
 		Umlfilename = umlInfo.getFileName();
@@ -57,12 +64,9 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 		
 
 		// Does the diagram support Class diagrams & sequence diagrams
-
 		List<XmiElement> elemList = notationmodelInfo.findElementsByName(PAPYRUS_NOTATION_ELEM);
 			
-		//Log.LogCreate().Info("found element " + String.valueOf(elemList.size()) );
-			
-			if (elemList.size() > 0 ) {
+		if (elemList.size() > 0 ) {
 				
 				for (int i = 0 ; i < elemList.size(); i++) {
 				
@@ -94,170 +98,38 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 					}
 				}
 			}
-		// need to find the active elements in the class diagram
+		
 		if (isClassDiag) {
-			ElementIterator(classXmiDiag);
-			
-			boolean foundError = false;
-			// now find the elements in the class 
-			for (int i = 0 ; i < activeIdList.size(); i++) {
-				if (modelUmlInfo.findElementsById(activeIdList.get(i)) == false) {
-					foundError = true;
-					break;
-				}
-				
-			}
-			if (foundError == false) {
-				// Convert this into a java file.
-				
-				// Build a list of Class. 
-				List <XmiElement> classList = new ArrayList<XmiElement> ();
-				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
-				for (int i = 0 ; i < packagedElemList.size(); i++) {
-					if (packagedElemList.get(i).getFoundMatch()) {
-						List <Attribute> attrlist = packagedElemList.get(i).getAttrib();
-						for (int k = 0; k < attrlist.size(); k++) {
-							if (attrlist.get(k).getName().equals("xmi:type") && 
-									attrlist.get(k).getValue().equals("uml:Class")) {
-								//Log.LogCreate().Info("Valid class name = " + packagedElemList.get(i).getAttributeValue("name"));
-								classList.add(packagedElemList.get(i));
-							}
-						}	
-
-					}
-				}
-				//Log.LogCreate().Info("Calling CreateJava file");
-				CreateJavaFile(classList);
-				createPngFile(Umlfilename, Umlfilename + ".java", umlInfo.getDestFilePath(), umlInfo.getLibPath());
-			}
-			
-		}		
+				new Uml2ClassUploadProcessor().process();
+				String image_file_name = "class_diagram_" + umlInfo.getFileName() + ".png";	
+				String folder = diagramPath +  "/" + umlInfo.getFileName();
+				this.storeDatabase(folder, image_file_name,id);
+		}
 	}
 	
-	private void CreateJavaFile(List <XmiElement> classList ) {
-		// Create Stream Writer
-		BufferedWriter out; 
-				try {
-					// for each package
-
-						File javaFile = new File(fileList.get(0).getDestFilePath() + Umlfilename + ".java");
-						FileWriter fstream = new FileWriter(javaFile);
-						out = new BufferedWriter(fstream);
-
-						out.write("import java.util.Date;\n");
-						out.write("import java.util.*; \n");
-						out.write("import java.io.*; \n");
-
-						// iterate thru an array list of classes
-
-						for (int i = 0; i < classList.size(); i++) {
-							
-							XmiElement cls =  classList.get(i);
-							List <XmiElement> childlist = cls.getChildElemList();
-							
-							String className ="";
-							className = cls.getAttributeValue("name");
-							//To determine if we have any generalizaton
-							for (int j = 0 ; j < childlist.size(); j++ ) {
-								// Check if there is any element named "generalizaion
-								XmiElement childElem = childlist.get(j);
-								if (childElem.getElementName().equals("generalization")){
-
-									// Parent element xmiElement 
-									String id = childElem.getAttributeValue("general");
-									XmiElement parentElement  = modelUmlInfo.getXmiElementFromId(id);
-									className += " extends " + parentElement.getAttributeValue("name");
-								}
-							}
-							out.write("public class " + className + "{\n");
-							
-							out.write("\n");
-							//out.write("/**\n");
-							
-							for (int j = 0 ; j < childlist.size(); j++ ) {
-								XmiElement childElem = childlist.get(j);
-								if (childElem.getFoundMatch() ) {
-									// Operations
-									if (childElem.getElementName().equals("ownedOperation")) {
-										List <Attribute>attriblistchild  = childElem.getAttrib();
-										for (int idx = 0;idx  < attriblistchild.size(); idx++) {
-											if (attriblistchild.get(idx).getName().equals("name")) {
-												String operationName = attriblistchild.get(idx).getValue();
-												out.write("\tvoid " + operationName + "();\n" );
-												break;
-											}
-										}
-									} else if(childElem.getElementName().equals("ownedAttribute")) {
-										// Here we only will process the Attributes	
-										List <Attribute>attriblistchild  = childElem.getAttrib();
-										String attrStr = "";
-										String type = "";
-										String name ="";
-										for (int idx = 0;idx  < attriblistchild.size(); idx++) {
-
-											if (attriblistchild.get(idx).getName().equals("name")) {
-												name = attriblistchild.get(idx).getValue();	
-												break;
-											}
-											 
-										}
-										List <XmiElement> attrList = childElem.getChildElemList();
-										for (int idx = 0; idx < attrList.size(); idx++) {
-											if (attrList.get(idx).getElementName().equals("type")) {
-												XmiElement elem  = attrList.get(idx);
-												if (elem.getAttributeValue("xmi:type").equals("uml:PrimitiveType")) {
-													String hrefVal = elem.getAttributeValue("href");
-													hrefVal = hrefVal.substring(hrefVal.indexOf('#') + 1, hrefVal.length());
-													switch (hrefVal) {
-														case "String":
-															type = "String";
-															break;
-														case "Integer" :
-															type = "int";
-															break;
-														case "Real":
-															type = "double";
-															break;
-														case "Boolean":
-															type = "boolean";
-															break;
-														case "UnlimitdNatural":
-															type = "long";
-															break;
-														
-													}
-												}
-												
-												
-											}
-										}
-										if (!type.isEmpty())
-											out.write("\t" + type +" " + name  + ";\n");
-										else 
-											out.write("\t int" +" " + name  + ";\n");
-									} 
-									 
-								}else if(childElem.getElementName().equals("ownedAttribute")) {
-									
-									String xmiID = childElem.getAttributeValue("type");
-									XmiElement elem = modelUmlInfo.getXmiElementFromId(xmiID);
-									String type = elem.getAttributeValue("name");
-									out.write("\t "+ type + " " + childElem.getAttributeValue("name") + ";\n");
-								}									
-							}	
-							out.write("}\n");
-
-						}
-						out.close();
-						fstream.close();
-				} catch (Exception e) {
-					Log.LogCreate().Info("Got an error creating the file...."
-							+ e.getMessage());
-				}
-
-				
-	}
 	
+
+	/*
+	 * function to store upload diagram information into database.
+	 */
+	private void storeDatabase(String path, String fileName, int userID) {
+		try {
+			Diagram diagramObj = new Diagram();
+			diagramObj.setDiagramName(fileName);
+			diagramObj.setEcoreFilePath(path);
+			diagramObj.setInEdition(false);
+			diagramObj.setOwnerId(userID);
+			diagramObj.setProjectId(2);
+			DiagramDAO.addDiagram(diagramObj);
+
+			EditingHistory editObj = new EditingHistory();
+			editObj.setDiagramId(diagramObj.getDiagramId());
+			editObj.setUserId(userID);
+
+			EditingHistoryDAO.addHistory(editObj);
+		} catch (IllegalArgumentException e) {
+		}
+	}
 	//private 
 	
 	/**
@@ -295,6 +167,7 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 					fileList.get(i).getFileName().lastIndexOf(".") + 1, fileList.get(i).getFileName().length());
 			if (extn.equals(extension)){
 				info = fileList.get(i);
+				break;
 			}
 		}
 		return info;
@@ -306,7 +179,170 @@ public class UmlUploadProcessor extends ClassUploadProcessor {
 	 * Sequence diagram and the Class diagram. 
 	 *
 	 */
-	private class Uml2ClassUploadProcessor {
+	private class Uml2ClassUploadProcessor extends ClassUploadProcessor{
+		
+		public void process() {
+			
+			ElementIterator(classXmiDiag);
+			 
+			boolean foundError = false;
+			// now find the elements in the class 
+			for (int i = 0 ; i < activeIdList.size(); i++) {
+				if (modelUmlInfo.findElementsById(activeIdList.get(i)) == false) {
+					foundError = true;
+					break;
+				}
+				
+			}
+			if (foundError == false) {
+				// Convert this into a java file.
+				
+				// Build a list of Class. 
+				List <XmiElement> classList = new ArrayList<XmiElement> ();
+				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
+				for (int i = 0 ; i < packagedElemList.size(); i++) {
+					if (packagedElemList.get(i).getFoundMatch()) {
+						List <Attribute> attrlist = packagedElemList.get(i).getAttrib();
+						for (int k = 0; k < attrlist.size(); k++) {
+							if (attrlist.get(k).getName().equals("xmi:type") && 
+									attrlist.get(k).getValue().equals("uml:Class")) {
+								//Log.LogCreate().Info("Valid class name = " + packagedElemList.get(i).getAttributeValue("name"));
+								classList.add(packagedElemList.get(i));
+							}
+						}	
+
+					}
+				}
+				//Log.LogCreate().Info("Calling CreateJava file");
+				CreateJavaFile(classList);
+				createPngFile(Umlfilename, Umlfilename + ".java", umlInfo.getDestFilePath(), umlInfo.getLibPath());
+			}
+			
+		}
+		
+		private void CreateJavaFile(List <XmiElement> classList ) {
+			// Create Stream Writer
+			BufferedWriter out; 
+					try {
+						// for each package
+
+							File javaFile = new File(fileList.get(0).getDestFilePath() + Umlfilename + ".java");
+							FileWriter fstream = new FileWriter(javaFile);
+							out = new BufferedWriter(fstream);
+
+							out.write("import java.util.Date;\n");
+							out.write("import java.util.*; \n");
+							out.write("import java.io.*; \n");
+
+							// iterate thru an array list of classes
+
+							for (int i = 0; i < classList.size(); i++) {
+								
+								XmiElement cls =  classList.get(i);
+								List <XmiElement> childlist = cls.getChildElemList();
+								
+								String className ="";
+								className = cls.getAttributeValue("name");
+								//To determine if we have any generalizaton
+								for (int j = 0 ; j < childlist.size(); j++ ) {
+									// Check if there is any element named "generalizaion
+									XmiElement childElem = childlist.get(j);
+									if (childElem.getElementName().equals("generalization")){
+
+										// Parent element xmiElement 
+										String id = childElem.getAttributeValue("general");
+										XmiElement parentElement  = modelUmlInfo.getXmiElementFromId(id);
+										className += " extends " + parentElement.getAttributeValue("name");
+									}
+								}
+								out.write("public class " + className + "{\n");
+								
+								out.write("\n");
+								//out.write("/**\n");
+								
+								for (int j = 0 ; j < childlist.size(); j++ ) {
+									XmiElement childElem = childlist.get(j);
+									if (childElem.getFoundMatch() ) {
+										// Operations
+										if (childElem.getElementName().equals("ownedOperation")) {
+											List <Attribute>attriblistchild  = childElem.getAttrib();
+											for (int idx = 0;idx  < attriblistchild.size(); idx++) {
+												if (attriblistchild.get(idx).getName().equals("name")) {
+													String operationName = attriblistchild.get(idx).getValue();
+													out.write("\tvoid " + operationName + "();\n" );
+													break;
+												}
+											}
+										} else if(childElem.getElementName().equals("ownedAttribute")) {
+											// Here we only will process the Attributes	
+											List <Attribute>attriblistchild  = childElem.getAttrib();
+											String attrStr = "";
+											String type = "";
+											String name ="";
+											for (int idx = 0;idx  < attriblistchild.size(); idx++) {
+
+												if (attriblistchild.get(idx).getName().equals("name")) {
+													name = attriblistchild.get(idx).getValue();	
+													break;
+												}
+												 
+											}
+											List <XmiElement> attrList = childElem.getChildElemList();
+											for (int idx = 0; idx < attrList.size(); idx++) {
+												if (attrList.get(idx).getElementName().equals("type")) {
+													XmiElement elem  = attrList.get(idx);
+													if (elem.getAttributeValue("xmi:type").equals("uml:PrimitiveType")) {
+														String hrefVal = elem.getAttributeValue("href");
+														hrefVal = hrefVal.substring(hrefVal.indexOf('#') + 1, hrefVal.length());
+														switch (hrefVal) {
+															case "String":
+																type = "String";
+																break;
+															case "Integer" :
+																type = "int";
+																break;
+															case "Real":
+																type = "double";
+																break;
+															case "Boolean":
+																type = "boolean";
+																break;
+															case "UnlimitdNatural":
+																type = "long";
+																break;
+															
+														}
+													}
+													
+													
+												}
+											}
+											if (!type.isEmpty())
+												out.write("\t" + type +" " + name  + ";\n");
+											else 
+												out.write("\t int" +" " + name  + ";\n");
+										} 
+										 
+									}else if(childElem.getElementName().equals("ownedAttribute")) {
+										
+										String xmiID = childElem.getAttributeValue("type");
+										XmiElement elem = modelUmlInfo.getXmiElementFromId(xmiID);
+										String type = elem.getAttributeValue("name");
+										out.write("\t "+ type + " " + childElem.getAttributeValue("name") + ";\n");
+									}									
+								}	
+								out.write("}\n");
+
+							}
+							out.close();
+							fstream.close();
+					} catch (Exception e) {
+						Log.LogCreate().Info("Got an error creating the file...."
+								+ e.getMessage());
+					}
+
+					
+		}	
 		
 	}
 	

@@ -32,7 +32,7 @@ public class UploadProcessorFactory {
  	 *   @return upload processor object for valid target file, else null
 	 */
 	public static UploadProcessor getUploadProcessorMethod(
-			String pTargetFilePath, List<FileInfo> fileList) {
+			String pTargetFilePath, List<FileInfo> fileList, String path, int id) {
 
 		switch (getFileType(pTargetFilePath)) {
 
@@ -45,7 +45,7 @@ public class UploadProcessorFactory {
 		case XMI_FILE_CLASS:
 			// Stub
 			if (fileList.size() == 3) {
-				return new UmlUploadProcessor(fileList);
+				return new UmlUploadProcessor(fileList, path, id);
 			}
 			break;
 		}
