@@ -52,7 +52,9 @@ public class UploadServlet extends HttpServlet {
 	private File destinationDir;
 	private File libDir;
 	private List<FileInfo> fileList;
-	
+	private String newFolder;
+	private ServletContext context;
+	private String id_file_date;
 	public UploadServlet() {
 		
 	}
@@ -77,11 +79,11 @@ public class UploadServlet extends HttpServlet {
 		// Set id properly
 		String id = session.getAttribute("userId").toString();
 
-		ServletContext context = getServletContext();
+		context = getServletContext();
 		
 		tmpDir = new File(context.getRealPath(TMP_DIR_PATH));
 
-		destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
+		//destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
 
 		libDir = new File(context.getRealPath(LIB_DIR_PATH));
 		
@@ -95,7 +97,8 @@ public class UploadServlet extends HttpServlet {
 		ServletFileUpload uploadHandler = new ServletFileUpload(dfif);
 		try {
 			List<?> items = uploadHandler.parseRequest(request);
-
+			destinationDir = createDir(id)	;											// file
+			
 			Iterator<?> itr = items.iterator();
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
@@ -109,29 +112,28 @@ public class UploadServlet extends HttpServlet {
 
 				if ((!item.isFormField()) && (!item.getName().equals(""))
 						&& (!id.equals(""))) {// check if item is a file
-					String newName = renameFile(id, item.getName());// rename
-																	// file
-					File file = new File(destinationDir, newName);
+					//String newName = renameFile(id, item.getName());// rename
+					File file = new File(destinationDir, filename);		
 					item.write(file);
 					String absolutePath = destinationDir + "\\";
 					String relativePath = context.getContextPath()
-							+ DESTINATION_DIR_PATH;
+							+ newFolder;
 					String libPath = libDir + "\\";
-
-					request.setAttribute("originalFileName", item.getName());
-					request.setAttribute("newFileName", newName);
+					logging.Log.LogCreate().Info("absolutePath " + absolutePath);		
+					request.setAttribute("originalFileName", filename);
+					request.setAttribute("newFileName", filename);
 					request.setAttribute("size", item.getSize());
-					request.setAttribute("absolutePath", absolutePath + newName);
-					request.setAttribute("relativePath", relativePath + newName);
-					request.setAttribute("javaFile", relativePath + newName
+					request.setAttribute("absolutePath", absolutePath + filename);
+					request.setAttribute("relativePath", relativePath + filename);
+					request.setAttribute("javaFile", relativePath + filename
 							+ ".java");
-					fileList.add(new FileInfo(absolutePath,newName,libPath));
+					fileList.add(new FileInfo(absolutePath,filename,libPath));
 					//Log.LogCreate().Info(" File list " + absolutePath  +"  "  + newName + " "  + libPath);
 					
-					if (isFileType(newName,"ecore") || isFileType(newName, "uml")){
-						String ecoreFileName = "uploads/" + newName;
-						newName += ".png";					
-						this.storeDatabase(ecoreFileName, newName,
+					if (isFileType(filename,"ecore")){
+						String image_file_name = filename + ".png";	
+						String folder = "uploads/" + id_file_date + "/" + filename;
+						this.storeDatabase(folder, image_file_name,
 								Integer.parseInt(id));
 					}
 				}
@@ -142,13 +144,15 @@ public class UploadServlet extends HttpServlet {
 
 		}
 
-		// Obtains upload processor to perform parsing and file
+		// Obtains upload processor to perform parsing and file 
 		// generations		
 		if (!fileList.isEmpty()) {
+			String folderPath = "uploads/" + id_file_date ;
 			UploadProcessor processor = UploadProcessorFactory
-					.getUploadProcessorMethod(filename,fileList );
+					.getUploadProcessorMethod(filename  ,fileList, folderPath, Integer.parseInt(id));
+			logging.Log.LogCreate().Info("got processor filename =" + filename);
 			if (processor != null){
-
+			    logging.Log.LogCreate().Info("calling process ");
 				processor.process();
 			}
 		}	
@@ -157,6 +161,19 @@ public class UploadServlet extends HttpServlet {
 
 	}
 
+	private File createDir(String id) {
+		id_file_date = new SimpleDateFormat("yyyy-MM-dd_HHmmss") .format(new java.util.Date());
+		newFolder = context.getRealPath(DESTINATION_DIR_PATH) + "/" + id_file_date ;
+		File dir = new File(newFolder);
+		logging.Log.LogCreate().Info("Creating folder = " + dir.toString());
+		if(!dir.mkdirs()  )
+		{
+			logging.Log.LogCreate().Info("Failed to create folder " + newFolder);
+		}
+
+		return dir;
+	}
+	
 	/**
 	 * Prefixes user ID and time for to file name. Used to create a unique file
 	 * name.
