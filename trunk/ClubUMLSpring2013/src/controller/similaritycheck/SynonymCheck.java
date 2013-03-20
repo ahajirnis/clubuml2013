@@ -9,6 +9,13 @@ import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Use a public API from words.bighugelabs.com
+ * find out if the two names are synonyms for each other
+ * 
+ * @author Dong Guo
+ */
+
 public class SynonymCheck {
 	
 	/**
@@ -23,10 +30,14 @@ public class SynonymCheck {
 	 */
     public static boolean isSimilarThesaurus(String name1, String name2) {
 
+    	//read the response line by line
         String line;
+        //one big string that store the response entirely
         String responseString;
+        //store the words we need from the response
         Hashtable responseTable = new Hashtable();
 
+        //connection vars 
         BufferedReader rd;
         OutputStreamWriter wr;
         StringBuilder API_response = new StringBuilder();
@@ -70,6 +81,6 @@ public class SynonymCheck {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        return true;
+        return false;
     }
 }

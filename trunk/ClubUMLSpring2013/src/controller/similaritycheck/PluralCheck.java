@@ -27,9 +27,9 @@ public class PluralCheck {
 		name2 = name2.toLowerCase();
 		
 		if(name1.length() < name2.length()){
-			name1 = PluralInflector.getInstance().pluralize(name1.toLowerCase());
+			name1 = PluralInflector.getInstance().pluralize(name1);
 		}else{
-			name2 = PluralInflector.getInstance().pluralize(name2.toLowerCase());
+			name2 = PluralInflector.getInstance().pluralize(name2);
 		}
 		
 		try{

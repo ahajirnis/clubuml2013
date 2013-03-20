@@ -22,10 +22,12 @@ public class PluralInflector {
 
     private static PluralInflector instance; // (Pseudo-)Singleton instance.
     
+    //constructor
     private PluralInflector() {
         initialize();
     }
     
+    //regex patterns
     private void initialize() {
         plural("$", "s");
         plural("(s|z|x|ch|ss|sh)$", "$1es");
@@ -35,6 +37,7 @@ public class PluralInflector {
 		plural("(child)$", "$1ren");
     }
 
+    //Factory function
     public static PluralInflector getInstance() {
         if (instance == null) {
             instance = new PluralInflector();
@@ -42,10 +45,12 @@ public class PluralInflector {
         return instance;
     }
 
+    //public API, the one that will be invoked
     public String pluralize(String word) {
         return replaceWithFirstRule(word, plurals);
     }
 
+    //process function
     private String replaceWithFirstRule(String word, List<RuleAndReplacement> ruleAndReplacements) {
 
         for (RuleAndReplacement rar : ruleAndReplacements) {
@@ -75,24 +80,50 @@ public class PluralInflector {
     
 }
 
+//content class
 class RuleAndReplacement {
 
     private String rule;
     private String replacement;
 	
+    //constructor
     public RuleAndReplacement(String rule, String replacement) {
         this.rule = rule;
         this.replacement = replacement;
     }
+    
+	/**
+	 * Get the part that will replace the original
+	 * 
+	 * @return replacement String
+	 */
     public String getReplacement() {
         return replacement;
     }
+    
+	/**
+	 * Set the part that will replace the original
+	 * 
+	 * @param replacement
+	 */
     public void setReplacement(String replacement) {
         this.replacement = replacement;
     }
+    
+	/**
+	 * Get the String that will be changed
+	 * 
+	 * @return rule String
+	 */
     public String getRule() {
         return rule;
     }
+    
+	/**
+	 * Set the String that will be changed
+	 * 
+	 * @param rule
+	 */
     public void setRule(String rule) {
         this.rule = rule;
     }

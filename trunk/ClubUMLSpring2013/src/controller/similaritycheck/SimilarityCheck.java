@@ -13,6 +13,14 @@ public class SimilarityCheck {
 	private String elementName1;
 	private String elementName2;
 	
+	/**
+	 * Constructor to initialize necessary class members
+	 *
+	 * @param name1
+	 * 			The name of element1
+	 * @param name2
+	 * 			The name of element2
+	 */
 	SimilarityCheck(String name1, String name2){
 		setElementName1(name1);
 		setElementName2(name2);
@@ -21,7 +29,7 @@ public class SimilarityCheck {
 	/* The process function
 	 * Package all the check functions in it
 	 */
-	public boolean doSimilarityCheck(){
+	public boolean doSimilarityCheck(/*String elementName1, String elementName2*/){
 		
 		//If there is only a lower/Uppercase problem,
 		//we don't need to do other checks any more
@@ -42,20 +50,41 @@ public class SimilarityCheck {
 		}
 	}
 
+	/**
+	 * Get the name of element2
+	 * 
+	 * @return elementName2 String
+	 */
 	public String getElementName2() {
 		return elementName2;
 	}
 
+	/**
+	 * Set elementName2
+	 * 
+	 * @param elementName2
+	 * 			The name of element2
+	 */
 	public void setElementName2(String elementName2) {
 		this.elementName2 = elementName2;
 	}
 
+	/**
+	 * Get the name of element1
+	 * 
+	 * @return elementName1 String
+	 */
 	public String getElementName1() {
 		return elementName1;
 	}
 
+	/**
+	 * Set elementName1
+	 * 
+	 * @param elementName1
+	 * 			The name of element1
+	 */
 	public void setElementName1(String elementName1) {
 		this.elementName1 = elementName1;
 	}
-	
 }

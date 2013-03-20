@@ -1,5 +1,9 @@
 package controller.similaritycheck;
 
+/**
+ * @author Dong Guo
+ */
+
 public class LowerUpperCheck {
 		
 	/**
