@@ -12,4 +12,8 @@ public class XmiTypeElement extends XmiBaseElement {
 		return super.getName();
 	}
 	
+	@Override
+	public boolean equals(Object object) {
+		return false;
+	}
 }

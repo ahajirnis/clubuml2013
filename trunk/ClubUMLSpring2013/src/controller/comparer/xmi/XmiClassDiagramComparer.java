@@ -1,6 +1,9 @@
 package controller.comparer.xmi;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.simple.JSONObject;
 
 import controller.compare.ComparerIntf;
 import controller.upload.FileInfo;
@@ -10,6 +13,11 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 
 	private XmiClassDiagramParser ClassDiagram1;
 	private XmiClassDiagramParser ClassDiagram2;
+
+	// TODO: Rework
+	private ArrayList<XmiClassElement> sameClass = new ArrayList<XmiClassElement>();
+	private ArrayList<XmiClassElement> uniqueClass1 = new ArrayList<XmiClassElement>();
+	private ArrayList<XmiClassElement> uniqueClass2 = new ArrayList<XmiClassElement>();
 
 	/**
 	 * Constructor
@@ -45,15 +53,6 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 						+ classDiagram2Notation.getFileName());
 	}
 
-	// Do not use this method yet. We need to change the interface to accept a
-	// list of FileInfo, since Xmi requires more than 1 file per diagram
-	@Override
-	public List<Object> compare(List<FileInfo> file1, List<FileInfo> file2,
-			String compareLayer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Refactor this method since it can be used in other sources (ex:
 	 * UmlUploadProcessors)
@@ -78,40 +77,31 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		return info;
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public JSONObject action(JSONObject jsonObj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	// *************************************************************************
 	// Implement and change these stubs to however you like
 	// *************************************************************************
 
-	// Compare names
-	public String compareClassNames() {
-		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
-		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
+	// Compare classes
+	private JSONObject compareClass(String className1, String className2) {
+		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
+		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
 
-		return "";
-	}
+		for (XmiClassElement classElement1 : list1) {
+			for (XmiClassElement classElement2 : list2) {
 
-	// Compare attributes
-	public String compareProperties() {
-		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
-		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
+			}
+		}
 
-		return "";
-	}
-
-	// Compare operations
-	public String compareOperations() {
-		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
-		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
-
-		return "";
-	}
-	
-	// Compare Generalization
-	public String compareGeneralizations() {
-		List<XmiBaseElement> list1 = ClassDiagram1.getRootElements();
-		List<XmiBaseElement> list2 = ClassDiagram2.getRootElements();
-
-		return "";
+		return null;
 	}
 
 }

@@ -42,4 +42,9 @@ public class XmiOperationElement extends XmiBaseElement {
 		
 		return "Operation: " + super.getVisibility() + " " + returnValue + "(" + formalParams + ")";
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		return false;
+	}
 }

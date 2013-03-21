@@ -2,17 +2,15 @@ package controller.compare;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import controller.upload.FileInfo;
 
 public class EcoreClassDiagramComparer implements ComparerIntf{
 
 	@Override
-	public List<Object> compare(List<FileInfo> file1, List<FileInfo> file2,
-			String compareLayer) {
+	public JSONObject action(JSONObject jsonObj) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
-
 }

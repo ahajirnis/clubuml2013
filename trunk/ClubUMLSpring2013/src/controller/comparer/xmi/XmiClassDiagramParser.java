@@ -65,7 +65,7 @@ public class XmiClassDiagramParser {
 		this.process();
 		this.postProcess();
 
-		// TESTing
+		// TESTing shows all elements
 		System.out.println("TEST OUTPUT ELEMENTS");
 		for (XmiBaseElement Class : rootElements) {
 
@@ -154,8 +154,7 @@ public class XmiClassDiagramParser {
 			boolean foundError = false;
 			// now find the elements in the class
 			for (int i = 0; i < activeIdList.size(); i++) {
-				System.out
-						.println("Find Element By ID: " + activeIdList.get(i));
+
 				if (modelUmlInfo.findElementsById(activeIdList.get(i)) == false) {
 					foundError = true;
 					break;
@@ -164,37 +163,46 @@ public class XmiClassDiagramParser {
 			}
 			if (!foundError) {
 				// Build a list of Class.
-				System.out.println("BUILD COMPARE ELEMENT STRUCTURE");
 				BuildXmiCompareElementStructure(modelUmlInfo);
 			}
 		}
 	}
 
+	/**
+	 * postProcess
+	 * 
+	 * Runs through elements and finds the names for the types if they are
+	 * reference. A type that is a reference begings with an underscore.
+	 */
 	private void postProcess() {
 
 		for (XmiClassElement Class : classElements) {
 
 			for (XmiAttributeElement element : Class.getAttributes()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+					element.setVerboseType(Utility.getBaseNameById(
+							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiOperationElement element : Class.getOperations()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+					element.setVerboseType(Utility.getBaseNameById(
+							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiClassElement element : Class.getNestedClass()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+					element.setVerboseType(Utility.getBaseNameById(
+							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiGeneralizationElement element : Class.getGeneralization()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(rootElements, element.getUmlType()));
+					element.setVerboseType(Utility.getBaseNameById(
+							rootElements, element.getUmlType()));
 				}
 			}
 		}
@@ -210,9 +218,6 @@ public class XmiClassDiagramParser {
 
 		List<XmiElement> packagedElemList = modelUmlInfo
 				.findElementsByName(PAPYRUS_PACKAGED_ELEM);
-
-		System.out.println("Print active count: " + activeIdList.size());
-		System.out.println("Print packaged count: " + packagedElemList.size());
 
 		for (int i = 0; i < packagedElemList.size(); i++) {
 
@@ -402,12 +407,30 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
-	 * Returns the list of Active Class elements
+	 * Returns the list of Active Root elements
 	 * 
 	 * @return List object of XmiElement
 	 */
 	public List<XmiBaseElement> getRootElements() {
 		return rootElements;
+	}
+
+	/**
+	 * Returns the list of Active Class elements
+	 * 
+	 * @return List object of XmiElement
+	 */
+	public List<XmiClassElement> getClassElements() {
+		return classElements;
+	}
+
+	/**
+	 * Returns the list of Active Type elements
+	 * 
+	 * @return List object of XmiElement
+	 */
+	public List<XmiTypeElement> getTypeElements() {
+		return primitiveElements;
 	}
 
 	/**

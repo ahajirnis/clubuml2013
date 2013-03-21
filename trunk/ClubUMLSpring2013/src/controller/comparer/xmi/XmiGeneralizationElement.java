@@ -22,4 +22,9 @@ public class XmiGeneralizationElement extends XmiBaseElement {
 	public String toString() {
 		return "Generalization - Parent = " + parent + ", " + super.toString();
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		return false;
+	}
 }

@@ -35,4 +35,8 @@ public class XmiParameterElement extends XmiBaseElement{
 		return this.direction + " " + super.getVisibility() + " " + super.getVerboseType() + " " + super.getName();
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		return false;
+	}
 }

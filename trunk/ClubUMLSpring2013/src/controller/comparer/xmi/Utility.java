@@ -1,6 +1,7 @@
 package controller.comparer.xmi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Utility {
 
@@ -35,4 +36,50 @@ public final class Utility {
 		return "";
 	}
 	
+	public static XmiClassElement getClassById(List<XmiClassElement> array, String id) {
+		for (XmiClassElement element : array) {
+			if (element.getId().equals(id)) {
+				return element;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static XmiClassElement getClassByName(List<XmiClassElement> array, String name) {
+		for (XmiClassElement element : array) {
+			if (element.getName().equals(name)) {
+				return element;
+			}
+		}
+		
+		return null;
+	}	
+	
+
+	/**
+	 * Compares 2 class elements' attributes
+	 * 
+	 * @param classElement1
+	 * @param classElement2
+	 * @return true if all attributes are the same, else false
+	 */
+	private boolean compareClassAttributes(XmiClassElement classElement1,
+			XmiClassElement classElement2) {
+	
+		return false;
+	}
+	
+	/**
+	 * Compares 2 class elements' operations
+	 * 
+	 * @param classElement1
+	 * @param classElement2
+	 * @return true if all operations are the same, else false
+	 */
+	private boolean compareClassOperations(XmiClassElement classElement1,
+			XmiClassElement classElement2) {
+
+		return false;
+	}
 }
