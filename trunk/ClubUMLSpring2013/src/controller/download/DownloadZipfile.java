@@ -87,9 +87,9 @@ public class DownloadZipfile {
         		try {
         			String sFilePath = targetFile.getPath();
         			String zipEntryName = sFilePath.substring(targetPath.length()+1, sFilePath.length());
-        			System.out.println("targetFile :" + targetFile);
-        			System.out.println("filepath :" + sFilePath);
-        			System.out.println("zipEntryName :" + zipEntryName);
+        			//System.out.println("targetFile :" + targetFile);
+        			//System.out.println("filepath :" + sFilePath);
+        			//System.out.println("zipEntryName :" + zipEntryName);
         			
         			fis = new FileInputStream(targetFile);
         			bis = new BufferedInputStream(fis);

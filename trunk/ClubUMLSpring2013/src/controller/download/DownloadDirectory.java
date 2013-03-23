@@ -27,7 +27,7 @@ public class DownloadDirectory {
     	File tmpdir = new File(dirPath);	
 	    if (!tmpdir.exists()) {
 			if (tmpdir.mkdir()) {
-				System.out.println("Directory is created!");
+				//System.out.println("Directory is created!");
 			} else {
 				System.out.println("Failed to create directory!");
 			}
@@ -39,8 +39,8 @@ public class DownloadDirectory {
 		if(file.isDirectory()){ 
 			if(file.list().length==0){	 
 	    		if (file.delete()) {
-	   				System.out.println("Directory is deleted : " 
-                               + file.getAbsolutePath());
+	   				//System.out.println("Directory is deleted : " 
+                    //           + file.getAbsolutePath());
 	   			} else {
 	   				System.out.println("Failed to delete directory!");
 	   			}
