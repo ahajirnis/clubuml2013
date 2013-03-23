@@ -108,6 +108,12 @@
 		</c:if>
 	</div>
 
+	<div id="box2">
+		<form action="DisplayDiagram" method="post">
+			<input type="submit" id="downloadProjectButton" value="DownloadProject"
+				name="submit" />
+		</form>
+	</div>
 	<div id="list">
 		<form action="DisplayDiagram" method="post"
 			onsubmit="return checkFields()">
