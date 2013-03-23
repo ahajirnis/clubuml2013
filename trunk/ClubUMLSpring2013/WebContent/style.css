@@ -333,6 +333,20 @@ ol li .send {
     -webkit-box-shadow: 0 0 1px 1px #888;
     box-shadow: 0 0 1px 1px #888;
 }
+#box2{
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #dedede;
+    float: right;
+    width: 440px;
+    margin-top: 20px;
+    margin-right: 50px;
+    padding:20px;
+    -moz-box-shadow: 0 0 1px 1px #888;
+    -webkit-box-shadow: 0 0 1px 1px #888;
+    box-shadow: 0 0 1px 1px #888;
+}
 #diagramBox{
     -webkit-border-radius: 5px;
     background-color: #dedede;
@@ -363,6 +377,7 @@ ol li .send {
     margin-left: auto;
     margin-right: auto;
 }
+
 #list form input{
     margin-left: 25px;
 }
