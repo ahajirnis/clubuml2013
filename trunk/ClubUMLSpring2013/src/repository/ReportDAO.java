@@ -1,7 +1,7 @@
 package repository;
 
 /**
- *
+ * @author Xuesong Meng&Yidu Liang
  * @author yangchen
  */
 import domain.Report;
@@ -26,12 +26,16 @@ public class ReportDAO {
 	ResultSet rs;
 	try {
 	    Connection conn = DbManager.getConnection();
+	    // Modified by Xuesong Meng, statement is not ready to be used.
+	    //String sql = "INSERT INTO report(diagramA , diagramB , mergedDiagram , type , time , reportFilePath , reportFileName) " +
+	    //               VALUES(?,?,?,?,NOW(),?,?);";
 	    String sql = "INSERT INTO report(diagram_A , diagram_B , comparedTime , reportFilePath) VALUES(?,?,NOW(),?);";
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 	    pstmt.setInt(1, report.getDiagramA_Id());
 	    pstmt.setInt(2, report.getDiagramB_Id());
 	    pstmt.setString(3, report.getReportFilePath());
+        // Need to add new setAttributes...
 
 	    pstmt.executeUpdate();
 
@@ -63,7 +67,9 @@ public class ReportDAO {
     public static Report getReport(int diagram_A, int diagram_B) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM report WHERE diagram_A = ? and diagram_B = ? ORDER BY report_Id DESC;";
+	    // Modified by Xuesong Meng
+	    //String sql = "SELECT * FROM report WHERE diagram_A = ? and diagram_B = ? ORDER BY report_Id DESC;";
+	    String sql = "SELECT * FROM report WHERE diagramA = ? and diagramB = ? ORDER BY reportId DESC;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 
 	    pstmt.setInt(1, diagram_A);
@@ -77,10 +83,10 @@ public class ReportDAO {
 
 	    //Initiate a report object and set attributes
 	    Report report = new Report();
-	    report.setReportId(rs.getInt("report_Id"));
-	    report.setDiagramA_Id(rs.getInt("diagram_A"));
-	    report.setDiagramB_Id(rs.getInt("diagram_B"));
-	    report.setCompareTime(rs.getString("comparedTime"));
+	    report.setReportId(rs.getInt("reportId"));
+	    report.setDiagramA_Id(rs.getInt("diagramA"));
+	    report.setDiagramB_Id(rs.getInt("diagramB"));
+	    report.setCompareTime(rs.getString("time"));
 	    report.setReportFilePath(rs.getString("reportFilePath"));
 
 	    rs.close();
@@ -103,7 +109,9 @@ public class ReportDAO {
     public static boolean updateReport(Report report) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "UPDATE report SET diagram_A = ? , diagram_B = ? , reportFilePath = ? WHERE report_Id = ?;";
+	    //Modified by Xuesong Meng
+	    //String sql = "UPDATE report SET diagram_A = ? , diagram_B = ? , reportFilePath = ? WHERE report_Id = ?;";
+	    String sql = "UPDATE report SET diagramA = ? , diagramB = ? , reportFilePath = ? WHERE reportId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setInt(1, report.getDiagramA_Id());
 	    pstmt.setInt(2, report.getDiagramB_Id());
@@ -130,7 +138,9 @@ public class ReportDAO {
     public static boolean deleteReport(Report report) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "DELETE FROM report WHERE report_Id = ?;";
+	    // Modified by Xuesong Meng
+	    //String sql = "DELETE FROM report WHERE report_Id = ?;";
+	    String sql = "DELETE FROM report WHERE reportId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 
 	    pstmt.setInt(1, report.getReportId());
