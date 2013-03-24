@@ -1,6 +1,7 @@
 package repository;
 
 /**
+ * @author Xuesong Meng&Yidu Liang
  * @author Joanne Zhuo
  */
 import java.sql.Connection;
@@ -75,11 +76,12 @@ public class ProjectDAO {
      */
     public static boolean addProject(Connection conn) {
 	try {
+		// modified by Xuesong Meng
 	    PreparedStatement pstmt = conn.prepareStatement(
-		    "INSERT into project(projectName, description, archived) VALUES(?,?,?);");
+		    "INSERT into project(projectName, starDate ,description) VALUES(?,NOW(),?);");
 	    pstmt.setString(1, PROJECT_NAME);
 	    pstmt.setString(2, PROJECT_Desc);
-	    pstmt.setByte(3, PROJECT_Achived);
+	    //pstmt.setByte(3, PROJECT_Achived);
 
 	    // Execute the SQL statement and update database accordingly.
 	    pstmt.executeUpdate();
