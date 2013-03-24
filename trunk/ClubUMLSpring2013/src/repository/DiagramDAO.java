@@ -1,7 +1,7 @@
 package repository;
 
 /**
- *
+ * @author Yidu Liang
  * @author yangchen
  */
 import domain.Diagram;
