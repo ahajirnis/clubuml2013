@@ -1,6 +1,7 @@
 package repository;
 
 /**
+ * @author Xuesong Meng&Yidu Liang
  * @author Joanne Zhuo
  */
 import java.sql.Connection;
@@ -27,14 +28,19 @@ public class UserDAO {
 
 		try {
 			Connection conn = DbManager.getConnection();
+			//PreparedStatement pstmt = conn.prepareStatement(
+			//				"INSERT into user(userName, password, email, project_Id, securityQuestion, securityAnswer) VALUES(?,?,?,?,?,?);",
+			//				Statement.RETURN_GENERATED_KEYS);
+			// Modified by Xuesong Meng
 			PreparedStatement pstmt = conn
 					.prepareStatement(
-							"INSERT into user(userName, password, email, project_Id, securityQuestion, securityAnswer) VALUES(?,?,?,?,?,?);",
+							"INSERT into user(userName,email,password, securityQ, securityA) VALUES(?,?,?,?,?);",
 							Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, user.getUserName());
-			pstmt.setString(2, user.getPassword());
+			pstmt.setString(1, user.getUserName());			
 			pstmt.setString(3, user.getEmail());
-			pstmt.setInt(4, user.getProjectId());
+			pstmt.setString(2, user.getPassword());
+			//No projectId in user table;
+			//pstmt.setInt(4, user.getProjectId());
 			pstmt.setString(5, user.getSecurityQuestion());
 			pstmt.setString(6, user.getSecurityAnswer());
 
@@ -79,11 +85,12 @@ public class UserDAO {
 			if (!rs.next()) {
 				return null;
 			}
-
+			
+			// Modified by Xuesong Meng
 			User user;
 			user = new User(rs.getInt("user_Id"), username, password,
-					rs.getString("email"), rs.getString("securityQuestion"),
-					rs.getString("securityAnswer"), 2);
+					rs.getString("email"), rs.getString("securityQ"),
+					rs.getString("securityA"), 2);
 
 			rs.close();
 			pstmt.close();
@@ -117,10 +124,11 @@ public class UserDAO {
 				return null;
 			}
 
+			// Modified by Xuesong Meng
 			User user;
 			user = new User(rs.getInt("user_Id"), username, "",
-					rs.getString("email"), rs.getString("securityQuestion"),
-					rs.getString("securityAnswer"), 2);
+					rs.getString("email"), rs.getString("securityQ"),
+					rs.getString("securityA"), 2);
 
 			rs.close();
 			pstmt.close();
@@ -154,7 +162,7 @@ public class UserDAO {
 			}
 
 			User user;
-			user = new User(rs.getInt("user_Id"), rs.getString("username"), "",
+			user = new User(rs.getInt("user_Id"), rs.getString("userName"), "",
 					rs.getString("email"), "", "", 2);
 			rs.close();
 			pstmt.close();
@@ -203,8 +211,11 @@ public class UserDAO {
 	public static boolean updateUser(User user) {
 		try {
 			Connection conn = DbManager.getConnection();
+			// Modified by Xuesong Meng
+			//PreparedStatement pstmt = conn
+			//		.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQuestion =?, securityAnswer=? where user_Id = ?;");
 			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQuestion =?, securityAnswer=? where user_Id = ?;");
+					.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQ =?, securityA=? where user_Id = ?;");
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getEmail());
