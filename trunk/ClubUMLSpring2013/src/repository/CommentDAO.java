@@ -1,8 +1,10 @@
 package repository;
 
 /**
- *
+ * @author Yidu Liang
+ * @author Xuesong Meng
  * @author yangchen
+ * 
  */
 import domain.Comment;
 import java.sql.Connection;
@@ -27,7 +29,7 @@ public class CommentDAO {
 	ResultSet rs;
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "INSERT INTO comment(user_Id , content , writtenTime , diagram_Id) VALUES(?,?,NOW(),?);";
+	    String sql = "INSERT INTO comment(userId , content , writtenTime , reportId) VALUES(?,?,NOW(),?);";
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	    pstmt.setInt(1, comment.getUserId());
 	    pstmt.setString(2, comment.getContent());
@@ -54,27 +56,27 @@ public class CommentDAO {
     /**
      * Get Comment ArrayList from DB
      * 
-     * @param diagram_id
-     * 			The ID of the diagram
+     * @param reportId
+     * 		  reportID : the merge result of 2 diagrams  
      * @return Comment ArrayList
      */
-    public static ArrayList<Comment> getComment(int diagram_id) {
+    public static ArrayList<Comment> getComment(int reportId) {
 	ArrayList<Comment> searchResult = new ArrayList<>();
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM comment where diagram_Id = ? ORDER BY `writtenTime` DESC;";
+	    String sql = "SELECT * FROM comment where reportId = ? ORDER BY `writtenTime` DESC;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
-	    pstmt.setInt(1, diagram_id);
+	    pstmt.setInt(1, reportId);
 
 	    ResultSet rs = pstmt.executeQuery();
 
 	    //Initiate a list to get all returned comment objects and set attributes
 	    while (rs.next()) {
 		Comment comt = new Comment();
-		comt.setCommentId(rs.getInt("comment_Id"));
+		comt.setCommentId(rs.getInt("commentId"));
 		comt.setContent(rs.getString("content"));
-		comt.setUserId(rs.getInt("user_Id"));
-		comt.setDiagramId(rs.getInt("diagram_Id"));
+		comt.setUserId(rs.getInt("userId"));
+		comt.setDiagramId(rs.getInt("reportId"));
 		comt.setCommentTime(rs.getString("writtenTime"));
 		searchResult.add(comt);
 	    }
@@ -99,7 +101,7 @@ public class CommentDAO {
     public static boolean updateComment(Comment comment) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "UPDATE comment SET content = ? , writtenTime = ? WHERE comment_Id = ?;";
+	    String sql = "UPDATE comment SET content = ? , writtenTime = ? WHERE commentId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setString(1, comment.getContent());
 	    pstmt.setString(2, comment.getCommentTime());
@@ -126,7 +128,7 @@ public class CommentDAO {
     public static boolean deleteComment(Comment comment) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "DELETE FROM comment WHERE comment_Id = ? ;";
+	    String sql = "DELETE FROM comment WHERE commentId = ? ;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setInt(1, comment.getCommentId());
 
