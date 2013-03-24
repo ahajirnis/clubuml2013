@@ -1,6 +1,7 @@
 package repository;
 
 /**
+ * @author Xuesong Meng&Yidu Liang
  * @author Joanne Zhuo
  */
 import java.io.File;
@@ -17,7 +18,9 @@ public class DbManager {
 	 */
 	private static final String SERVER = "localhost:3306";
 	private static final String USER = "root";
-	private static final String PASSWORD = "1234";
+	// Modified by Xuesong Meng, No password.
+	//private static final String PASSWORD = "1234";
+	private static final String PASSWORD = "";
 	private static final String DATABASE = "clubuml";
 	// as long as you're using mysql, leave this alone.
 	private static final String DATABASE_TYPE = "mysql";
@@ -108,10 +111,12 @@ public class DbManager {
 			// user with the given user name and password.
 			if (System.getProperty("os.name").equals("Linux") && System.getProperty("user.name").equals("tomcat7")) {
 				// Connection for rho (need to move this to a file. outside of webapps folder for security)
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ClubUML","csye7945", "north7945");
+				// Modified by Xuesong Meng
+				//con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/ClubUML","csye7945", "north7945");
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/clubuml","localhost", "");
 			} else {
 				String url = "jdbc:" + DATABASE_TYPE + "://" + SERVER + "/" + DATABASE;
-				con = DriverManager.getConnection(url, USER, PASSWORD);
+				con = DriverManager.getConnection(url, USER, PASSWORD);				
 			}
 			
 			return true;
