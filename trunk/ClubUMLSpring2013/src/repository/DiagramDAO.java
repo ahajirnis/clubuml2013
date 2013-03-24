@@ -27,14 +27,31 @@ public class DiagramDAO {
 	ResultSet rs;
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "INSERT INTO diagram (diagramName , createdTime , inEdition , owner_Id , filePath) VALUES (?,NOW(),?,?,?);";
+	    //String sql = "INSERT INTO diagram (diagramName , createdTime , inEdition , owner_Id , filePath) VALUES (?,NOW(),?,?,?);";
+		//add by Yidu Liang Mar 20 2013
+		
+		String sql = "insert into diagram (projectId, userId, diagramType, diagramName, filePath, fileType, notationFileName, notationFilePath, diFileName, diFilePath)"+
+		"VALUES (?, ?, ?, ?, ?, ? ,?, ?, ?, ?)";
+		
+		
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-	    pstmt.setString(1, diagram.getDiagramName());
-	    pstmt.setBoolean(2, diagram.isInEdition());
-	    pstmt.setInt(3, diagram.getOwnerId());
-	    pstmt.setString(4, diagram.getEcoreFilePath());
-
+	    //pstmt.setString(1, diagram.getDiagramName());
+	    //pstmt.setBoolean(2, diagram.isInEdition());
+	    //pstmt.setInt(3, diagram.getOwnerId());
+	    //pstmt.setString(4, diagram.getEcoreFilePath());
+		
+		pstmt.setString(1,diagram.getProjectName()); // this need to be implementing 
+		pstmt.setString(2,diagram.getOwnerId());
+		pstmt.setString(3,diagram.getdiagramType()); // this need to be implementing 
+		pstmt.setString(4,diagram.diagramName());    // this need to be implementing 
+		pstmt.setString(5,diagram.getFilePath());    // this need to be implementing 
+		pstmt.setString(6,diagram.getfileType());    // this need to be implementing 
+		pstmt.setString(7,diagram.getnotationFileName());   // this need to be implementing 
+		pstmt.setString(8,diagram.getnotationFilePath());   // this need to be implementing 
+		pstmt.setString(9,diagram.getdiFileName());   // this need to be implementing 
+		pstmt.setString(10,diagram.diFilePath());     // this need to be implementing 
+		
 	    pstmt.executeUpdate();
 
 	    //Get and set the auto-generated PK
@@ -57,7 +74,7 @@ public class DiagramDAO {
     /**
      * Get Diagram ArrayList from DB
      * 
-     * @param project_Id
+     * @param projectId
      * 			The ID of the project
      * @return Diagram ArrayList
      */
@@ -73,7 +90,8 @@ public class DiagramDAO {
 	    ResultSet rs = pstmt.executeQuery();
 
 	    //Initiate a list to get all returned report objects and set attributes
-	    while (rs.next()) {
+	    /*
+		while (rs.next()) {
 		Diagram diagram = new Diagram();
 		diagram.setDiagramId(rs.getInt("diagram_Id"));
 		diagram.setDiagramName(rs.getString("diagramName"));
@@ -81,6 +99,24 @@ public class DiagramDAO {
 		diagram.setInEdition(rs.getBoolean("inEdition"));
 		diagram.setOwnerId(rs.getInt("owner_Id"));
 		diagram.setEcoreFilePath(rs.getString("filePath"));
+		searchResult.add(diagram);
+	    }
+		*/
+		//add by Yidu Liang Mar22 2013  projectId, userId, diagramType, diagramName, filePath, fileType, notationFileName, notationFilePath, diFileName, diFilePath
+		while (rs.next()) {
+		Diagram diagram = new Diagram();
+		diagram.setDiagramId(rs.getInt("diagramId"));
+		diagram.setDiagramProject(rs.getInt("projectId"));
+		diagram.setDiagramOwner(rs.getInt("userId"));
+		diagram.setDiagramType(rs.getString("diagramType"));
+		diagram.setDiagramName(rs.getString("diagramName"));
+		diagram.setFilePath(rs.getString("filePath"));
+		diagram.setFileType(rs.getString("fileType"));
+		diagram.setnotationFilename(rs.getString("notationFileName"));
+		diagram.setnotationFilePath(rs.getString("notationFilePath"));
+		diagram.setdiFilename(rs.getString("diFileName"));
+		diagram.setdiFilePath(rs.getString("diFilePath"));
+		
 		searchResult.add(diagram);
 	    }
 
@@ -104,7 +140,7 @@ public class DiagramDAO {
     public static Diagram getDiagram(int diagram_Id) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM diagram WHERE diagram_Id = ?;";
+	    String sql = "SELECT * FROM diagram WHERE diagramId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 
 	    pstmt.setInt(1, diagram_Id);
@@ -116,12 +152,17 @@ public class DiagramDAO {
 	    }
 
 	    Diagram dia = new Diagram();
-	    dia.setDiagramId(rs.getInt("diagram_Id"));
-	    dia.setDiagramName(rs.getString("diagramName"));
-	    dia.setCreatedTime(rs.getString("createdTime"));
-	    dia.setInEdition(rs.getBoolean("inEdition"));
-	    dia.setOwnerId(rs.getInt("owner_Id"));
-	    dia.setEcoreFilePath(rs.getString("filePath"));
+		diagram.setDiagramId(rs.getInt("diagramId"));
+		diagram.setDiagramProject(rs.getInt("projectId"));
+		diagram.setDiagramOwner(rs.getInt("userId"));
+		diagram.setDiagramType(rs.getString("diagramType"));
+		diagram.setDiagramName(rs.getString("diagramName"));
+		diagram.setFilePath(rs.getString("filePath"));
+		diagram.setFileType(rs.getString("fileType"));
+		diagram.setnotationFilename(rs.getString("notationFileName"));
+		diagram.setnotationFilePath(rs.getString("notationFilePath"));
+		diagram.setdiFilename(rs.getString("diFileName"));
+		diagram.setdiFilePath(rs.getString("diFilePath"));
 
 	    pstmt.close();
 	    conn.close();
@@ -136,20 +177,25 @@ public class DiagramDAO {
      * Update Diagram from DB
      * 
      * @param Diagram object
-     * 			diagramName, createdTime, inEdition, ecoreFilePath
+     * 			projectId, userId, diagramType, diagramName, filePath, fileType, notationFileName, notationFilePath, diFileName, diFilePath
      * @return true if success; false if fail
      */
     public static boolean updateDiagram(Diagram diagram) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "UPDATE diagram SET diagramName = ? , createdTime = ? , inEdition = ? , filePath = ? WHERE diagram_Id = ?;";
+	    String sql = "UPDATE diagram SET projectId = ?, userId = ?, diagramType = ?, diagramName = ?, filePath = ?, fileType = ?, notationFileName = ?, notationFilePath= ?, diFileName = ?, diFilePath = ? WHERE diagramId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 
-	    pstmt.setString(1, diagram.getDiagramName());
-	    pstmt.setString(2, diagram.getCreatedTime());
-	    pstmt.setBoolean(3, diagram.isInEdition());
-	    pstmt.setString(4, diagram.getEcoreFilePath());
-	    pstmt.setInt(5, diagram.getDiagramId());
+	    pstmt.setString(1,diagram.getProjectName()); // this need to be implementing 
+		pstmt.setString(2,diagram.getOwnerId());
+		pstmt.setString(3,diagram.getdiagramType()); // this need to be implementing 
+		pstmt.setString(4,diagram.diagramName());    // this need to be implementing 
+		pstmt.setString(5,diagram.getFilePath());    // this need to be implementing 
+		pstmt.setString(6,diagram.getfileType());    // this need to be implementing 
+		pstmt.setString(7,diagram.getnotationFileName());   // this need to be implementing 
+		pstmt.setString(8,diagram.getnotationFilePath());   // this need to be implementing 
+		pstmt.setString(9,diagram.getdiFileName());   // this need to be implementing 
+		pstmt.setString(10,diagram.diFilePath());     // this need to be implementing 
 
 	    pstmt.executeUpdate();
 
