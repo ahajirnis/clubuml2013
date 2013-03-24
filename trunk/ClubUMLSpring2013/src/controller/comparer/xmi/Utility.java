@@ -36,6 +36,18 @@ public final class Utility {
 		return "";
 	}
 	
+	public static XmiAssociationElement getAssociationById(ArrayList<XmiAssociationElement> array, String id) {
+
+		for(XmiAssociationElement element : array) {
+			System.out.println(element.getId());
+			if (element.getId().equals(id)) {
+				return element;
+			}
+		}
+		return null;
+	}
+	
+	
 	public static XmiClassElement getClassById(List<XmiClassElement> array, String id) {
 		for (XmiClassElement element : array) {
 			if (element.getId().equals(id)) {

@@ -8,7 +8,10 @@ public class XmiClassElement extends XmiBaseElement{
 	private ArrayList<XmiAttributeElement> attributes;
 	private ArrayList<XmiClassElement> nestedClass;
 	private ArrayList<XmiGeneralizationElement> generalization;
-
+	
+	// linked to association
+	private ArrayList<XmiMemberEndElement> classifer;
+	
 	public XmiClassElement(String id, String name, String type,
 			String visibility) {
 		super(id, name, type, visibility);
@@ -17,6 +20,7 @@ public class XmiClassElement extends XmiBaseElement{
 		this.attributes = new ArrayList<XmiAttributeElement>();
 		this.nestedClass = new ArrayList<XmiClassElement>();
 		this.generalization = new ArrayList<XmiGeneralizationElement>();
+		this.classifer = new ArrayList<XmiMemberEndElement>();
 	}
 
 	public ArrayList<XmiOperationElement> getOperations() {
@@ -54,5 +58,19 @@ public class XmiClassElement extends XmiBaseElement{
 
 	public void addGeneralization(XmiGeneralizationElement generalization) {
 		this.generalization.add(generalization);
+	}
+
+	/**
+	 * @return the classifer
+	 */
+	public ArrayList<XmiMemberEndElement> getClassifer() {
+		return classifer;
+	}
+
+	/**
+	 * @param classifer the classifer to set
+	 */
+	public void addClassifer(XmiMemberEndElement classifer) {
+		this.classifer.add(classifer);
 	}
 }

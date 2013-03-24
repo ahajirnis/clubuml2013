@@ -16,19 +16,29 @@ import uml2parser.XmiElement;
 
 public class XmiClassDiagramParser {
 
+	// Class diagram signifier
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
+
+	// Tags
 	private final static String PAPYRUS_NOTATION_ELEM = "notation:Diagram";
 	private final static String PAPYRUS_PACKAGED_ELEM = "packagedElement";
 	private final static String PAPYRUS_OPERATION_ELEM = "ownedOperation";
 	private final static String PAPYRUS_PROPERTY_ELEM = "ownedAttribute";
 	private final static String PAPYRUS_PARAMETER_ELEM = "ownedParameter";
 	private final static String PAPYRUS_GENERALIZATION_ELEM = "generalization";
+	private final static String PAPYRUS_MEMVBER_END = "ownedEnd";
+	private final static String PAPYRUS_LOWER_VALUE = "lowerValue";
+	private final static String PAPYRUS_UPPER_VALUE = "upperValue";
 
+	// UML Types
 	private final static String PAPYRUS_PACKAGE_TYPE_CLASS = "uml:Class";
 	private final static String PAPYRUS_PACKAGE_TYPE_INTERFACE = "uml:Interface";
 	private final static String PAPYRUS_PACKAGE_TYPE_PRIMITIVE = "uml:PrimitiveType";
-	private final static String PAPYRUS_PACKAGE_TYPE_Association = "uml:Association";
+	private final static String PAPYRUS_PACKAGE_TYPE_ASSOCIATION = "uml:Association";
+	private final static String PAPYRUS_PACKAGE_TYPE_LITERNAL_INTEGER = "uml:LiteralInteger";
+	private final static String PAPYRUS_PACKAGE_TYPE_LITERNAL_UNLILMITED = "uml:LiteralUnlimitedNatural";
 
+	// Attributes
 	private final static String PAPYRUS_XMI_ATTRIBUTE_TYPE = "xmi:type";
 	private final static String PAPYRUS_ATTRIBUTE_NAME = "name";
 	private final static String PAPYRUS_ATTRIBUTE_ID = "xmi:id";
@@ -36,6 +46,10 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_ATTRIBUTE_VISIBILITY = "visibility";
 	private final static String PAPYRUS_ATTRIBUTE_DIRECTION = "direction";
 	private final static String PAPYRUS_GENERALIZATION_DIRECTION = "general";
+	private final static String PAPYRUS_ATTRIBUTE_ASSOCIATION = "association";
+	private final static String PAPYRUS_ATTRIBUTE_VALUE = "value";
+	private final static String PAPYRUS_MEMBER_END = "memberEnd";
+	private final static String PAPYRUS_AGGREGATION = "aggregation";
 
 	private String umlFileName;
 	private String notationFileName;
@@ -55,6 +69,7 @@ public class XmiClassDiagramParser {
 	private ArrayList<XmiBaseElement> rootElements = new ArrayList<XmiBaseElement>();
 	private ArrayList<XmiClassElement> classElements = new ArrayList<XmiClassElement>();
 	private ArrayList<XmiTypeElement> primitiveElements = new ArrayList<XmiTypeElement>();
+	private ArrayList<XmiAssociationElement> associationElements = new ArrayList<XmiAssociationElement>();
 
 	XmiClassDiagramParser(String umlFile, String notationFile) {
 		umlFileName = umlFile;
@@ -171,10 +186,19 @@ public class XmiClassDiagramParser {
 	/**
 	 * postProcess
 	 * 
+	 */
+	private void postProcess() {
+		DefineReferenceTypeName();
+
+	}
+
+	/**
+	 * DefineReferenceTypeName
+	 * 
 	 * Runs through elements and finds the names for the types if they are
 	 * reference. A type that is a reference begings with an underscore.
 	 */
-	private void postProcess() {
+	private void DefineReferenceTypeName() {
 
 		for (XmiClassElement Class : classElements) {
 
@@ -203,6 +227,25 @@ public class XmiClassDiagramParser {
 				if (element.getUmlType().startsWith("_")) {
 					element.setVerboseType(Utility.getBaseNameById(
 							rootElements, element.getUmlType()));
+				}
+			}
+		}
+	}
+
+	/**
+	 * DefineReferenceTypeName
+	 * 
+	 * Runs through elements and finds the names for the types if they are
+	 * reference. A type that is a reference begings with an underscore.
+	 */
+	private void DefineMissingAssociations() {
+
+		for (XmiClassElement Class : classElements) {
+
+			for (XmiMemberEndElement element : Class.getClassifer()) {
+				if (element.getAssociation() == null) {
+					element.setAssociation(Utility.getAssociationById(
+							associationElements, element.getAssociationId()));
 				}
 			}
 		}
@@ -262,6 +305,16 @@ public class XmiClassDiagramParser {
 							classElements.add(classElement);
 							break;
 						}
+						case PAPYRUS_PACKAGE_TYPE_ASSOCIATION: {
+
+							XmiAssociationElement assocationElement = createXmiAssociationElement(packagedElemList
+									.get(i));
+
+							rootElements.add(assocationElement);
+
+							associationElements.add(assocationElement);
+							break;
+						}
 						}
 					}
 				}
@@ -297,10 +350,18 @@ public class XmiClassDiagramParser {
 
 		for (int j = 0; j < childElements.size(); j++) {
 			String tag = childElements.get(j).getElementName();
+			String association = childElements.get(j).getAttributeValue(
+					PAPYRUS_ATTRIBUTE_ASSOCIATION);
 			switch (tag) {
 			case PAPYRUS_PROPERTY_ELEM:
-				xmiClass.addAttribute(createXmiAttributeElement(childElements
-						.get(j)));
+				if (association == null) {
+					xmiClass.addAttribute(createXmiAttributeElement(childElements
+							.get(j)));
+				} else {
+					xmiClass.addClassifer(createXmiMemberEndElement(childElements
+							.get(j)));
+				}
+
 				break;
 			case PAPYRUS_OPERATION_ELEM:
 				xmiClass.addOperation(createXmiOperationElement(childElements
@@ -340,13 +401,14 @@ public class XmiClassDiagramParser {
 	}
 
 	private XmiAttributeElement createXmiAttributeElement(XmiElement xmiElement) {
-		List<Attribute> attrlist = xmiElement.getAttrib();
-
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
 		String visibility = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
+
+		String association = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_ASSOCIATION);
 
 		XmiAttributeElement xmiClass = new XmiAttributeElement(id, name, type,
 				visibility);
@@ -404,6 +466,79 @@ public class XmiClassDiagramParser {
 				generalization);
 
 		return xmiClass;
+	}
+
+	private XmiAssociationElement createXmiAssociationElement(
+			XmiElement xmiElement) {
+		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
+		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+
+		XmiAssociationElement xmiClass = new XmiAssociationElement(id, name,
+				type);
+
+		List<XmiElement> childrenElement = xmiElement.getChildElemList();
+
+		for (XmiElement child : childrenElement) {
+			String tag = child.getElementName();
+
+			switch (tag) {
+			case PAPYRUS_MEMVBER_END:
+				XmiMemberEndElement memberEndChild = createXmiMemberEndElement(child);
+				xmiClass.addMemberEnd(memberEndChild);
+				memberEndChild.setAssociation(xmiClass);
+				break;
+			}
+		}
+
+		return null;
+	}
+
+	private XmiMemberEndElement createXmiMemberEndElement(XmiElement xmiElement) {
+		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
+		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+		
+		String aggregationValue = xmiElement
+				.getAttributeValue(PAPYRUS_AGGREGATION);
+		
+		String associationId = xmiElement
+				.getAttributeValue(PAPYRUS_ATTRIBUTE_ASSOCIATION);
+
+		XmiMemberEndElement xmiClass = new XmiMemberEndElement(id, name, type);
+		
+		if (aggregationValue != null) {
+			xmiClass.setAggregation(AggregationValues.valueOf(aggregationValue));
+		}
+		
+		xmiClass.setAssociationId(associationId);
+		
+		List<XmiElement> childrenElement = xmiElement.getChildElemList();
+
+		for (XmiElement child : childrenElement) {
+			String tag = child.getElementName();
+
+			switch (tag) {
+			case PAPYRUS_LOWER_VALUE:
+				xmiClass.setLowerValue(createXmiValueElement(child));
+				break;
+			case PAPYRUS_UPPER_VALUE:
+				xmiClass.setUpperValue(createXmiValueElement(child));
+				break;
+			}
+		}
+
+		return xmiClass;
+	}
+
+	private XmiValueElement createXmiValueElement(XmiElement xmiElement) {
+		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
+		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		String value = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VALUE);
+
+		XmiValueElement xmiValue = new XmiValueElement(id, type, value);
+
+		return xmiValue;
 	}
 
 	/**
