@@ -1,11 +1,10 @@
 package controller.comparer.xmi;
 
-
 public class XmiBaseElement {
 
 	private static final String DEFAULT_VISIBILITY = "public";
 	private static final String DEFAULT_TYPE = "<Undefined>";
-	
+
 	private String id;
 	private String name;
 	private String type;
@@ -13,13 +12,13 @@ public class XmiBaseElement {
 	private String visibility;
 
 	public XmiBaseElement(String id, String name, String type, String visibility) {
-		
+
 		this.id = id;
 		this.name = name;
 		setUmlType(type);
 		setVisibility(visibility);
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -33,7 +32,7 @@ public class XmiBaseElement {
 	}
 
 	public void setVisibility(String visibility) {
-		
+
 		if (visibility == null) {
 			this.visibility = DEFAULT_VISIBILITY;
 		} else if (visibility.isEmpty()) {
@@ -80,5 +79,15 @@ public class XmiBaseElement {
 	@Override
 	public String toString() {
 		return getVisibility() + " " + getTypeName() + " " + getName();
+	}
+
+	public boolean equals(Object object) {
+		XmiBaseElement o = (XmiBaseElement) object;
+		if (this.getName() == o.getName()
+				&& this.getVisibility() == o.getVisibility()
+				&& this.getTypeName() == o.getTypeName()) {
+			return true;
+		} else
+			return false;
 	}
 }

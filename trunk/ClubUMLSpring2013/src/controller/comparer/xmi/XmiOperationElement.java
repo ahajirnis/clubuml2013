@@ -45,6 +45,13 @@ public class XmiOperationElement extends XmiBaseElement {
 	
 	@Override
 	public boolean equals(Object object) {
-		return false;
+		XmiOperationElement o = (XmiOperationElement) object;
+		if (this.getName() == o.getName()
+				&& this.getVisibility() == o.getVisibility()
+				&& this.getTypeName() == o.getTypeName()
+				&& this.getParameters().equals(o.getParameters())) {
+			return true;
+		} else
+			return false;
 	}
 }

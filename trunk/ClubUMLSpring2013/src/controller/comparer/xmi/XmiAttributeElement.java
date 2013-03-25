@@ -11,4 +11,15 @@ public class XmiAttributeElement extends XmiBaseElement {
 	public String toString() {
 		return super.toString();
 	}
+
+	@Override
+	public boolean equals(Object object) {
+		XmiAttributeElement o = (XmiAttributeElement) object;
+		if (this.getName() == o.getName()
+				&& this.getVisibility() == o.getVisibility()
+				&& this.getTypeName() == o.getTypeName()) {
+			return true;
+		} else
+			return false;
+	}
 }

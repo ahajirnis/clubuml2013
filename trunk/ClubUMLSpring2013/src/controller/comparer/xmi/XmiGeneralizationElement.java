@@ -25,6 +25,13 @@ public class XmiGeneralizationElement extends XmiBaseElement {
 	
 	@Override
 	public boolean equals(Object object) {
-		return false;
+		XmiGeneralizationElement o = (XmiGeneralizationElement) object;
+		if (this.getName() == o.getName()
+				&& this.getVisibility() == o.getVisibility()
+				&& this.getTypeName() == o.getTypeName()
+				&& this.getParent() == o.getParent()) {
+			return true;
+		} else
+			return false;
 	}
 }
