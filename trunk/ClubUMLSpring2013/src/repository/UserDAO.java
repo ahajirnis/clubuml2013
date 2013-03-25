@@ -41,8 +41,8 @@ public class UserDAO {
 			pstmt.setString(2, user.getPassword());
 			//No projectId in user table;
 			//pstmt.setInt(4, user.getProjectId());
-			pstmt.setString(5, user.getSecurityQuestion());
-			pstmt.setString(6, user.getSecurityAnswer());
+			pstmt.setString(4, user.getSecurityQuestion());
+			pstmt.setString(5, user.getSecurityAnswer());
 
 			// Execute the SQL statement and update database accordingly.
 			pstmt.executeUpdate();
