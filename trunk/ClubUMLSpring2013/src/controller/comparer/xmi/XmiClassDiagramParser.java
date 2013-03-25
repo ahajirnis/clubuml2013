@@ -204,28 +204,28 @@ public class XmiClassDiagramParser {
 
 			for (XmiAttributeElement element : Class.getAttributes()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(
+					element.setTypeName(Utility.getBaseNameById(
 							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiOperationElement element : Class.getOperations()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(
+					element.setTypeName(Utility.getBaseNameById(
 							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiClassElement element : Class.getNestedClass()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(
+					element.setTypeName(Utility.getBaseNameById(
 							rootElements, element.getUmlType()));
 				}
 			}
 
 			for (XmiGeneralizationElement element : Class.getGeneralization()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setVerboseType(Utility.getBaseNameById(
+					element.setTypeName(Utility.getBaseNameById(
 							rootElements, element.getUmlType()));
 				}
 			}

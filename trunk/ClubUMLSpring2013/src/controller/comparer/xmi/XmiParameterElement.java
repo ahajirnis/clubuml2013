@@ -32,7 +32,7 @@ public class XmiParameterElement extends XmiBaseElement{
 	
 	@Override
 	public String toString() {
-		return this.direction + " " + super.getVisibility() + " " + super.getVerboseType() + " " + super.getName();
+		return this.direction + " " + super.getVisibility() + " " + super.getTypeName() + " " + super.getName();
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class XmiBaseElement {
 	private String id;
 	private String name;
 	private String type;
-	private String verboseType;
+	private String typeName;
 	private String visibility;
 
 	public XmiBaseElement(String id, String name, String type, String visibility) {
@@ -63,22 +63,22 @@ public class XmiBaseElement {
 		this.name = name;
 	}
 
-	public String getVerboseType() {
-		if (this.verboseType == null) {
+	public String getTypeName() {
+		if (this.typeName == null) {
 			return type;
-		} else if (this.verboseType.isEmpty()) {
+		} else if (this.typeName.isEmpty()) {
 			return type;
 		} else {
-			return verboseType;
+			return typeName;
 		}
 	}
 
-	public void setVerboseType(String verboseType) {
-		this.verboseType = verboseType;
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	@Override
 	public String toString() {
-		return getVisibility() + " " + getVerboseType() + " " + getName();
+		return getVisibility() + " " + getTypeName() + " " + getName();
 	}
 }
