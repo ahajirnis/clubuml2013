@@ -39,7 +39,6 @@ public class SynonymCheck {
 
         //connection vars 
         BufferedReader rd;
-        OutputStreamWriter wr;
         StringBuilder API_response = new StringBuilder();
 
         name1 = name1.toLowerCase();
@@ -51,8 +50,6 @@ public class SynonymCheck {
             URL url = new URL("http://words.bighugelabs.com/api/2/eb23eace35633b1274abdfeabc1b4753/" + name1 + "/json");
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
-            wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.flush();
 
             // Get the response
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
