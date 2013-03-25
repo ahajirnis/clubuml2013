@@ -20,7 +20,13 @@ import org.eclipse.emf.ecore.EReference;
 import domain.Diagram;
 import domain.EditingHistory;
 
-public class UpdatedUmlUploadProcessor implements UploadProcessor{
+/**
+ * 
+ * @author shuklp
+ * 
+ */
+public class UpdatedUmlUploadProcessor implements UploadProcessor {
+
 	List<FileInfo> fileList;
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
 	private final static String PAPYRUS_SEQUENCE_DIAG = "PapyrusUMLSequenceDiagram";
@@ -28,6 +34,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 	private final static String PAPYRUS_PACKAGED_ELEM = "packagedElement";
 	private boolean isClassDiag = false;
 	private boolean isSeqDiag = false;
+	private int flag = 0;
 	private List<String> activeIdList;
 	private XmiElement classXmiDiag;
 	private XmiElement sequenceXmiDiag;
@@ -87,12 +94,14 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 							// Notation file. We can enhance this in future.
 							classXmiDiag = xmi;
 							isClassDiag = true;
+							flag = 1;
 						}
 							break;
 						// Add Sequence Diagrams Support
 						case PAPYRUS_SEQUENCE_DIAG: {
 							sequenceXmiDiag = xmi;
 							isSeqDiag = true;
+							flag = 2;
 						}
 							break;
 						default: {
@@ -233,7 +242,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 				}
 				// Log.LogCreate().Info("Calling CreateJava file");
 				CreateJavaFile(classList);
-				createPngFile(Umlfilename, Umlfilename + ".java",
+				createPngFile(flag, Umlfilename, Umlfilename + ".java",
 						umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
 		}
@@ -406,7 +415,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 				// Build a list of lifelines, messages and fragments
 				// The fragment list sequence presents the message sequence
 				List <XmiElement> fragmentList = new ArrayList<XmiElement> ();
-				List <XmiElement> lifelinelist = new ArrayList<XmiElement> ();
+				List <XmiElement> lifelineList = new ArrayList<XmiElement> ();
 				List <XmiElement> messageList = new ArrayList<XmiElement> ();
 				List <String> msgIdList = new ArrayList<String> ();
 				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
@@ -425,7 +434,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 							}	
 							if (childElems.get(j).getElementName().equals("lifeline")) {
 								Log.LogCreate().Info("Found lifeline list =" + childElems.get(j).getElementId());
-								lifelinelist.add(childElems.get(j));
+								lifelineList.add(childElems.get(j));
 							}
 							if (childElems.get(j).getElementName().equals("message")) {
 								Log.LogCreate().Info("Found message list =" + childElems.get(j).getElementId());
@@ -439,7 +448,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 					xmiElemMsg.process();
 					for (XmiElement fragment:fragmentList) {
 						if (fragment.getElementId().equals(messageList.get(i).getAttributeValue("sendEvent"))||fragment.getElementId().equals(messageList.get(i).getAttributeValue("receiveEvent"))) {
-							for (XmiElement lifeline:lifelinelist)
+							for (XmiElement lifeline:lifelineList)
 							{
 								if (lifeline.getElementId().equals(fragment.getAttributeValue("covered")) && fragment.getAttributeValue("name").startsWith("MessageSend"))
 								{
@@ -460,10 +469,10 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 					}
 				}
 				
-				for (int i = 0 ; i < lifelinelist.size() ; i++) {
-					XmiElementLifeLine xmiElemLifLin = new XmiElementLifeLine(lifelinelist.get(i));
+				for (int i = 0 ; i < lifelineList.size() ; i++) {
+					XmiElementLifeLine xmiElemLifLin = new XmiElementLifeLine(lifelineList.get(i));
 					xmiElemLifLin.process();
-					String coveryByVal = lifelinelist.get(i).getAttributeValue("coveredBy");
+					String coveryByVal = lifelineList.get(i).getAttributeValue("coveredBy");
 					String [] coveryByValList = coveryByVal.split(" ");
 					List<String> coveryByList = new ArrayList<String>();
 					for (int j = 0 ; j < coveryByValList.length; j++) {
@@ -481,7 +490,69 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 				}
 				
 				/** Then call method to translate PicELement into .pic statement and create .png file**/
+				CreatePicFile(picElem);
+				createPngFile(flag, Umlfilename, Umlfilename + ".pic",
+						umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
+		}
+		
+		private void CreatePicFile(PicElement PicElem) {
+			// Create Stream Writer
+			BufferedWriter out;
+			try {
+				// for each package
+
+				File javaFile = new File(fileList.get(0).getDestFilePath()
+						+ Umlfilename + ".pic");
+				FileWriter fstream = new FileWriter(javaFile);
+				out = new BufferedWriter(fstream);
+				PicElement picElem = new PicElement();
+				out.write(".PS\n");
+				out.write("copy \"sequence.pic\"; \n");
+				String[] LifelineNic = new String[picElem.getLifelineList().size()];
+				
+				out.write("#Define objects \n");
+				for (int i = 0; i < picElem.getLifelineList().size(); i++) {
+					XmiElementLifeLine  obj= picElem.getLifelineList().get(i);
+					String objType,objName;
+					objType = obj.getLifelineType();
+					objName = obj.getLifelineName();
+					LifelineNic[i] = (String) objName.substring(0, 1)+i;
+					obj.setLifelineNic(LifelineNic[i]);
+					if(objType.equals("object"))
+						out.write(objType+"("+LifelineNic[i]+",\""+objName+"\");\n");
+					else
+						out.write(objType+"("+LifelineNic[i]+");\n");
+				}
+				out.write("step();");
+				
+				out.write("#Message sequences \n");
+				for(int m = 0; m<picElem.getMessageList().size(); m++)
+				{
+					XmiElementMessage  msg= picElem.getMessageList().get(m);
+					String msgSort,msgName,msgSender,msgReceiver;
+					msgSort = msg.getmessageSort();
+					msgName = msg.getmessageName();
+					msgSender = msg.getSender().getLifelineNic();
+					msgReceiver = msg.getReceiver().getLifelineNic();
+					out.write(msgSort+"("+msgSender+","+msgReceiver+","+"\""+msgName+"\");\n");					
+				}
+				
+				out.write("#Complete the lifelines \n");
+				out.write("step(); \n");
+				for(int j = 0; j < picElem.getLifelineList().size(); j++)
+				{					
+					out.write("complete("+j+");\n");
+				}
+				out.write(".PE\n");
+			
+				out.close();
+				fstream.close();
+			} catch (Exception e) {
+				Log.LogCreate().Info(
+						"Got an error creating the file...." + e.getMessage());
+			}
+
 		}
 	}
 	
@@ -516,6 +587,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 		String lifelineName;		
 		/*This lifeline Type should be either object or placeholder_object*/
 		String lifelineType;
+		String lifelineNic;
 		
 		XmiElementLifeLine(XmiElement element) {			
 			elem = element;
@@ -538,7 +610,20 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 		public void setLifelineType(String lifelineType) {
 			this.lifelineType = lifelineType;
 		}
-				
+		public String getLifelineName() {
+			return lifelineName;
+		}
+
+		public void setLifelineName(String lifelineName) {
+			this.lifelineName = lifelineName;
+		}	
+		public String getLifelineNic() {
+			return lifelineNic;
+		}
+
+		public void setLifelineNic(String lifelineNic) {
+			this.lifelineNic = lifelineNic;
+		}
 	}
 
 	class XmiElementMessage {
@@ -552,7 +637,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 		XmiElementMessage(XmiElement element) {
 			elem = element;
 		}
-		
+
 		private void process() {
 			List<Attribute> temp = elem.getAttrib();
 			for (int i = 0; i < temp.size(); i++) {
@@ -586,7 +671,14 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor{
 				}				
 			}
 		}
+		
+		public String getmessageName() {
+			return messageName;
+		}
 
+		public String getmessageSort() {
+			return messageSort;
+		}
 		public XmiElementLifeLine getSender() {
 			return sender;
 		}
