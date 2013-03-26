@@ -11,6 +11,13 @@ import controller.upload.UploadProcessorFactory;
 
 public class XmiClassDiagramComparer implements ComparerIntf {
 
+	private final static String KEY_REQUEST = "Request";
+	private final static String REQUEST_REFRESH = "Refresh";
+	private final static String REQUEST_CONSOLIDATE = "Consolidate";
+	private final static String REQUEST_ADD = "Add";
+	private final static String REQUEST_BREAK = "Break";
+	private final static String REQUEST_COMPARE = "Compare";
+	
 	private XmiClassDiagramParser ClassDiagram1;
 	private XmiClassDiagramParser ClassDiagram2;
 
@@ -78,11 +85,28 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	}
 
 	/**
+	 * Based on the JSON object's request, this method invokes the
+	 * desired request and returns a JSON object.
 	 * 
+	 * JSON structure is documented in the JSON documentation.
 	 */
 	@Override
 	public JSONObject action(JSONObject jsonObj) {
-		// TODO Auto-generated method stub
+		String request = (String)jsonObj.get(KEY_REQUEST);
+		
+		switch(request) {
+		case REQUEST_REFRESH:
+			return Refresh(jsonObj);
+		case REQUEST_COMPARE:
+			return Compare(jsonObj);
+		case REQUEST_CONSOLIDATE:
+			return Consolidate(jsonObj);
+		case REQUEST_ADD:
+			return Add(jsonObj);
+		case REQUEST_BREAK:
+			return Break(jsonObj);
+		}
+		
 		return null;
 	}
 
@@ -90,18 +114,42 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	// Implement and change these stubs to however you like
 	// *************************************************************************
 
-	// Compare classes
-	private JSONObject compareClass(String className1, String className2) {
-		List<XmiClassElement> list1 = ClassDiagram1.getClassElements();
-		List<XmiClassElement> list2 = ClassDiagram2.getClassElements();
-
-		for (XmiClassElement classElement1 : list1) {
-			for (XmiClassElement classElement2 : list2) {
-
-			}
-		}
-
+	@SuppressWarnings("unchecked")
+	private JSONObject Refresh(JSONObject jsonObj) {
+		
+		JSONObject obj = new JSONObject();
+		
+		ArrayList<String> array1 = new ArrayList<String>();
+		array1.add("Class A");
+		array1.add("Class B");
+		obj.put("Class1", array1);
+		
+		ArrayList<String> array2 = new ArrayList<String>();
+		array2.add("Class C");
+		array2.add("Class D");
+		obj.put("Class2", array2);
+		
+		ArrayList<String> array3 = new ArrayList<String>();
+		array3.add("Class E");
+		array3.add("Class F");
+		obj.put("Same", array3);
+		
+		return obj;
+	}
+	
+	private JSONObject Compare(JSONObject jsonObj) {		
 		return null;
 	}
-
+	
+	private JSONObject Consolidate(JSONObject jsonObj) {
+		return null;
+	}
+	
+	private JSONObject Add(JSONObject jsonObj) {
+		return null;
+	}
+	
+	private JSONObject Break(JSONObject jsonObj) {
+		return null;
+	}
 }
