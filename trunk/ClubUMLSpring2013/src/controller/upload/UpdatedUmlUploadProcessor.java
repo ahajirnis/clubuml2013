@@ -242,8 +242,7 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor {
 				}
 				// Log.LogCreate().Info("Calling CreateJava file");
 				CreateJavaFile(classList);
-				createPngFile(flag, Umlfilename, Umlfilename + ".java",
-						umlInfo.getDestFilePath(), umlInfo.getLibPath());
+				createPngFile(flag, Umlfilename, Umlfilename + ".java", umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
 		}
 
@@ -398,9 +397,9 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor {
 			Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor");
 			ElementIterator(sequenceXmiDiag);
 			boolean foundError = false;
-			// PicElement is a structure specifically for creating .pic statement
+			/** PicElement is a structure specifically for creating .pic statement **/
 			PicElement picElem= new PicElement();
-			// now find the elements in the class 
+			/** Now find the elements in the class **/
 			for (int i = 0 ; i < activeIdList.size(); i++) {
 				if (modelUmlInfo.findElementsById(activeIdList.get(i)) == false) {
 					Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor : Found error while iterating active element list");
@@ -412,14 +411,16 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor {
 			Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor : active list size =  " + String.valueOf(activeIdList.size()) );
 			if (foundError == false) {
 				Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor : ");
-				// Build a list of lifelines, messages and fragments
-				// The fragment list sequence presents the message sequence
+				/** Build a list of lifelines, messages and fragments **/
 				List <XmiElement> fragmentList = new ArrayList<XmiElement> ();
 				List <XmiElement> lifelineList = new ArrayList<XmiElement> ();
 				List <XmiElement> messageList = new ArrayList<XmiElement> ();
+				/**This msgIdList is used for ordering the message **/
 				List <String> msgIdList = new ArrayList<String> ();
+				
 				List<XmiElement> packagedElemList =  modelUmlInfo.findElementsByName(PAPYRUS_PACKAGED_ELEM);
 				Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor : packagedElemList size =  " + String.valueOf(packagedElemList.size()) );
+				
 				for (int i = 0 ; i < packagedElemList.size(); i++) {
 					List<XmiElement> childElems = packagedElemList.get(i).getChildElemList();
 					Log.LogCreate().Info("Uml2SequenceDiagramUploadProcessor : childElems size =  " + String.valueOf(childElems.size()) );
@@ -428,47 +429,27 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor {
 							if (childElems.get(j).getElementName().equals("fragment")) {
 								Log.LogCreate().Info("Found fragment list =" + childElems.get(j).getElementId());
 								fragmentList.add(childElems.get(j));
+								/* Some more code here */
 								if(childElems.get(j).getAttributeValue("xmi:type").equals("MessageOccurrenceSpecification") && childElems.get(j).getAttributeValue("name").startsWith("MessageSend")) {
 									msgIdList.add(childElems.get(j).getAttributeValue("message"));																	
 								}
-							}	
-							if (childElems.get(j).getElementName().equals("lifeline")) {
-								Log.LogCreate().Info("Found lifeline list =" + childElems.get(j).getElementId());
-								lifelineList.add(childElems.get(j));
-							}
+							}							
+						    if (childElems.get(j).getElementName().equals("lifeline")) {
+							    Log.LogCreate().Info("Found lifeline list =" + childElems.get(j).getElementId());
+							    lifelineList.add(childElems.get(j));
+						    }							
 							if (childElems.get(j).getElementName().equals("message")) {
 								Log.LogCreate().Info("Found message list =" + childElems.get(j).getElementId());
-								messageList.add(childElems.get(j));
+								/** Use the msgIdList to order the messages correctly **/
+								if (msgIdList.contains(childElems.get(j))) {
+									messageList.add(msgIdList.indexOf(childElems.get(j)), childElems.get(j));
+								}
+								
 							}													
 					}					
 				}
-			    // Create XmiElementMessage item and put it into messageList of Pic class
-				for (int i = 0 ; i < messageList.size() ; i++) {
-					XmiElementMessage xmiElemMsg = new XmiElementMessage(messageList.get(i));
-					xmiElemMsg.process();
-					for (XmiElement fragment:fragmentList) {
-						if (fragment.getElementId().equals(messageList.get(i).getAttributeValue("sendEvent"))||fragment.getElementId().equals(messageList.get(i).getAttributeValue("receiveEvent"))) {
-							for (XmiElement lifeline:lifelineList)
-							{
-								if (lifeline.getElementId().equals(fragment.getAttributeValue("covered")) && fragment.getAttributeValue("name").startsWith("MessageSend"))
-								{
-									xmiElemMsg.setSender(new XmiElementLifeLine(lifeline));
-								}
-								if (lifeline.getElementId().equals(fragment.getAttributeValue("covered")) && fragment.getAttributeValue("name").startsWith("MessageRecv"))
-								{
-									xmiElemMsg.setReceiver(new XmiElementLifeLine(lifeline));
-								}
-							}
-						
-						}
-					}	
-					
-					// add xmiElementMessage with the correct order 
-					if (msgIdList.contains(messageList.get(i).getElementId())) {
-						picElem.getMessageList().add(msgIdList.indexOf(messageList.get(i).getElementId()), xmiElemMsg);
-					}
-				}
 				
+				/** Create XmiElementLifeline item and set type property **/
 				for (int i = 0 ; i < lifelineList.size() ; i++) {
 					XmiElementLifeLine xmiElemLifLin = new XmiElementLifeLine(lifelineList.get(i));
 					xmiElemLifLin.process();
@@ -489,10 +470,35 @@ public class UpdatedUmlUploadProcessor implements UploadProcessor {
 					picElem.getLifelineList().add(xmiElemLifLin);					
 				}
 				
+			    /** Create XmiElementMessage item and set the sender lifeline and receiver lifeline **/
+				for (int i = 0 ; i < messageList.size() ; i++) {
+					XmiElementMessage xmiElemMsg = new XmiElementMessage(messageList.get(i));
+					xmiElemMsg.process();
+					for (XmiElement fragment:fragmentList) {
+						if (fragment.getElementId().equals(messageList.get(i).getAttributeValue("sendEvent"))||fragment.getElementId().equals(messageList.get(i).getAttributeValue("receiveEvent"))) {
+							for (XmiElement lifeline:lifelineList)
+							{
+								if (lifeline.getElementId().equals(fragment.getAttributeValue("covered")) && fragment.getAttributeValue("name").startsWith("MessageSend"))
+								{
+									XmiElementLifeLine xmiElemLiflin = new XmiElementLifeLine(lifeline);
+									xmiElemLiflin.process();
+									xmiElemMsg.setSender(xmiElemLiflin);
+								}
+								if (lifeline.getElementId().equals(fragment.getAttributeValue("covered")) && fragment.getAttributeValue("name").startsWith("MessageRecv"))
+								{
+									XmiElementLifeLine xmiElemLiflin = new XmiElementLifeLine(lifeline);
+									xmiElemLiflin.process();
+									xmiElemMsg.setReceiver(xmiElemLiflin);
+								}
+							}						
+						}
+					}	
+					 picElem.getMessageList().add(xmiElemMsg);
+				}				
+				
 				/** Then call method to translate PicELement into .pic statement and create .png file**/
 				CreatePicFile(picElem);
-				createPngFile(flag, Umlfilename, Umlfilename + ".pic",
-						umlInfo.getDestFilePath(), umlInfo.getLibPath());
+				createPngFile(flag, Umlfilename, Umlfilename + ".pic", umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
 		}
 		
