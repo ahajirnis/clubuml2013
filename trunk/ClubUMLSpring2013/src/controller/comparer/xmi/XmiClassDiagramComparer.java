@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import controller.compare.ComparerIntf;
 import controller.upload.FileInfo;
 import controller.upload.UploadProcessorFactory;
+import controller.util.FileUtil;
 
 public class XmiClassDiagramComparer implements ComparerIntf {
 
@@ -36,9 +37,9 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 			List<FileInfo> XmiFiles2) {
 
 		// Process the first file
-		FileInfo classDiagram1Notation = getFile(
+		FileInfo classDiagram1Notation = FileUtil.getFile(
 				UploadProcessorFactory.NOTATION_EXTENSION, XmiFiles1);
-		FileInfo classDiagram1Uml = getFile(
+		FileInfo classDiagram1Uml = FileUtil.getFile(
 				UploadProcessorFactory.UML_EXTENSION, XmiFiles1);
 
 		ClassDiagram1 = new XmiClassDiagramParser(
@@ -48,9 +49,9 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 						+ classDiagram1Notation.getFileName());
 
 		// Process the second file
-		FileInfo classDiagram2Notation = getFile(
+		FileInfo classDiagram2Notation = FileUtil.getFile(
 				UploadProcessorFactory.NOTATION_EXTENSION, XmiFiles2);
-		FileInfo classDiagram2Uml = getFile(
+		FileInfo classDiagram2Uml = FileUtil.getFile(
 				UploadProcessorFactory.UML_EXTENSION, XmiFiles2);
 
 		ClassDiagram2 = new XmiClassDiagramParser(
@@ -68,6 +69,11 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	 * @param fileList
 	 * @return
 	 */
+	
+	/*  ***************
+	 * this method has been changed to be static 
+	 * new location is in FileUtil.java under package controller.util 
+	 *
 	private FileInfo getFile(String extension, List<FileInfo> fileList) {
 		FileInfo info = null;
 		for (int i = 0; i < fileList.size(); i++) {
@@ -83,6 +89,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		}
 		return info;
 	}
+	
+	* ***************/ 
 
 	/**
 	 * Based on the JSON object's request, this method invokes the
