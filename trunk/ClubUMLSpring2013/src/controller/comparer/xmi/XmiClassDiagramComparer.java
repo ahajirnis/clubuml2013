@@ -6,25 +6,34 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 import controller.compare.ComparerIntf;
+import controller.comparer.xmi.request.Request;
+import controller.merge.xmi.xclass.XmiMergedClass;
 import controller.upload.FileInfo;
 import controller.upload.UploadProcessorFactory;
 import controller.util.FileUtil;
 
 public class XmiClassDiagramComparer implements ComparerIntf {
-
+	private final static String REQUEST_PACKAGE = "controller.comparer.xmi.request";
 	private final static String KEY_REQUEST = "Request";
+	
+	// These request will be removed in final version
 	private final static String REQUEST_REFRESH = "Refresh";
 	private final static String REQUEST_CONSOLIDATE = "Consolidate";
 	private final static String REQUEST_ADD = "Add";
 	private final static String REQUEST_BREAK = "Break";
 	private final static String REQUEST_COMPARE = "Compare";
 	
+	// Parser elements that contain the metamodel
 	private XmiClassDiagramParser ClassDiagram1;
 	private XmiClassDiagramParser ClassDiagram2;
 
-	// TODO: Rework
-	private ArrayList<XmiClassElement> sameClass = new ArrayList<XmiClassElement>();
+	// Store merged classes
+	private ArrayList<XmiMergedClass> sameClass = new ArrayList<XmiMergedClass>();
+	
+	// Classes unique to diagram 1
 	private ArrayList<XmiClassElement> uniqueClass1 = new ArrayList<XmiClassElement>();
+	
+	// Classes unqiey to diagram 2
 	private ArrayList<XmiClassElement> uniqueClass2 = new ArrayList<XmiClassElement>();
 
 	/**
@@ -62,37 +71,6 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	}
 
 	/**
-	 * Refactor this method since it can be used in other sources (ex:
-	 * UmlUploadProcessors)
-	 * 
-	 * @param extension
-	 * @param fileList
-	 * @return
-	 */
-	
-	/*  ***************
-	 * this method has been changed to be static 
-	 * new location is in FileUtil.java under package controller.util 
-	 *
-	private FileInfo getFile(String extension, List<FileInfo> fileList) {
-		FileInfo info = null;
-		for (int i = 0; i < fileList.size(); i++) {
-			String extn = fileList
-					.get(i)
-					.getFileName()
-					.substring(
-							fileList.get(i).getFileName().lastIndexOf(".") + 1,
-							fileList.get(i).getFileName().length());
-			if (extn.equals(extension)) {
-				info = fileList.get(i);
-			}
-		}
-		return info;
-	}
-	
-	* ***************/ 
-
-	/**
 	 * Based on the JSON object's request, this method invokes the
 	 * desired request and returns a JSON object.
 	 * 
@@ -118,8 +96,34 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		return null;
 	}
 
+	// Note: This method will replace the action() method above when we're ready to connect 
+	// the real request elements
+	//
+	// Request classes that needs to be created under controller.comparer.xmi.request package:
+	//  Refresh
+	//  Compare
+	//	Consolidate
+	//	Add 
+	//	Break
+	public JSONObject actionTest(JSONObject jsonObj) {
+
+		String request = (String)jsonObj.get(REQUEST_PACKAGE + KEY_REQUEST);
+		
+		try {
+			// Create request object via Reflection
+			Request requestObj = (Request) Class.forName(request).newInstance();
+			return requestObj.request(jsonObj, this);
+		} catch (Exception e) {
+			// Return null object for any error, no request
+			// Possible errors:
+			// 	1. request variable string is null
+			//	2. Attempting to instantiate a class that doesn't exist
+			return null;
+		}
+	}
+	
 	// *************************************************************************
-	// Implement and change these stubs to however you like
+	// Unofficial stubs below - Decoupling Request objects and XmiClassDiagramComparer
 	// *************************************************************************
 
 	@SuppressWarnings("unchecked")
@@ -160,4 +164,61 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	private JSONObject Break(JSONObject jsonObj) {
 		return null;
 	}
+
+	/**
+	 * @return the sameClass
+	 */
+	public ArrayList<XmiMergedClass> getSameClass() {
+		return sameClass;
+	}
+
+	/**
+	 * @param sameClass the sameClass to set
+	 */
+	public void setSameClass(ArrayList<XmiMergedClass> sameClass) {
+		this.sameClass = sameClass;
+	}
+
+	/**
+	 * @return the uniqueClass1
+	 */
+	public ArrayList<XmiClassElement> getUniqueClass1() {
+		return uniqueClass1;
+	}
+
+	/**
+	 * @param uniqueClass1 the uniqueClass1 to set
+	 */
+	public void setUniqueClass1(ArrayList<XmiClassElement> uniqueClass1) {
+		this.uniqueClass1 = uniqueClass1;
+	}
+
+	/**
+	 * @return the uniqueClass2
+	 */
+	public ArrayList<XmiClassElement> getUniqueClass2() {
+		return uniqueClass2;
+	}
+
+	/**
+	 * @param uniqueClass2 the uniqueClass2 to set
+	 */
+	public void setUniqueClass2(ArrayList<XmiClassElement> uniqueClass2) {
+		this.uniqueClass2 = uniqueClass2;
+	}
+
+	/**
+	 * @return the classDiagram1
+	 */
+	public final XmiClassDiagramParser getClassDiagram1() {
+		return ClassDiagram1;
+	}
+
+	/**
+	 * @return the classDiagram2
+	 */
+	public final XmiClassDiagramParser getClassDiagram2() {
+		return ClassDiagram2;
+	}
+
 }
