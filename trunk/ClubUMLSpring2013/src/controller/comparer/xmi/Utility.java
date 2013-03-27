@@ -5,9 +5,19 @@ import java.util.List;
 
 public final class Utility {
 
-	public static String getPrimitiveNameById(ArrayList<XmiTypeElement> array, String id) {
-		
-		for(XmiTypeElement element : array) {
+	/**
+	 * Gets the primitive element from the ArrayList of XmiTypeElement
+	 * 
+	 * @param array
+	 *            of XmiTypeElement
+	 * @param id
+	 *            of target element
+	 * @return XmiTypeElement if found, else ""
+	 */
+	public static String getPrimitiveNameById(ArrayList<XmiTypeElement> array,
+			String id) {
+
+		for (XmiTypeElement element : array) {
 			if (element.getId().equals(id)) {
 				return element.getName();
 			}
@@ -15,9 +25,19 @@ public final class Utility {
 		return "";
 	}
 
-	public static String getClassNameById(ArrayList<XmiClassElement> array, String id) {
-		
-		for(XmiClassElement element : array) {
+	/**
+	 * Gets the Class element from the ArrayList of XmiClassElement
+	 * 
+	 * @param array
+	 *            of XmiClassElement
+	 * @param id
+	 *            of target element
+	 * @return XmiClassElement if found, else ""
+	 */
+	public static String getClassNameById(ArrayList<XmiClassElement> array,
+			String id) {
+
+		for (XmiClassElement element : array) {
 			if (element.getId().equals(id)) {
 				return element.getName();
 			}
@@ -25,9 +45,19 @@ public final class Utility {
 		return "";
 	}
 
-	public static String getBaseNameById(ArrayList<XmiBaseElement> array, String id) {
+	/**
+	 * Gets the Base name from the ArrayList of XmiBaseElement
+	 * 
+	 * @param array
+	 *            of XmiBaseElement
+	 * @param id
+	 *            of target element
+	 * @return XmiBaseElement if found, else ""
+	 */
+	public static String getBaseNameById(ArrayList<XmiBaseElement> array,
+			String id) {
 
-		for(XmiBaseElement element : array) {
+		for (XmiBaseElement element : array) {
 			System.out.println(element.getId());
 			if (element.getId().equals(id)) {
 				return element.getName();
@@ -35,10 +65,11 @@ public final class Utility {
 		}
 		return "";
 	}
-	
-	public static XmiAssociationElement getAssociationById(ArrayList<XmiAssociationElement> array, String id) {
 
-		for(XmiAssociationElement element : array) {
+	public static XmiAssociationElement getAssociationById(
+			ArrayList<XmiAssociationElement> array, String id) {
+
+		for (XmiAssociationElement element : array) {
 			System.out.println(element.getId());
 			if (element.getId().equals(id)) {
 				return element;
@@ -46,28 +77,28 @@ public final class Utility {
 		}
 		return null;
 	}
-	
-	
-	public static XmiClassElement getClassById(List<XmiClassElement> array, String id) {
+
+	public static XmiClassElement getClassById(List<XmiClassElement> array,
+			String id) {
 		for (XmiClassElement element : array) {
 			if (element.getId().equals(id)) {
 				return element;
 			}
 		}
-		
+
 		return null;
 	}
-	
-	public static XmiClassElement getClassByName(List<XmiClassElement> array, String name) {
+
+	public static XmiClassElement getClassByName(List<XmiClassElement> array,
+			String name) {
 		for (XmiClassElement element : array) {
 			if (element.getName().equals(name)) {
 				return element;
 			}
 		}
-		
+
 		return null;
-	}	
-	
+	}
 
 	/**
 	 * Compares 2 class elements' attributes
@@ -78,10 +109,10 @@ public final class Utility {
 	 */
 	private boolean compareClassAttributes(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
-	
+
 		return false;
 	}
-	
+
 	/**
 	 * Compares 2 class elements' operations
 	 * 
