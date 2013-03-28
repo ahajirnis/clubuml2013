@@ -1,0 +1,100 @@
+#welcome{
+        color:#990000;
+        background-color: #FC9804;
+        font-family:serif;
+        font-style:italic;
+        font-weight:bold;
+        text-align: center;
+}
+#header {
+	width: auto;
+	height:40px;
+	margin: auto;
+}
+
+#diagram {
+	display:block;
+	float:left;
+	width:50%;
+	height:100%;
+
+
+}
+#comment {
+	display:block;
+	float:left;
+	height:100%;
+	width:23%;
+        background-color:lightcyan;
+}
+
+#list {
+        display:block;
+	float:left;
+        width:25%;
+	height:100%;
+
+}
+
+
+
+#show_diagram{
+    font-size: 50px;
+    text-align: center;
+}
+
+.texts {
+    width:400px;
+    height:30px;
+    padding:3px 2px;
+}
+
+.submit{
+    width:80px;
+    height:30px;
+
+}
+.compare_button{
+    position: relative;
+    left:40%;
+}
+
+
+.file1{
+
+display:block;
+float:left;
+width:46%;
+height:650px;
+border-color: #000;
+background-color:lightcyan;
+
+
+}
+
+.file2{
+
+display:block;
+float:right;
+width:46%;
+height:650px;
+border-color: #000;
+background-color:lightcyan;
+
+
+}
+.compare{
+
+display:block;
+float:left;
+width:7%;
+height:100px;
+
+
+}
+.promote{
+position:relative;
+
+top:95%; left:0%;
+
+}
