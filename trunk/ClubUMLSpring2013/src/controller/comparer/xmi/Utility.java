@@ -1,6 +1,7 @@
 package controller.comparer.xmi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class Utility {
@@ -109,8 +110,26 @@ public final class Utility {
 	 */
 	private boolean compareClassAttributes(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
+<<<<<<< .mine
+		
+				ArrayList<XmiAttributeElement> attr1 = new ArrayList<XmiAttributeElement>();
+				ArrayList<XmiAttributeElement> attr2 = new ArrayList<XmiAttributeElement>();
+				attr1 = classElement1.getAttributes();
+				attr2 = classElement2.getAttributes();
+				
+				Collections.sort((List)attr1);
+				Collections.sort((List)attr2);
+										
+				if(attr1.equals(attr2)){
+					return true;
+				}
+				else{
+					return false;
+				}	
+=======
 
 		return false;
+>>>>>>> .r168
 	}
 
 	/**
@@ -122,7 +141,22 @@ public final class Utility {
 	 */
 	private boolean compareClassOperations(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
-
-		return false;
+			
+				ArrayList<XmiOperationElement> attr1 = new ArrayList<XmiOperationElement>();
+				ArrayList<XmiOperationElement> attr2 = new ArrayList<XmiOperationElement>();
+				
+				attr1 = classElement1.getOperations();
+				attr2 = classElement2.getOperations();
+				
+		
+				Collections.sort((List)attr1);
+				Collections.sort((List)attr2);
+										
+				if(attr1.equals(attr2)){
+					return true;
+				}
+				else{
+					return false;
+				}	
 	}
 }
