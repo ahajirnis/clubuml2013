@@ -110,7 +110,6 @@ public final class Utility {
 	 */
 	private boolean compareClassAttributes(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
-<<<<<<< .mine
 		
 				ArrayList<XmiAttributeElement> attr1 = new ArrayList<XmiAttributeElement>();
 				ArrayList<XmiAttributeElement> attr2 = new ArrayList<XmiAttributeElement>();
@@ -126,10 +125,7 @@ public final class Utility {
 				else{
 					return false;
 				}	
-=======
 
-		return false;
->>>>>>> .r168
 	}
 
 	/**
