@@ -108,23 +108,20 @@ public final class Utility {
 	 * @param classElement2
 	 * @return true if all attributes are the same, else false
 	 */
-	private boolean compareClassAttributes(XmiClassElement classElement1,
+	public boolean compareClassAttributes(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
 		
 				ArrayList<XmiAttributeElement> attr1 = new ArrayList<XmiAttributeElement>();
 				ArrayList<XmiAttributeElement> attr2 = new ArrayList<XmiAttributeElement>();
+				
 				attr1 = classElement1.getAttributes();
 				attr2 = classElement2.getAttributes();
 				
 				Collections.sort((List)attr1);
 				Collections.sort((List)attr2);
 										
-				if(attr1.equals(attr2)){
-					return true;
-				}
-				else{
-					return false;
-				}	
+				
+				return attr1.equals(attr2);
 
 	}
 
@@ -135,7 +132,7 @@ public final class Utility {
 	 * @param classElement2
 	 * @return true if all operations are the same, else false
 	 */
-	private boolean compareClassOperations(XmiClassElement classElement1,
+	public boolean compareClassOperations(XmiClassElement classElement1,
 			XmiClassElement classElement2) {
 			
 				ArrayList<XmiOperationElement> attr1 = new ArrayList<XmiOperationElement>();
@@ -148,11 +145,7 @@ public final class Utility {
 				Collections.sort((List)attr1);
 				Collections.sort((List)attr2);
 										
-				if(attr1.equals(attr2)){
-					return true;
-				}
-				else{
-					return false;
-				}	
+				
+				return attr1.equals(attr2);
 	}
 }
