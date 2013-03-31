@@ -68,6 +68,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 						+ classDiagram2Uml.getFileName(),
 				classDiagram2Notation.getDestFilePath()
 						+ classDiagram2Notation.getFileName());
+		
+		GenerateClassLists();
 	}
 
 	/**
@@ -220,5 +222,43 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	public final XmiClassDiagramParser getClassDiagram2() {
 		return ClassDiagram2;
 	}
-
+	
+	/**
+	 * Create the list of unique and same class lists.
+	 */
+	private void GenerateClassLists() {
+		
+		// Keep track of class elements to remove (avoid concurrency issues)
+		ArrayList<XmiClassElement> trackRemoveClass1 = new ArrayList<XmiClassElement>();
+		ArrayList<XmiClassElement> trackRemoveClass2 = new ArrayList<XmiClassElement>();
+		
+		// populate unique elements then search for classes that are perfectly the same
+		for (XmiClassElement class1 : ClassDiagram1.getClassElements() ){
+			uniqueClass1.add(class1);
+		}
+		
+		for (XmiClassElement class2 : ClassDiagram2.getClassElements() ){
+			uniqueClass2.add(class2);
+		}
+		
+		for (XmiClassElement class1 : uniqueClass1) {
+			for (XmiClassElement class2 : uniqueClass2) {
+				if (class1.equals(class2)) {
+					trackRemoveClass1.add(class1);
+					trackRemoveClass2.add(class2);
+					sameClass.add(new XmiMergedClass(class1, class2));
+				} 
+			}
+		}
+		
+		// remove not unique classes
+		for (XmiClassElement class1 : trackRemoveClass1 ){
+			uniqueClass1.remove(class1);
+		}
+		
+		for (XmiClassElement class2 : trackRemoveClass2 ){
+			uniqueClass2.remove(class2);
+		}
+	}
+	
 }

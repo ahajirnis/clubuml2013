@@ -36,15 +36,41 @@ public class XmiParameterElement extends XmiBaseElement {
 				+ super.getTypeName() + " " + super.getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
-	public boolean equals(Object object) {
-		XmiParameterElement o = (XmiParameterElement) object;
-		if (this.getName() == o.getName()
-				&& this.getVisibility() == o.getVisibility()
-				&& this.getDirection() == o.getDirection()
-				&& this.getTypeName() == o.getTypeName()) {
-			return true;
-		} else
-			return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((direction == null) ? 0 : direction.hashCode());
+		return result;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof XmiParameterElement)) {
+			return false;
+		}
+		XmiParameterElement other = (XmiParameterElement) obj;
+		if (direction == null) {
+			if (other.direction != null) {
+				return false;
+			}
+		} else if (!direction.equals(other.direction)) {
+			return false;
+		}
+		return true;
+	}
+
 }

@@ -76,43 +76,47 @@ public class XmiClassDiagramParser {
 		notationFileName = notationFile;
 		activeIdList = new ArrayList<String>();
 
-		System.out.println("CREATED");
 		this.process();
 		this.postProcess();
-
-		// TESTing shows all elements
-		System.out.println("TEST OUTPUT ELEMENTS");
-		for (XmiBaseElement Class : rootElements) {
-
-			if (Class instanceof XmiClassElement) {
-
-				System.out.println("Class " + Class.toString());
-
-				for (XmiAttributeElement elelment : ((XmiClassElement) Class)
-						.getAttributes()) {
-					System.out.println("Attribute " + elelment.toString());
-				}
-
-				for (XmiOperationElement element : ((XmiClassElement) Class)
-						.getOperations()) {
-					System.out.println("Operation " + element.toString());
-				}
-
-				for (XmiClassElement elelment : ((XmiClassElement) Class)
-						.getNestedClass()) {
-					System.out.println("Nested: " + elelment.toString());
-				}
-
-				for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
-						.getGeneralization()) {
-					System.out.println("Generalization " + elelment.toString());
-				}
-			} else if (Class instanceof XmiTypeElement) {
-				System.out.println("Primitive " + Class.toString());
-			}
-		}
 	}
 
+	/**
+	 * Used for testing to see the information stored for this parser
+	 */
+	private void TestPrintOutput() {
+	// TESTing shows all elements
+			System.out.println("TEST OUTPUT ELEMENTS");
+			for (XmiBaseElement Class : rootElements) {
+
+				if (Class instanceof XmiClassElement) {
+
+					System.out.println("Class " + Class.toString());
+
+					for (XmiAttributeElement elelment : ((XmiClassElement) Class)
+							.getAttributes()) {
+						System.out.println("Attribute " + elelment.toString());
+					}
+
+					for (XmiOperationElement element : ((XmiClassElement) Class)
+							.getOperations()) {
+						System.out.println("Operation " + element.toString());
+					}
+
+					for (XmiClassElement elelment : ((XmiClassElement) Class)
+							.getNestedClass()) {
+						System.out.println("Nested: " + elelment.toString());
+					}
+
+					for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
+							.getGeneralization()) {
+						System.out.println("Generalization " + elelment.toString());
+					}
+				} else if (Class instanceof XmiTypeElement) {
+					System.out.println("Primitive " + Class.toString());
+				}
+			}
+	}
+	
 	// Process is the same as the Upload Xmi functionality (Refactor code)
 	private void process() {
 		// Parse the UML File
@@ -189,8 +193,76 @@ public class XmiClassDiagramParser {
 	 */
 	private void postProcess() {
 		DefineReferenceTypeName();
+		DefineGeneralizationParent();
+	}
+	
+	/**
+	 * 
+	 * @param ElemName
+	 * @return
+	 */
+	public List<XmiElement> findElementsByName(String TargetName,
+			XmiElement xmiParent) {
+		List<XmiElement> elementList = new ArrayList<XmiElement>();
+
+		ElementIterator(xmiParent, TargetName, elementList);
+
+		return elementList;
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @param elemname
+	 * @param elementList
+	 */
+	private void ElementIterator(XmiElement name, String elemname,
+			List<XmiElement> elementList) {
+
+		List<XmiElement> childElementlist = name.getChildElemList();
+		// Log.LogCreate().Info("ElementIterator:  Element name " +
+		// name.getElementName());
+		if (name.getElementName().equals(elemname)) {
+			elementList.add(name);
+		}
+
+		if (childElementlist != null) {
+			for (int i = 0; i < childElementlist.size(); i++) {
+				ElementIterator(childElementlist.get(i), elemname, elementList);
+
+			}
+		}
+		return;
+	}
+
+	/**
+	 * Sets the active flag for elements found in notation and uml files
+	 * 
+	 * @param element
+	 */
+	private void ActiveElementIterator(XmiElement element) {
+		List<XmiElement> childElementlist = element.getChildElemList();
+		if (childElementlist != null) {
+			// iterate the xmiElement which contains all the information
+			for (int i = 0; i < childElementlist.size(); i++) {
+				ActiveElementIterator(childElementlist.get(i));
+			}
+
+		}
+		List<Attribute> attribList = element.getAttrib();
+		for (int j = 0; j < attribList.size(); j++) {
+			Attribute attrib = attribList.get(j);
+			if (attrib.getName().equals("href")) {
+				int beginIndex = attrib.getValue().indexOf('#');
+				String value = attrib.getValue().substring(beginIndex + 1);
+				// Log.LogCreate().Info("Active IDs " + value);
+				activeIdList.add(value);
+			}
+		}
 
 	}
+	
+
 
 	/**
 	 * DefineReferenceTypeName
@@ -204,48 +276,48 @@ public class XmiClassDiagramParser {
 
 			for (XmiAttributeElement element : Class.getAttributes()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setTypeName(Utility.getBaseNameById(
-							rootElements, element.getUmlType()));
+					element.setTypeName(Utility.getBaseNameById(rootElements,
+							element.getUmlType()));
 				}
 			}
 
 			for (XmiOperationElement element : Class.getOperations()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setTypeName(Utility.getBaseNameById(
-							rootElements, element.getUmlType()));
+					element.setTypeName(Utility.getBaseNameById(rootElements,
+							element.getUmlType()));
 				}
 			}
 
 			for (XmiClassElement element : Class.getNestedClass()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setTypeName(Utility.getBaseNameById(
-							rootElements, element.getUmlType()));
+					element.setTypeName(Utility.getBaseNameById(rootElements,
+							element.getUmlType()));
 				}
 			}
 
 			for (XmiGeneralizationElement element : Class.getGeneralization()) {
 				if (element.getUmlType().startsWith("_")) {
-					element.setTypeName(Utility.getBaseNameById(
-							rootElements, element.getUmlType()));
+					element.setTypeName(Utility.getBaseNameById(rootElements,
+							element.getUmlType()));
 				}
 			}
 		}
 	}
 
 	/**
-	 * DefineReferenceTypeName
+	 * DefineGeneralizationParent
 	 * 
-	 * Runs through elements and finds the names for the types if they are
-	 * reference. A type that is a reference begings with an underscore.
+	 * Runs through genearlization elements and defines the parent element. Must be
+	 * done during post processing to make sure parent (XmiClassElement) exists.
 	 */
-	private void DefineMissingAssociations() {
+	private void DefineGeneralizationParent() {
 
 		for (XmiClassElement Class : classElements) {
 
-			for (XmiMemberEndElement element : Class.getClassifer()) {
-				if (element.getAssociation() == null) {
-					element.setAssociation(Utility.getAssociationById(
-							associationElements, element.getAssociationId()));
+			for (XmiGeneralizationElement element : Class.getGeneralization()) {
+				if (element.getParent() == null) {
+					element.setParentElement(Utility.getClassById(
+							this.classElements, element.getParent()));
 				}
 			}
 		}
@@ -349,6 +421,9 @@ public class XmiClassDiagramParser {
 		XmiClassElement xmiClass = new XmiClassElement(id, name, type, "");
 
 		for (int j = 0; j < childElements.size(); j++) {
+			if (!childElements.get(j).getFoundMatch()) {
+				continue;
+			}
 			String tag = childElements.get(j).getElementName();
 			String association = childElements.get(j).getAttributeValue(
 					PAPYRUS_ATTRIBUTE_ASSOCIATION);
@@ -429,6 +504,10 @@ public class XmiClassDiagramParser {
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
+			if (!child.getFoundMatch()) {
+				continue;
+			}
+			
 			String tag = child.getElementName();
 
 			switch (tag) {
@@ -480,6 +559,11 @@ public class XmiClassDiagramParser {
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
+			
+			if (!child.getFoundMatch()) {
+				continue;
+			}
+			
 			String tag = child.getElementName();
 
 			switch (tag) {
@@ -498,21 +582,21 @@ public class XmiClassDiagramParser {
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
-		
+
 		String aggregationValue = xmiElement
 				.getAttributeValue(PAPYRUS_AGGREGATION);
-		
+
 		String associationId = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_ASSOCIATION);
 
 		XmiMemberEndElement xmiClass = new XmiMemberEndElement(id, name, type);
-		
+
 		if (aggregationValue != null) {
 			xmiClass.setAggregation(AggregationValues.valueOf(aggregationValue));
 		}
-		
+
 		xmiClass.setAssociationId(associationId);
-		
+
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
@@ -568,70 +652,6 @@ public class XmiClassDiagramParser {
 		return primitiveElements;
 	}
 
-	/**
-	 * 
-	 * @param ElemName
-	 * @return
-	 */
-	public List<XmiElement> findElementsByName(String TargetName,
-			XmiElement xmiParent) {
-		List<XmiElement> elementList = new ArrayList<XmiElement>();
-
-		ElementIterator(xmiParent, TargetName, elementList);
-
-		return elementList;
-	}
-
-	/**
-	 * 
-	 * @param name
-	 * @param elemname
-	 * @param elementList
-	 */
-	private void ElementIterator(XmiElement name, String elemname,
-			List<XmiElement> elementList) {
-
-		List<XmiElement> childElementlist = name.getChildElemList();
-		// Log.LogCreate().Info("ElementIterator:  Element name " +
-		// name.getElementName());
-		if (name.getElementName().equals(elemname)) {
-			elementList.add(name);
-		}
-
-		if (childElementlist != null) {
-			for (int i = 0; i < childElementlist.size(); i++) {
-				ElementIterator(childElementlist.get(i), elemname, elementList);
-
-			}
-		}
-		return;
-	}
-
-	/**
-	 * Sets the active flag for elements found in notation and uml files
-	 * 
-	 * @param element
-	 */
-	private void ActiveElementIterator(XmiElement element) {
-		List<XmiElement> childElementlist = element.getChildElemList();
-		if (childElementlist != null) {
-			// iterate the xmiElement which contains all the information
-			for (int i = 0; i < childElementlist.size(); i++) {
-				ActiveElementIterator(childElementlist.get(i));
-			}
-
-		}
-		List<Attribute> attribList = element.getAttrib();
-		for (int j = 0; j < attribList.size(); j++) {
-			Attribute attrib = attribList.get(j);
-			if (attrib.getName().equals("href")) {
-				int beginIndex = attrib.getValue().indexOf('#');
-				String value = attrib.getValue().substring(beginIndex + 1);
-				// Log.LogCreate().Info("Active IDs " + value);
-				activeIdList.add(value);
-			}
-		}
-
-	}
+	
 
 }

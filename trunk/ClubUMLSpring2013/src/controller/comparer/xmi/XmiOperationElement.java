@@ -42,16 +42,43 @@ public class XmiOperationElement extends XmiBaseElement {
 		
 		return "Operation: " + super.getVisibility() + " " + returnValue + "(" + formalParams + ")";
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
-	public boolean equals(Object object) {
-		XmiOperationElement o = (XmiOperationElement) object;
-		if (this.getName() == o.getName()
-				&& this.getVisibility() == o.getVisibility()
-				&& this.getTypeName() == o.getTypeName()
-				&& this.getParameters().equals(o.getParameters())) {
-			return true;
-		} else
-			return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((parameters == null) ? 0 : parameters.hashCode());
+		return result;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof XmiOperationElement)) {
+			return false;
+		}
+		XmiOperationElement other = (XmiOperationElement) obj;
+		if (parameters == null) {
+			if (other.parameters != null) {
+				return false;
+			}
+		} else if (!parameters.equals(other.parameters)) {
+			return false;
+		}
+		return true;
+	}
+	
+
 }

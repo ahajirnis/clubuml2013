@@ -21,13 +21,44 @@ public class XmiMergedClass {
 	private ArrayList<XmiAttributeElement> attributes1;
 	private ArrayList<XmiOperationElement> operations1;
 	private ArrayList<XmiGeneralizationElement> generalizations1;
+	private ArrayList<XmiClassElement> nestedClasses1;
 	private ArrayList<XmiAssociationElement> associations1;
 	
 	// Class 2 elements to keep in final class
 	private ArrayList<XmiAttributeElement> attributes2;
 	private ArrayList<XmiOperationElement> operations2;
 	private ArrayList<XmiGeneralizationElement> generalizations2;
+	private ArrayList<XmiClassElement> nestedClasses2;
 	private ArrayList<XmiAssociationElement> associations2;
+	
+	/**
+	 * Default constructor
+	 */
+	public XmiMergedClass() {}
+	
+	/**
+	 * constructor used when class1 and class2 are perfect matches in terms of value.
+	 * @param class1
+	 * @param class2
+	 */
+	public XmiMergedClass(XmiClassElement class1, XmiClassElement class2) {
+		this.class1 = class1;
+		this.class2 = class2;
+		
+		this.attributes1 = class1.getAttributes();
+		this.attributes2 = class2.getAttributes();
+		
+		this.operations1 = class1.getOperations();
+		this.operations2 = class2.getOperations();
+		
+		this.generalizations1 = class1.getGeneralization();
+		this.generalizations2 = class2.getGeneralization();
+		
+		this.nestedClasses1 = class1.getNestedClass();
+		this.nestedClasses2 = class2.getNestedClass();
+		
+		// TODO: Associations
+	}
 	
 	/**
 	 * @return the class1
@@ -162,5 +193,8 @@ public class XmiMergedClass {
 		this.newName = newName;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return class1.toString() + " merged with " + class2.toString();
+	}
 }

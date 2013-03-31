@@ -21,4 +21,41 @@ public class XmiAssociationElement extends XmiBaseElement {
 		// add element at the end
 		memberEnd.add(element);
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((memberEnd == null) ? 0 : memberEnd.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof XmiAssociationElement)) {
+			return false;
+		}
+		XmiAssociationElement other = (XmiAssociationElement) obj;
+		if (memberEnd == null) {
+			if (other.memberEnd != null) {
+				return false;
+			}
+		} else if (!memberEnd.equals(other.memberEnd)) {
+			return false;
+		}
+		return true;
+	}
 }

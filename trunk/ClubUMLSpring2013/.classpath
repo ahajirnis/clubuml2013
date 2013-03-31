@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="WebContent/lib/commons-io-2.4/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="WebContent/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/lib/tomcat-coyote.jar"/>
+	<classpathentry kind="lib" path="WebContent/lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

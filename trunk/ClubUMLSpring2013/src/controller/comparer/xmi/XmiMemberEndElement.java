@@ -98,4 +98,73 @@ public class XmiMemberEndElement extends XmiBaseElement {
 	public void setAssociationId(String associationId) {
 		this.associationId = associationId;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((aggregation == null) ? 0 : aggregation.hashCode());
+		result = prime * result
+				+ ((association == null) ? 0 : association.hashCode());
+		result = prime * result
+				+ ((associationId == null) ? 0 : associationId.hashCode());
+		result = prime * result
+				+ ((lowerValue == null) ? 0 : lowerValue.hashCode());
+		result = prime * result
+				+ ((upperValue == null) ? 0 : upperValue.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof XmiMemberEndElement)) {
+			return false;
+		}
+		XmiMemberEndElement other = (XmiMemberEndElement) obj;
+		if (aggregation != other.aggregation) {
+			return false;
+		}
+		if (association == null) {
+			if (other.association != null) {
+				return false;
+			}
+		} else if (!association.equals(other.association)) {
+			return false;
+		}
+		if (associationId == null) {
+			if (other.associationId != null) {
+				return false;
+			}
+		} else if (!associationId.equals(other.associationId)) {
+			return false;
+		}
+		if (lowerValue == null) {
+			if (other.lowerValue != null) {
+				return false;
+			}
+		} else if (!lowerValue.equals(other.lowerValue)) {
+			return false;
+		}
+		if (upperValue == null) {
+			if (other.upperValue != null) {
+				return false;
+			}
+		} else if (!upperValue.equals(other.upperValue)) {
+			return false;
+		}
+		return true;
+	}
 }
