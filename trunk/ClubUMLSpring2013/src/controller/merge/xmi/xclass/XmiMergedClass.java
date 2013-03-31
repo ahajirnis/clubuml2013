@@ -195,6 +195,12 @@ public class XmiMergedClass {
 	
 	@Override
 	public String toString() {
-		return class1.toString() + " merged with " + class2.toString();
+		if (class1 != null && class2 != null) {
+			return class1.toString() + " merged with " + class2.toString();
+		} else if (class1 != null) {
+			return class1.toString();
+		} else {
+			return class2.toString();
+		}
 	}
 }
