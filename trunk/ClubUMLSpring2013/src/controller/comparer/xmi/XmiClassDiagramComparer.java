@@ -130,28 +130,10 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 
 	@SuppressWarnings("unchecked")
 	private JSONObject Refresh(JSONObject jsonObj) {
-		
-		JSONObject obj = new JSONObject();
-		
-		ArrayList<String> array1 = new ArrayList<String>();
-		array1.add("Class A");
-		array1.add("Class B");
-		obj.put("Class1", array1);
-		
-		ArrayList<String> array2 = new ArrayList<String>();
-		array2.add("Class C");
-		array2.add("Class D");
-		obj.put("Class2", array2);
-		
-		ArrayList<String> array3 = new ArrayList<String>();
-		array3.add("Class E");
-		array3.add("Class F");
-		obj.put("Same", array3);
-		
-		return obj;
+		return null;
 	}
 	
-	private JSONObject Compare(JSONObject jsonObj) {		
+	private JSONObject Compare(JSONObject jsonObj) {
 		return null;
 	}
 	
