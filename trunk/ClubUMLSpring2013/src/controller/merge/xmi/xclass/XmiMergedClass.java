@@ -45,18 +45,16 @@ public class XmiMergedClass {
 		this.class1 = class1;
 		this.class2 = class2;
 		
+		// Only need to set one set of variables since classes are equal
 		this.attributes1 = class1.getAttributes();
-		this.attributes2 = class2.getAttributes();
 		
 		this.operations1 = class1.getOperations();
-		this.operations2 = class2.getOperations();
 		
 		this.generalizations1 = class1.getGeneralization();
-		this.generalizations2 = class2.getGeneralization();
 		
 		this.nestedClasses1 = class1.getNestedClass();
-		this.nestedClasses2 = class2.getNestedClass();
 		
+		this.newName = class1.getName();
 		// TODO: Associations
 	}
 	
@@ -199,8 +197,10 @@ public class XmiMergedClass {
 			return class1.toString() + " merged with " + class2.toString();
 		} else if (class1 != null) {
 			return class1.toString();
-		} else {
+		} else if (class2 != null){
 			return class2.toString();
+		} else {
+			return "No classes merged";
 		}
 	}
 }
