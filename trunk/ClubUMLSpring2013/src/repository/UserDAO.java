@@ -24,7 +24,7 @@ public class UserDAO {
 	public static boolean addUser(User user) {
 		ResultSet rs;
 		// set projectId using the only one project in DB
-		user.setProjectId(ProjectDAO.getProjectId());
+		//user.setProjectId(ProjectDAO.getProjectId());
 
 		try {
 			Connection conn = DbManager.getConnection();
@@ -37,8 +37,8 @@ public class UserDAO {
 							"INSERT into user(userName,email,password, securityQ, securityA) VALUES(?,?,?,?,?);",
 							Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, user.getUserName());			
-			pstmt.setString(3, user.getEmail());
-			pstmt.setString(2, user.getPassword());
+			pstmt.setString(2, user.getEmail());
+			pstmt.setString(3, user.getPassword());
 			//No projectId in user table;
 			//pstmt.setInt(4, user.getProjectId());
 			pstmt.setString(4, user.getSecurityQuestion());
@@ -73,30 +73,26 @@ public class UserDAO {
 		try {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt;
-
-
 			pstmt = conn.prepareStatement("SELECT * FROM user where userName = ? and password = ?;");
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
-			
 			// Execute the SQL statement and store result into the ResultSet
 			ResultSet rs = pstmt.executeQuery();
-
-			if (!rs.next()) {
-				return null;
-			}
 			
 			// Modified by Xuesong Meng
+			if(rs.next()){
 			User user;
-			user = new User(rs.getInt("user_Id"), username, password,
+			user = new User(rs.getInt("userId"), username, password,
 					rs.getString("email"), rs.getString("securityQ"),
-					rs.getString("securityA"), 2);
-
+					rs.getString("securityA"));
 			rs.close();
 			pstmt.close();
 			conn.close();
 			return user;
+			}
+			else return null;			
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			System.out.println("Using default model.");
 		}
 
@@ -126,9 +122,9 @@ public class UserDAO {
 
 			// Modified by Xuesong Meng
 			User user;
-			user = new User(rs.getInt("user_Id"), username, "",
+			user = new User(rs.getInt("userId"), username, "",
 					rs.getString("email"), rs.getString("securityQ"),
-					rs.getString("securityA"), 2);
+					rs.getString("securityA"));
 
 			rs.close();
 			pstmt.close();
@@ -151,7 +147,7 @@ public class UserDAO {
 		try {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt = conn
-					.prepareStatement("SELECT * FROM user where user_Id = ?;");
+					.prepareStatement("SELECT * FROM user where userId = ?;");
 			pstmt.setInt(1, userId);
 
 			// Execute the SQL statement and store result into the ResultSet
@@ -162,8 +158,8 @@ public class UserDAO {
 			}
 
 			User user;
-			user = new User(rs.getInt("user_Id"), rs.getString("userName"), "",
-					rs.getString("email"), "", "", 2);
+			user = new User(rs.getInt("userId"), rs.getString("userName"), "",
+					rs.getString("email"), "", "");
 			rs.close();
 			pstmt.close();
 			conn.close();
@@ -187,7 +183,7 @@ public class UserDAO {
 		try {
 			Connection conn = DbManager.getConnection();
 			PreparedStatement pstmt = conn
-					.prepareStatement("DELETE FROM user where user_Id = ?;");
+					.prepareStatement("DELETE FROM user where userId = ?;");
 			pstmt.setInt(1, user.getUserId());
 
 			// Execute the SQL statement and update database accordingly.
@@ -215,7 +211,7 @@ public class UserDAO {
 			//PreparedStatement pstmt = conn
 			//		.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQuestion =?, securityAnswer=? where user_Id = ?;");
 			PreparedStatement pstmt = conn
-					.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQ =?, securityA=? where user_Id = ?;");
+					.prepareStatement("UPDATE user SET userName=? , password=?, email=?, securityQ =?, securityA=? where userId = ?;");
 			pstmt.setString(1, user.getUserName());
 			pstmt.setString(2, user.getPassword());
 			pstmt.setString(3, user.getEmail());
