@@ -16,12 +16,18 @@ public class Break implements Request{
 		
 		JSONObject response = new JSONObject();
 		
+		//gets the name
 		String name = (String)jsonObj.get("Class");
+		
+		//read in arraylist for comparison
 		ArrayList<XmiMergedClass> sameClass = comparer.getSameClass();
 		
+		//loop through arraylist to find match
 		for (int i = 0; i < sameClass.size(); i++) {
 			XmiMergedClass o = comparer.getSameClass().get(i);
 			if (o.getNewName().equals(name)) {
+				
+				//check if it belongs to class 1 and/or class 2
 				if (o.getClass1() != null) {
 					ArrayList<XmiClassElement> list = comparer.getUniqueClass1();
 					list.add(o.getClass1());
@@ -32,6 +38,8 @@ public class Break implements Request{
 					list.add(o.getClass2());
 					comparer.setUniqueClass2(list);
 				}
+				
+				//remove it from arraylist
 				sameClass.remove(i);
 				comparer.setSameClass(sameClass);
 				response.put("Response", "Sucess");
