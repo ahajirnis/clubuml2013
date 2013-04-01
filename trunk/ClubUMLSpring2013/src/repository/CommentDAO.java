@@ -33,7 +33,7 @@ public class CommentDAO {
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	    pstmt.setInt(1, comment.getUserId());
 	    pstmt.setString(2, comment.getContent());
-	    pstmt.setInt(3, comment.getDiagramId());
+	    pstmt.setInt(3, comment.getReportId());
 
 	    pstmt.executeUpdate();
 
@@ -76,7 +76,7 @@ public class CommentDAO {
 		comt.setCommentId(rs.getInt("commentId"));
 		comt.setContent(rs.getString("content"));
 		comt.setUserId(rs.getInt("userId"));
-		comt.setDiagramId(rs.getInt("reportId"));
+		comt.setReportId(rs.getInt("reportId"));
 		comt.setCommentTime(rs.getString("writtenTime"));
 		searchResult.add(comt);
 	    }

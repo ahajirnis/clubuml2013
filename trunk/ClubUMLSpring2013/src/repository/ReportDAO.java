@@ -29,11 +29,11 @@ public class ReportDAO {
 	    // Modified by Xuesong Meng, statement is not ready to be used.
 	    //String sql = "INSERT INTO report(diagramA , diagramB , mergedDiagram , type , time , reportFilePath , reportFileName) " +
 	    //               VALUES(?,?,?,?,NOW(),?,?);";
-	    String sql = "INSERT INTO report(diagram_A , diagram_B , comparedTime , reportFilePath) VALUES(?,?,NOW(),?);";
+	    String sql = "INSERT INTO report(diagramA , diagramB , time , reportFilePath) VALUES(?,?,NOW(),?);";
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-	    pstmt.setInt(1, report.getDiagramA_Id());
-	    pstmt.setInt(2, report.getDiagramB_Id());
+	    pstmt.setInt(1, report.getDiagramA());
+	    pstmt.setInt(2, report.getDiagramB());
 	    pstmt.setString(3, report.getReportFilePath());
         // Need to add new setAttributes...
 
@@ -84,9 +84,9 @@ public class ReportDAO {
 	    //Initiate a report object and set attributes
 	    Report report = new Report();
 	    report.setReportId(rs.getInt("reportId"));
-	    report.setDiagramA_Id(rs.getInt("diagramA"));
-	    report.setDiagramB_Id(rs.getInt("diagramB"));
-	    report.setCompareTime(rs.getString("time"));
+	    report.setDiagramA(rs.getInt("diagramA"));
+	    report.setDiagramB(rs.getInt("diagramB"));
+	    report.setTime(rs.getString("time"));
 	    report.setReportFilePath(rs.getString("reportFilePath"));
 
 	    rs.close();
@@ -113,8 +113,8 @@ public class ReportDAO {
 	    //String sql = "UPDATE report SET diagram_A = ? , diagram_B = ? , reportFilePath = ? WHERE report_Id = ?;";
 	    String sql = "UPDATE report SET diagramA = ? , diagramB = ? , reportFilePath = ? WHERE reportId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
-	    pstmt.setInt(1, report.getDiagramA_Id());
-	    pstmt.setInt(2, report.getDiagramB_Id());
+	    pstmt.setInt(1, report.getDiagramA());
+	    pstmt.setInt(2, report.getDiagramB());
 	    pstmt.setString(3, report.getReportFilePath());
 	    pstmt.setInt(4, report.getReportId());
 
