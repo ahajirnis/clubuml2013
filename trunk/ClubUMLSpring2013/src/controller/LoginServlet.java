@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 
 	//authorize user from database, if exist, store it in session.
 	User userObj = UserDAO.getUser(username, password);
+	//if (userObj == null) System.out.println(username+password);
 	if (userObj != null) {
 	    HttpSession session = request.getSession(true);
 	    session.setAttribute("username", username);

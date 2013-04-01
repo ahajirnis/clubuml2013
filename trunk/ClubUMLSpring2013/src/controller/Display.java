@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import repository.CommentDAO;
 import repository.DiagramDAO;
-import repository.EditingHistoryDAO;
 import repository.UserDAO;
 
 /**
@@ -50,6 +49,7 @@ public class Display extends HttpServlet {
 	    throws ServletException, IOException {
 
 	// retrieve diagram list from database.
+    /*
 	ArrayList<domain.EditingHistory> editedDiagrams = EditingHistoryDAO.getPriorityList();
 	if (!editedDiagrams.isEmpty()) {
 	    ArrayList<domain.Diagram> diagrams = new ArrayList();
@@ -72,6 +72,26 @@ public class Display extends HttpServlet {
 		request.setAttribute("comments", commentListObj);
 	    }
 	}
+	*/
+    //Modified by Xuesong Meng
+    	try{
+    	ArrayList<domain.Diagram> diagrams = DiagramDAO.getDiagramList(2);
+	    if (!diagrams.isEmpty()) {
+		request.setAttribute("diagrams", diagrams);
+		//set the first diagram in diagram list as the default display diagram..
+		request.setAttribute("firstPath", diagrams.get(0).getFilePath() + ".png");
+		request.setAttribute("diagramId1", diagrams.get(0).getDiagramId());
+	    }
+	    ArrayList<Comment> commentListObj = CommentDAO.getComment(diagrams.get(0).getDiagramId());
+	    if (!commentListObj.isEmpty()) {
+		for (int i = 0; i < commentListObj.size(); i++) {
+		    commentListObj.get(i).setUserName(UserDAO.getUser(commentListObj.get(i).getUserId()).getUserName());
+		}
+		request.setAttribute("comments", commentListObj);
+	    }	
+    	} catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
 	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
 	dispatcher.forward(request, response);
     }

@@ -66,7 +66,7 @@ public class RegisterServlet extends HttpServlet {
 		if (checkUserExist != null) {
 			Failed(request, response, dispatcher);		//user already existed, registration failed
 		} else {
-			User userObj = new User(username, password, email, question, answer, 2);
+			User userObj = new User(username, password, email, question, answer);
 			Success(request, response, dispatcher, userObj);	//registration succeeded
 		}
 	}

@@ -65,8 +65,8 @@ public class Compare extends HttpServlet {
 		Diagram diagram2 = DiagramDAO.getDiagram(this.diagramID2);
 
 		CompareDiagrams compareObj = new CompareDiagrams(
-				context.getRealPath(diagram1.getEcoreFilePath()),
-				context.getRealPath(diagram2.getEcoreFilePath()),
+				context.getRealPath(diagram1.getFilePath()),
+				context.getRealPath(diagram2.getFilePath()),
 				context.getRealPath("/reports/"));
 		try {
 			String path = compareObj.process();
@@ -144,8 +144,8 @@ public class Compare extends HttpServlet {
 	 */
 	private void saveReport(String path) {
 		Report reportObj = new Report();
-		reportObj.setDiagramA_Id(this.diagramID1);
-		reportObj.setDiagramB_Id(this.diagramID2);
+		reportObj.setDiagramA(this.diagramID1);
+		reportObj.setDiagramB(this.diagramID2);
 		reportObj.setReportFilePath(path);
 		ReportDAO.addReport(reportObj);
 	}

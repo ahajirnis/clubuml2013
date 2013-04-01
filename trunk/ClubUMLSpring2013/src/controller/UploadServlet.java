@@ -23,11 +23,9 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import repository.DiagramDAO;
-import repository.EditingHistoryDAO;
 import controller.upload.UploadProcessor;
 import controller.upload.UploadProcessorFactory;
 import domain.Diagram;
-import domain.EditingHistory;
 import logging.Log;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +50,7 @@ public class UploadServlet extends HttpServlet {
 	private File destinationDir;
 	private File libDir;
 	private List<FileInfo> fileList;
-	private String newFolder;
-	private ServletContext context;
-	private String id_file_date;
+	
 	public UploadServlet() {
 		
 	}
@@ -79,11 +75,11 @@ public class UploadServlet extends HttpServlet {
 		// Set id properly
 		String id = session.getAttribute("userId").toString();
 
-		context = getServletContext();
+		ServletContext context = getServletContext();
 		
 		tmpDir = new File(context.getRealPath(TMP_DIR_PATH));
 
-		//destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
+		destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
 
 		libDir = new File(context.getRealPath(LIB_DIR_PATH));
 		
@@ -97,8 +93,7 @@ public class UploadServlet extends HttpServlet {
 		ServletFileUpload uploadHandler = new ServletFileUpload(dfif);
 		try {
 			List<?> items = uploadHandler.parseRequest(request);
-			destinationDir = createDir(id)	;											// file
-			
+
 			Iterator<?> itr = items.iterator();
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
@@ -112,28 +107,29 @@ public class UploadServlet extends HttpServlet {
 
 				if ((!item.isFormField()) && (!item.getName().equals(""))
 						&& (!id.equals(""))) {// check if item is a file
-					//String newName = renameFile(id, item.getName());// rename
-					File file = new File(destinationDir, filename);		
+					String newName = renameFile(id, item.getName());// rename
+																	// file
+					File file = new File(destinationDir, newName);
 					item.write(file);
 					String absolutePath = destinationDir + "\\";
 					String relativePath = context.getContextPath()
-							+ newFolder;
+							+ DESTINATION_DIR_PATH;
 					String libPath = libDir + "\\";
-					logging.Log.LogCreate().Info("absolutePath " + absolutePath);		
-					request.setAttribute("originalFileName", filename);
-					request.setAttribute("newFileName", filename);
+
+					request.setAttribute("originalFileName", item.getName());
+					request.setAttribute("newFileName", newName);
 					request.setAttribute("size", item.getSize());
-					request.setAttribute("absolutePath", absolutePath + filename);
-					request.setAttribute("relativePath", relativePath + filename);
-					request.setAttribute("javaFile", relativePath + filename
+					request.setAttribute("absolutePath", absolutePath + newName);
+					request.setAttribute("relativePath", relativePath + newName);
+					request.setAttribute("javaFile", relativePath + newName
 							+ ".java");
-					fileList.add(new FileInfo(absolutePath,filename,libPath));
+					fileList.add(new FileInfo(absolutePath,newName,libPath));
 					//Log.LogCreate().Info(" File list " + absolutePath  +"  "  + newName + " "  + libPath);
 					
-					if (isFileType(filename,"ecore")){
-						String image_file_name = filename + ".png";	
-						String folder = "uploads/" + id_file_date + "/" + filename;
-						this.storeDatabase(folder, image_file_name,
+					if (isFileType(newName,"ecore") || isFileType(newName, "uml")){
+						String ecoreFileName = "uploads/" + newName;
+						newName += ".png";					
+						this.storeDatabase(ecoreFileName, newName,
 								Integer.parseInt(id));
 					}
 				}
@@ -144,15 +140,13 @@ public class UploadServlet extends HttpServlet {
 
 		}
 
-		// Obtains upload processor to perform parsing and file 
+		// Obtains upload processor to perform parsing and file
 		// generations		
 		if (!fileList.isEmpty()) {
-			String folderPath = "uploads/" + id_file_date ;
 			UploadProcessor processor = UploadProcessorFactory
-					.getUploadProcessorMethod(filename  ,fileList, folderPath, Integer.parseInt(id));
-			logging.Log.LogCreate().Info("got processor filename =" + filename);
+					.getUploadProcessorMethod(filename,fileList );
 			if (processor != null){
-			    logging.Log.LogCreate().Info("calling process ");
+
 				processor.process();
 			}
 		}	
@@ -161,19 +155,6 @@ public class UploadServlet extends HttpServlet {
 
 	}
 
-	private File createDir(String id) {
-		id_file_date = new SimpleDateFormat("yyyy-MM-dd_HHmmss") .format(new java.util.Date());
-		newFolder = context.getRealPath(DESTINATION_DIR_PATH) + "/" + id_file_date ;
-		File dir = new File(newFolder);
-		logging.Log.LogCreate().Info("Creating folder = " + dir.toString());
-		if(!dir.mkdirs()  )
-		{
-			logging.Log.LogCreate().Info("Failed to create folder " + newFolder);
-		}
-
-		return dir;
-	}
-	
 	/**
 	 * Prefixes user ID and time for to file name. Used to create a unique file
 	 * name.
@@ -196,18 +177,21 @@ public class UploadServlet extends HttpServlet {
 		try {
 			Diagram diagramObj = new Diagram();
 			diagramObj.setDiagramName(fileName);
-			diagramObj.setEcoreFilePath(path);
-			diagramObj.setInEdition(false);
-			diagramObj.setOwnerId(userID);
+			diagramObj.setFilePath(path);
+			diagramObj.setMerged(0);
+			diagramObj.setUserId(userID);
 			diagramObj.setProjectId(2);
 			DiagramDAO.addDiagram(diagramObj);
-
+			
+			/*
 			EditingHistory editObj = new EditingHistory();
 			editObj.setDiagramId(diagramObj.getDiagramId());
 			editObj.setUserId(userID);
 
 			EditingHistoryDAO.addHistory(editObj);
+			*/
 		} catch (IllegalArgumentException e) {
+			System.out.println("error" + e.getMessage());
 		}
 	}
 

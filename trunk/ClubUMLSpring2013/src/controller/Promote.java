@@ -5,7 +5,6 @@
 package controller;
 
 import domain.Comment;
-import domain.EditingHistory;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import repository.CommentDAO;
-import repository.EditingHistoryDAO;
 
 /**
  *
@@ -55,17 +53,19 @@ public class Promote extends HttpServlet {
 
 	//Save the comment
 	Comment commentObj = new Comment();
-	commentObj.setDiagramId(imageId);
+	commentObj.setReportId(imageId);
 	commentObj.setUserId(Integer.parseInt(userId));
 	commentObj.setContent(comment);
 	CommentDAO.addComment(commentObj);
 
+	/* removed by Xuesong Meng
 	EditingHistory editObj = new EditingHistory();
 	editObj.setDiagramId(imageId);
 	editObj.setUserId(Integer.parseInt(userId));
 	//update edit history
 	EditingHistoryDAO.addHistory(editObj);
-
+	*/
+	
 	RequestDispatcher dispatcher = request.getRequestDispatcher("Display");
 	dispatcher.forward(request, response);
 

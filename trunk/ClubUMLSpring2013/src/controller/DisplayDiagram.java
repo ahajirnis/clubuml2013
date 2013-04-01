@@ -23,12 +23,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import controller.download.DownloadDirectory;
-import controller.download.DownloadZipfile;
 import repository.CommentDAO;
 import repository.DiagramDAO;
-import repository.EditingHistoryDAO;
 import repository.UserDAO;
 
 /**
@@ -78,9 +74,7 @@ public class DisplayDiagram extends HttpServlet {
 	}
 	if (option.equals("Download")) {
 	    downloadDiagram(checked, request, response);
-	}
-	if (option.equals("DownloadProject")) {
-	    downloadProject(request, response);
+
 	}
     }
 
@@ -170,6 +164,7 @@ public class DisplayDiagram extends HttpServlet {
 	int diagramId1 = Integer.parseInt(checked[0]);
 
 	// retrieve diagram list from database.
+	/*
 	ArrayList<domain.EditingHistory> editedDiagrams = EditingHistoryDAO.getPriorityList();
 	if (!editedDiagrams.isEmpty()) {
 	    ArrayList<domain.Diagram> diagrams = new ArrayList();
@@ -178,13 +173,16 @@ public class DisplayDiagram extends HttpServlet {
 		diagObj.setCreatedTime(editedDiagrams.get(i).getEditingTime());
 		diagrams.add(diagObj);
 	    }
+	 */
+	//Modified by Xuesong Meng
+		ArrayList<domain.Diagram> diagrams = DiagramDAO.getDiagramList(2);
 	    if (!diagrams.isEmpty()) {
 
 		for (int i = 0; i < diagrams.size(); i++) {
 		    if (diagrams.get(i).getDiagramId() == diagramId1) {
 
 			//set the first diagram in diagram list as the default display diagram..
-			request.setAttribute("firstPath", diagrams.get(i).getEcoreFilePath() + ".png");
+			request.setAttribute("firstPath", diagrams.get(i).getFilePath() + ".png");
 			request.setAttribute("diagramId1", diagrams.get(i).getDiagramId());
 
 			ArrayList<Comment> commentListObj = CommentDAO.getComment(diagramId1);
@@ -198,10 +196,9 @@ public class DisplayDiagram extends HttpServlet {
 		}
 		request.setAttribute("diagrams", diagrams);
 	    }
-	}
 	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
 	dispatcher.forward(request, response);
-    }
+}
     /*
      * function to download the selected diagram.
      */
@@ -211,101 +208,33 @@ public class DisplayDiagram extends HttpServlet {
 
 	int id = Integer.parseInt(checked[0]);
 	String fileName = DiagramDAO.getDiagram(id).getDiagramName();
-
 	// the absolute path of folder where all diagrams store.
-	String filePath = DiagramDAO.getDiagram(id).getEcoreFilePath();
-	String[] splitPath = filePath.split("/");
-	String targetPath = "/" + splitPath[0] + "/" + splitPath[1] + "/";
-	
 	ServletContext context = getServletContext();
-	String targetRealPath = context.getRealPath(targetPath);
-	String reportRealPath = context.getRealPath("/reports/");
-	
-	DownloadDirectory dirObj = new DownloadDirectory();
-    DownloadZipfile zipObj = new DownloadZipfile();
-    File tmpdir = dirObj.createDirectory(reportRealPath);
-    
-    String outputFile = splitPath[2] + ".zip";
-    String downloadPath = dirObj.getDownloadPath();
-    String output = downloadPath + "\\" + outputFile;
+	String path = context.getRealPath("/uploads/");
 
 	try {
-	    zipObj.downloadZipfileProcessor(targetRealPath, output);
-		
 	    OutputStream ops = response.getOutputStream();
 	    byte bytes[] = new byte[1024];
 	    int length = 0;
-		
-	    File fileLoad = new File(downloadPath, outputFile);
 
-	    String mimetype = context.getMimeType(outputFile);
-	    response.setHeader("Content-disposition", "attachment;filename=" + outputFile);
+	    File fileLoad = new File(path, fileName);
+
+	    String mimetype = context.getMimeType(fileName);
+	    response.setHeader("Content-disposition", "attachment;filename=" + fileName);
 	    response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
 	    response.setContentLength((int) fileLoad.length());
 
 	    DataInputStream in = new DataInputStream(new FileInputStream(fileLoad));
 
 	    while ((in != null) && ((length = in.read(bytes)) != -1)) {
-	    	ops.write(bytes, 0, length);
+		ops.write(bytes, 0, length);
 	    }
 	    ops.flush();
 	    ops.close();
 	    in.close();
-	    
-	    dirObj.deleteDirectory(tmpdir);
-	    
 	} catch (IOException ex) {
 	    Logger.getLogger(DisplayDiagram.class.getName()).log(Level.SEVERE, null, ex);
 	}
 
-    }
-    
-    
-    /*
-     * function to download project.
-     */
-    public void downloadProject(HttpServletRequest request, HttpServletResponse response)
-    	    throws FileNotFoundException, IOException {
-
-    	// the absolute path of folder where all diagrams store.
-    	ServletContext context = getServletContext();
-    	String targetPath = context.getRealPath("/uploads/");
-    	String reportPath = context.getRealPath("/reports/");
-    	
-    	DownloadDirectory dirObj = new DownloadDirectory();
-	    DownloadZipfile zipObj = new DownloadZipfile();
-	    File tmpdir = dirObj.createDirectory(reportPath);
-	    
-	    String outputFile = "download.zip";
-	    String downloadPath = dirObj.getDownloadPath();
-	    String output = downloadPath + "\\" + outputFile;
-    	    	
-    	try {
-    		zipObj.downloadZipfileProcessor(targetPath, output);
-    		
-    	    OutputStream ops = response.getOutputStream();
-    	    byte bytes[] = new byte[1024];
-    	    int length = 0;
-    		
-    	    File fileLoad = new File(downloadPath, outputFile);
-
-    	    String mimetype = context.getMimeType(outputFile);
-    	    response.setHeader("Content-disposition", "attachment;filename=" + outputFile);
-    	    response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
-    	    response.setContentLength((int) fileLoad.length());
-
-    	    DataInputStream in = new DataInputStream(new FileInputStream(fileLoad));
-
-    	    while ((in != null) && ((length = in.read(bytes)) != -1)) {
-    	    	ops.write(bytes, 0, length);
-    	    }
-    	    ops.flush();
-    	    ops.close();
-    	    in.close();
-    	    
-    	    dirObj.deleteDirectory(tmpdir);
-    	} catch (IOException ex) {
-
-    	}
     }
 }
