@@ -21,22 +21,20 @@ public class Break implements Request{
 		
 		for (int i = 0; i < sameClass.size(); i++) {
 			XmiMergedClass o = comparer.getSameClass().get(i);
-			if (o.getNewName() == name) {
+			if (o.getNewName().equals(name)) {
 				if (o.getClass1() != null) {
 					ArrayList<XmiClassElement> list = comparer.getUniqueClass1();
 					list.add(o.getClass1());
 					comparer.setUniqueClass1(list);
-					sameClass.remove(i);
-					comparer.setSameClass(sameClass);
 				}
 				if (o.getClass2() != null) {
 					ArrayList<XmiClassElement> list = comparer.getUniqueClass2();
 					list.add(o.getClass2());
 					comparer.setUniqueClass2(list);
-					sameClass.remove(i);
-					comparer.setSameClass(sameClass);
 				}
-				response.put("Sucess", "Sucess");
+				sameClass.remove(i);
+				comparer.setSameClass(sameClass);
+				response.put("Response", "Sucess");
 			}
 		}
 		return response;
