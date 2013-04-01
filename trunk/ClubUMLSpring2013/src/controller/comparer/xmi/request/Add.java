@@ -7,8 +7,16 @@ import controller.comparer.xmi.XmiClassElement;
 import controller.comparer.xmi.Utility;
 import controller.merge.xmi.xclass.XmiMergedClass;
 
+/**
+ * Add()
+ * Add Request
+ * @author Minhee Song
+ *
+ */
+
 public class Add implements Request {
 
+	private final static String TITLE_RESPONSE = "Response";
 	private final static String CLASS_DIAGRAM_1 = "Class1";
 	private final static String CLASS_DIAGRAM_2 = "Class2";
 	private final static String OPERATION = "Operations";
@@ -25,30 +33,22 @@ public class Add implements Request {
 	
 	private static JSONObject BuildJSONStructure(JSONObject jsonObj, 
 			XmiClassDiagramComparer comparer) {
-		
-		XmiMergedClass mergedClass = new XmiMergedClass();
 		String className;
 		XmiClassElement classElement;
 		
 		JSONObject obj = new JSONObject();		
-		obj.put("Response","Success");
-
 		try {   
 			if (jsonObj.get(CLASS_DIAGRAM_1) != null) {
 				className = (String)jsonObj.get(CLASS_DIAGRAM_1);
 			    classElement = Utility.getClassByName(comparer.getUniqueClass1(), className);
-			    mergedClass.setNewName(className);
 			    obj.put(CLASS_DIAGRAM_1, className);			    
 			    if(classElement != null) {
-				    mergedClass.setClass1(classElement);
 				    if(classElement.getAttributes() != null) {
-				    	mergedClass.setAttributes(classElement.getAttributes());
 				    	obj.put(ATTRIBUTE,classElement.getAttributes());
 				    } else {
 				    	obj.put(ATTRIBUTE,null);
 				    }
 				    if(classElement.getOperations() != null) {
-				    	mergedClass.setOperations(classElement.getOperations());
 				    	obj.put(OPERATION,classElement.getOperations());
 				    } else {
 				    	obj.put(OPERATION,null);
@@ -57,21 +57,18 @@ public class Add implements Request {
 			    	obj.put(ATTRIBUTE,null);
 			 	    obj.put(OPERATION,null);
 			    }
+			    obj.put(TITLE_RESPONSE,"Success");
 			} else if (jsonObj.get(CLASS_DIAGRAM_2) != null) {
 				className = (String)jsonObj.get(CLASS_DIAGRAM_2);
 				classElement = Utility.getClassByName(comparer.getUniqueClass2(), className);
-				mergedClass.setNewName(className);
 				obj.put(CLASS_DIAGRAM_2, className);
 				if(classElement != null) {
-					mergedClass.setClass2(classElement);
 				    if(classElement.getAttributes() != null) {
-				    	mergedClass.setAttributes2(classElement.getAttributes());
 				    	obj.put(ATTRIBUTE,classElement.getAttributes());
 				    } else {
 				    	obj.put(ATTRIBUTE,null);
 				    }
 				    if(classElement.getOperations() != null) {
-				    	mergedClass.setOperations2(classElement.getOperations());
 				    	obj.put(OPERATION,classElement.getOperations());
 				    } else {
 				    	obj.put(OPERATION,null);
@@ -80,11 +77,15 @@ public class Add implements Request {
 					obj.put(ATTRIBUTE,null);
 			 	    obj.put(OPERATION,null);
 				}
+				obj.put(TITLE_RESPONSE,"Success");
+			} else {
+				obj.put(TITLE_RESPONSE,"Fail");
 			}
+			
 		} catch (NullPointerException npe) {   
-			System.out.println(npe);
+			obj.put(TITLE_RESPONSE,"Fail");
+			System.out.println("Add request : " + npe);
 		} 	
-		comparer.getSameClass().add(mergedClass);
 		return obj;
 	}
 }
