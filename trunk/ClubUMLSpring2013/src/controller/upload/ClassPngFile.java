@@ -9,7 +9,8 @@ import logging.Log;
  * @author RD2012
  * 
  */
-public abstract class DiagramVisualization implements UploadProcessor {
+public abstract class ClassPngFile implements UploadProcessor {
+
 	/**
 	 * Generates PNG file.
 	 * 
@@ -24,10 +25,9 @@ public abstract class DiagramVisualization implements UploadProcessor {
 	 * @param pLibPath
 	 *            library path in context which contains UmlGraph-5.6.jar or pic2plot.
 	 */
-	public void createPngFile(int flag, String pFileName, String pInFileName, String pFileDir, String pLibPath) {
+	public static void createPngFile(String pFileName, String pInFileName,
+			String pFileDir, String pLibPath) {
 
-		if (flag==1)
-		{
 			try {
 
 				String umlGraphPath = pLibPath + "UmlGraph-5.6.jar";
@@ -74,39 +74,6 @@ public abstract class DiagramVisualization implements UploadProcessor {
 				Log.LogCreate().Info("Error in creating the png file.............");
 				e.printStackTrace();
 			}
-		}
 
-		else if(flag==2)
-		{
-
-			try {
-
-				String umlPicutilPath = pLibPath + "pic2plot";
-				String picFileName = pInFileName;
-				String pngFileName = pFileName + ".png";
-
-				// Command to generate PNG file from pic file
-				String command[] = { UploadProcessor.GRAPHICVIZ_PATH_WINDOWS, umlPicutilPath,
-						"-Tpng", pFileDir + picFileName, ">",
-						pFileDir + pngFileName };
-
-				try {
-					Process procObj = Runtime.getRuntime().exec(command);
-					int exitVal = procObj.waitFor();
-					if (exitVal != 0) {
-						Log.LogCreate().Info("Error in creating the png file");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					Log.LogCreate().Info("Error 2: generating png file failed");
-				}
-
-			} catch (Exception e) {
-				Log.LogCreate().Info("Error in creating the png file.............");
-				e.printStackTrace();
-			}
-			}
-		else
-		{	Log.LogCreate().Info("Error in getting the umlFile..........");}
 	}
 }
