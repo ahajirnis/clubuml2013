@@ -8,10 +8,28 @@ package domain;
 public class Report {
 
     private int reportId;
-    private int diagramA_Id;
-    private int diagramB_Id;
-    private String compareTime;
+    private int diagramA;
+    private int diagramB;
+    private int mergedDiagram;
+    private String time;
+    private String reportFileName;
     private String reportFilePath;
+
+	public int getMergedDiagram() {
+		return mergedDiagram;
+	}
+
+	public void setMergedDiagram(int mergedDiagram) {
+		this.mergedDiagram = mergedDiagram;
+	}
+
+	public String getReportFileName() {
+		return reportFileName;
+	}
+
+	public void setReportFileName(String reportFileName) {
+		this.reportFileName = reportFileName;
+	}
 
 	/**
 	 * Gete the reportId
@@ -37,8 +55,8 @@ public class Report {
 	 * 
 	 * @return diagramA_Id int
 	 */
-    public int getDiagramA_Id() {
-        return diagramA_Id;
+    public int getDiagramA() {
+        return diagramA;
     }
 
 	/**
@@ -47,8 +65,8 @@ public class Report {
 	 * @param diagramA_Id
 	 * 			The ID of diagram-A
 	 */
-    public void setDiagramA_Id(int diagramA_Id) {
-        this.diagramA_Id = diagramA_Id;
+    public void setDiagramA(int diagramA) {
+        this.diagramA = diagramA;
     }
 
 	/**
@@ -56,8 +74,8 @@ public class Report {
 	 * 
 	 * @return diagramB_Id int
 	 */
-    public int getDiagramB_Id() {
-        return diagramB_Id;
+    public int getDiagramB() {
+        return diagramB;
     }
 
 	/**
@@ -66,8 +84,8 @@ public class Report {
 	 * @param diagramB_Id
 	 * 			The ID of diagram-B
 	 */
-    public void setDiagramB_Id(int diagramB_Id) {
-        this.diagramB_Id = diagramB_Id;
+    public void setDiagramB(int diagramB) {
+        this.diagramB = diagramB;
     }
 
 	/**
@@ -75,8 +93,8 @@ public class Report {
 	 * 
 	 * @return compareTime String
 	 */
-    public String getCompareTime() {
-        return compareTime;
+    public String getTime() {
+        return time;
     }
 
 	/**
@@ -85,8 +103,8 @@ public class Report {
 	 * @param compareTime
 	 * 			The time that this compare happened
 	 */
-    public void setCompareTime(String compareTime) {
-        this.compareTime = compareTime;
+    public void setTime(String time) {
+        this.time = time;
     }
     
 	/**

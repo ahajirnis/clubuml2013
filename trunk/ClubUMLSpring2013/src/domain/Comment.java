@@ -11,9 +11,8 @@ public class Comment {
 
     private int commentId;
     private String content;
+    private int reportId;
     private String commentTime;
-    private int diagramId;
-
     private int userId;
     private String userName;
 
@@ -31,11 +30,11 @@ public class Comment {
 	 * @param userId
 	 * 			The ID od the user that made this comment
 	 */
-    public Comment(int commentId, String content, String commentTime, int diagramId, int userId) {
+    public Comment(int commentId, String content, String commentTime, int reportId, int userId) {
         this.commentId = commentId;
         this.content = content;
         this.commentTime = commentTime;
-        this.diagramId = diagramId;
+        this.reportId = reportId;
         this.userId = userId;
     }
     
@@ -59,7 +58,7 @@ public class Comment {
         this.commentId = commentId;
         this.content = content;
         this.commentTime = commentTime;
-        this.diagramId = diagramId;
+        this.reportId = reportId;
         this.userId = userId;
         this.userName = userName;
     }
@@ -170,8 +169,8 @@ public class Comment {
 	 * 
 	 * @return diagramId int
 	 */
-    public int getDiagramId() {
-        return diagramId;
+    public int getReportId() {
+        return reportId;
     }
 
 	/**
@@ -180,7 +179,7 @@ public class Comment {
 	 * @param diagramId
 	 * 			The ID of the diagram that this comment belongs to
 	 */
-    public void setDiagramId(int diagramId) {
-        this.diagramId = diagramId;
+    public void setReportId(int reportId) {
+        this.reportId = reportId;
     }
 }

@@ -11,6 +11,15 @@ public class Project {
 	private String projectName;
 	private String description;
 	private byte achived = 0;// Default
+	private String startDate;
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
 
 	/**
 	 * Constructor to initialize necessary class members

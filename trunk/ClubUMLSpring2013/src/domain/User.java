@@ -13,7 +13,7 @@ public class User {
 	private String email;
 	private String securityQuestion;
 	private String securityAnswer;
-	private int projectId;
+	//private int projectId;
 
 	/**
 	 * Constructor to initialize necessary class members
@@ -45,13 +45,13 @@ public class User {
 	 * 			The ID of the project
 	 */
 	public User( String userName, String password, String email,
-			String securityQuestion, String securityAnswer, int projectId) { 
+			String securityQuestion, String securityAnswer) { 
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.securityQuestion = securityQuestion;
 		this.securityAnswer = securityAnswer;
-		this.projectId = projectId;
+		//this.projectId = projectId;
 	}
 	
 	/**
@@ -73,14 +73,14 @@ public class User {
 	 * 			The ID of the project
 	 */
 	public User(int userId, String userName, String password, String email,
-			String securityQuestion, String securityAnswer, int projectId) {
+			String securityQuestion, String securityAnswer) {
 		this.userId = userId;
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
 		this.securityQuestion = securityQuestion;
 		this.securityAnswer = securityAnswer;
-		this.projectId = projectId;
+		//this.projectId = projectId;
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class User {
 	 * Gete the projectId
 	 * 
 	 * @return projectId int
-	 */
+	
 	public int getProjectId() {
 		return projectId;
 	}
@@ -211,8 +211,9 @@ public class User {
 	 * 
 	 * @param projectId
 	 * 			The ID of the project
-	 */
+
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
+	*/
 }

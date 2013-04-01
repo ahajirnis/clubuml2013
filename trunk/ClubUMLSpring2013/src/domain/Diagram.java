@@ -8,13 +8,83 @@ package domain;
 public class Diagram {
 
     private int diagramId;
-    private String diagramName;
-    private String createdTime;
-    private boolean inEdition;
-    private int ownerId;
+    private int merged;
+    private int userId;
     private int projectId = 2; // default;
-    private String ecoreFilePath;
+    private String diagramName;
+    private String diagramType;
+    private String filePath;
+    private String fileType;
+    private String createdTime;    
+    private String notationFilePath;
+    private String notationFileName;
+    private String diFileName;
+    private String diFilepath;
     
+	public String getDiagramType() {
+		return diagramType;
+	}
+
+	public void setDiagramType(String diagramType) {
+		this.diagramType = diagramType;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public int getMerged() {
+		return merged;
+	}
+
+	public void setMerged(int merged) {
+		this.merged = merged;
+	}
+
+	public String getNotationFilePath() {
+		return notationFilePath;
+	}
+
+	public void setNotationFilePath(String notationFilePath) {
+		this.notationFilePath = notationFilePath;
+	}
+
+	public String getNotationFileName() {
+		return notationFileName;
+	}
+
+	public void setNotationFileName(String notationFileName) {
+		this.notationFileName = notationFileName;
+	}
+
+	public String getDiFileName() {
+		return diFileName;
+	}
+
+	public void setDiFileName(String diFileName) {
+		this.diFileName = diFileName;
+	}
+
+	public String getDiFilepath() {
+		return diFilepath;
+	}
+
+	public void setDiFilepath(String diFilepath) {
+		this.diFilepath = diFilepath;
+	}
+
 	/**
 	 * Constructor to initialize necessary class members
 	 *
@@ -31,14 +101,14 @@ public class Diagram {
 	 * @param ecoreFilePath
 	 * 			The filepath of this diagram
 	 */
-    public Diagram(int diagramId, String diagramName, String createdTime, boolean inEdition,
-    		int ownerId, String ecoreFilePath) {
+    public Diagram(int diagramId, String diagramName, String createdTime, int merged,
+    		int userId, String FilePath) {
         this.diagramId = diagramId;
         this.diagramName = diagramName;
         this.createdTime = createdTime;
-        this.inEdition = inEdition;
-        this.ownerId = ownerId;
-        this.ecoreFilePath = ecoreFilePath;
+        this.merged = merged;
+        this.userId = userId;
+        this.filePath = FilePath;
     }
 
 	/**
@@ -108,7 +178,7 @@ public class Diagram {
 	 * Gete the inEdition
 	 * 
 	 * @return inEdition boolean
-	 */
+
     public boolean isInEdition() {
         return inEdition;
     }
@@ -118,7 +188,7 @@ public class Diagram {
 	 * 
 	 * @param inEdition
 	 * 			Status of is diagram
-	 */
+
     public void setInEdition(boolean inEdition) {
         this.inEdition = inEdition;
     }
@@ -128,8 +198,8 @@ public class Diagram {
 	 * 
 	 * @return ownerId int
 	 */
-    public int getOwnerId() {
-        return ownerId;
+    public int getUserId() {
+        return userId;
     }
 
 	/**
@@ -138,8 +208,8 @@ public class Diagram {
 	 * @param ownerId
 	 * 			The ID of the owner of this diagram
 	 */
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
 	/**
@@ -161,24 +231,7 @@ public class Diagram {
         this.projectId = projectId;
     }
 
-	/**
-	 * Gete the ecoreFilePath
-	 * 
-	 * @return ecoreFilePath String
-	 */
-    public String getEcoreFilePath() {
-        return ecoreFilePath;
-    }
-    
-	/**
-	 * Set ecoreFilePath
-	 * 
-	 * @param ecoreFilePath
-	 * 			The filepath of this diagram
-	 */
-    public void setEcoreFilePath(String ecoreFilePath) {
-        this.ecoreFilePath = ecoreFilePath;
-    }
+	
     
 	/**
 	 * Some functions that have not been used yet
