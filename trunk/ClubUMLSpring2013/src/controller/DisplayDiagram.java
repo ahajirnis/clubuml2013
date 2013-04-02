@@ -201,10 +201,10 @@ public class DisplayDiagram extends HttpServlet {
 		}
 		request.setAttribute("diagrams", diagrams);
 	    }
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
+		dispatcher.forward(request, response);
 	}
-	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
-	dispatcher.forward(request, response);
-    }
+	
     /*
      * function to download the selected diagram.
      */
