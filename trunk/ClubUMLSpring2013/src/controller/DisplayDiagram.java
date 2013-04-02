@@ -216,7 +216,7 @@ public class DisplayDiagram extends HttpServlet {
 	String fileName = DiagramDAO.getDiagram(id).getDiagramName();
 
 	// the absolute path of folder where all diagrams store.
-	String filePath = DiagramDAO.getDiagram(id).getEcoreFilePath();
+	String filePath = DiagramDAO.getDiagram(id).getFilePath();
 	String[] splitPath = filePath.split("/");
 	String targetPath = "/" + splitPath[0] + "/" + splitPath[1] + "/";
 	
