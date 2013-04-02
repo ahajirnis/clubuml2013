@@ -10,7 +10,7 @@ public abstract class SequencePngFile implements UploadProcessor{
 	public static void createPngFile(String pFileName, String pInFileName,
 			String pFileDir, String pLibPath) {
 	try {
-		final String umlPicutilPath = "c:\\csye7945\\clubuml2012\\trunk\\ClubUMLSpring2013\\tools\\win\\pic2plot.exe";
+		final String umlPicutilPath = "C:\\Program Files\\GnuWin32\\bin\\pic2plot.exe";
 		//logging.Log.LogCreate().Info("pFileName =" + pFileName + " pInFileName=" + pInFileName + " pFileDir= " + pFileDir + " pLibPath = " + pLibPath);
 		logging.Log.LogCreate().Info(umlPicutilPath);
 		Path srcSeqPicFile =new java.io.File(pLibPath + "sequence.pic").toPath();

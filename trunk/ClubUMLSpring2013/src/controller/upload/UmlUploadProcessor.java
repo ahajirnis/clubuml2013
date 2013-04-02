@@ -1,7 +1,6 @@
 package controller.upload;
 
 import repository.DiagramDAO;
-import repository.EditingHistoryDAO;
 import uml2parser.*;
 import logging.Log;
 
@@ -18,7 +17,6 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 
 import domain.Diagram;
-import domain.EditingHistory;
 
 /**
  * 
@@ -34,7 +32,6 @@ public class UmlUploadProcessor implements UploadProcessor {
 	private final static String PAPYRUS_PACKAGED_ELEM = "packagedElement";
 	private boolean isClassDiag = false;
 	private boolean isSeqDiag = false;
-	private int flag = 0;
 	private List<String> activeIdList;
 	private XmiElement classXmiDiag;
 	private XmiElement sequenceXmiDiag;
@@ -94,14 +91,12 @@ public class UmlUploadProcessor implements UploadProcessor {
 							// Notation file. We can enhance this in future.
 							classXmiDiag = xmi;
 							isClassDiag = true;
-							flag = 1;
 						}
 							break;
 						// Add Sequence Diagrams Support
 						case PAPYRUS_SEQUENCE_DIAG: {
 							sequenceXmiDiag = xmi;
 							isSeqDiag = true;
-							flag = 2;
 						}
 							break;
 						default: {
@@ -468,8 +463,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 									XmiElementLifeLine xmiElemLifeLine =  picElem.getLifeline(lifeline);									
 									xmiElemMsg.setReceiver(xmiElemLifeLine);
 								}
-							}
-						
+							}						
 						}
 					}	
 					Log.LogCreate().Info("Locating message list =" + messageList.get(i).getElementId());
@@ -505,8 +499,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 				
 				/** Then call method to translate PicELement into .pic statement and create .png file**/
 				CreatePicFile(picElem);
-				SequencePngFile.createPngFile(Umlfilename, Umlfilename + ".pic",
-						umlInfo.getDestFilePath(), umlInfo.getLibPath());
+				SequencePngFile.createPngFile(Umlfilename, Umlfilename + ".pic", umlInfo.getDestFilePath(), umlInfo.getLibPath());
 			}
 		}
 		
