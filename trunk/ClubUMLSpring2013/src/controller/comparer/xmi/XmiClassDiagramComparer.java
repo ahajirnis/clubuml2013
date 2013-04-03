@@ -1,6 +1,7 @@
 package controller.comparer.xmi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -95,7 +96,9 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 			return Break(jsonObj);
 		}
 		
-		return null;
+		JSONObject jObj = new JSONObject();
+		jObj.put("Response", "Fail");
+		return jObj;
 	}
 
 	// Note: This method will replace the action() method above when we're ready to connect 
@@ -130,23 +133,77 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 
 	@SuppressWarnings("unchecked")
 	private JSONObject Refresh(JSONObject jsonObj) {
-		return null;
+		
+		JSONObject jObj = new JSONObject();
+		ArrayList<String> class1 = new ArrayList<String>();
+		class1.add("Vehicle");
+		
+		ArrayList<String> class2 = new ArrayList<String>();
+		class2.add("Vehicle");
+		class2.add("Bus");
+		
+		ArrayList<String> same = new ArrayList<String>();
+		same.add("Car");
+		same.add("Bike");
+		
+		jObj.put("Class1", class1);
+		jObj.put("Class2", class2);
+		jObj.put("Same", same);
+		jObj.put("Response", "Success");
+		return jObj;
 	}
 	
 	private JSONObject Compare(JSONObject jsonObj) {
-		return null;
+		JSONObject jObj = new JSONObject();
+		
+		jObj.put("Class1","Vehicle");
+		jObj.put("Class2","Vehicle");
+		
+		ArrayList<String> arraylist = new ArrayList<String>();
+		
+		HashMap<String, ArrayList<String>> attr = new HashMap<String, ArrayList<String>>();
+		arraylist.add("<Undefined> Color");
+		attr.put("Class2", arraylist);
+		
+		arraylist = new ArrayList<String>();
+		
+		HashMap<String, ArrayList<String>> op = new HashMap<String, ArrayList<String>>();
+		arraylist.add("Start()");
+		op.put("Class1", arraylist);
+		arraylist = new ArrayList<String>();
+		arraylist.add("Stop()");
+		op.put("Class2", arraylist);
+		
+		jObj.put("Attribute", attr);
+		jObj.put("Operation", op);
+		jObj.put("Response", "Success");
+		return jObj;
 	}
 	
 	private JSONObject Consolidate(JSONObject jsonObj) {
-		return null;
+		JSONObject jObj = new JSONObject();
+		jObj.put("Response", "Success");
+		return jObj;
 	}
 	
 	private JSONObject Add(JSONObject jsonObj) {
-		return null;
+		JSONObject jObj = new JSONObject();
+		
+		jObj.put("Class2", "Bus");
+		ArrayList<String> arraylist = new ArrayList<String>();
+		arraylist.add("<Undefined> Benches");
+		jObj.put("Attributes", arraylist);
+		arraylist = new ArrayList<String>();
+		arraylist.add("StopSign()");
+		jObj.put("Operations", arraylist);
+		jObj.put("Response", "Success");
+		return jObj;
 	}
 	
 	private JSONObject Break(JSONObject jsonObj) {
-		return null;
+		JSONObject jObj = new JSONObject();
+		jObj.put("Response", "Success");
+		return jObj;
 	}
 
 	/**
