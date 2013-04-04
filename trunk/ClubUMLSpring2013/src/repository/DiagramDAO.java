@@ -26,11 +26,11 @@ public class DiagramDAO {
     public static boolean addDiagram(Diagram diagram) {
 	ResultSet rs;
 	try {
-	    Connection conn = DbManager.getConnection();
+		Connection conn = DbManager.getConnection();
 	    //String sql = "INSERT INTO diagram (diagramName , createdTime , inEdition , owner_Id , filePath) VALUES (?,NOW(),?,?,?);";
 		//add by Yidu Liang Mar 20 2013
 		
-		String sql = "insert into diagram (projectId, userId, diagramType, diagramName ,filePath, fileType, merged, notationFileName, notationFilePath, diFileName, diFilePath)"+
+		String sql = "insert into diagram (projectId, userId, diagramType, diagramName ,filePath, fileType, merged, notationFileName, notationFilePath, diFlieName, diFilePath)"+
 		"VALUES (?, ?, ?, ?, ? ,?, ?, ?, ?, ?,? )";
 		
 		
@@ -40,6 +40,7 @@ public class DiagramDAO {
 	    //pstmt.setBoolean(2, diagram.isInEdition());
 	    //pstmt.setInt(3, diagram.getOwnerId());
 	    //pstmt.setString(4, diagram.getEcoreFilePath());
+	    System.out.println("diagram upload SQL test");
 	    System.out.println(diagram.getProjectId());
 	    System.out.println(diagram.getUserId());
 	    System.out.println(diagram.getDiagramType());
@@ -54,7 +55,7 @@ public class DiagramDAO {
 		pstmt.setInt(7,diagram.getMerged());
 		pstmt.setString(8,diagram.getNotationFileName());   // this need to be implementing 
 		pstmt.setString(9,diagram.getNotationFilePath());   // this need to be implementing 
-		pstmt.setString(10,diagram.getDiagramName());   // this need to be implementing 
+		pstmt.setString(10,diagram.getDiFileName());   // this need to be implementing 
 		pstmt.setString(11,diagram.getDiFilepath());     // this need to be implementing 
 		
 	    pstmt.executeUpdate();
@@ -71,6 +72,7 @@ public class DiagramDAO {
 	    conn.close();
 	    return true;
 	} catch (SQLException ex) {
+		System.out.println("Exception"+ex.getMessage());
 	    Logger.getLogger(DiagramDAO.class.getName()).log(Level.SEVERE, null, ex);
 	}
 	return false;
@@ -87,7 +89,7 @@ public class DiagramDAO {
 	ArrayList<Diagram> searchResult = new ArrayList<>();
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM diagram;";
+	    String sql = "SELECT * FROM diagram where projectId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 
 	    pstmt.setInt(1, projectId);
@@ -119,7 +121,7 @@ public class DiagramDAO {
 		diagram.setFileType(rs.getString("fileType"));
 		diagram.setNotationFileName(rs.getString("notationFileName"));
 		diagram.setNotationFilePath(rs.getString("notationFilePath"));
-		diagram.setDiagramName(rs.getString("diFileName"));
+		diagram.setDiagramName(rs.getString("diFlieName"));
 		diagram.setDiFilepath(rs.getString("diFilePath"));
 		
 		searchResult.add(diagram);
