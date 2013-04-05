@@ -101,6 +101,25 @@ public final class Utility {
 		return null;
 	}
 
+	public static XmiAttributeElement getAttributebyName(XmiClassElement classname, String attrName ) {
+		ArrayList<XmiAttributeElement> attrlist = classname.getAttributes();
+		for (XmiAttributeElement elem : attrlist) {
+			if (elem.getName().equals(attrName)) {
+				return elem;
+			}
+		}
+		return null;
+	}
+	
+	public static XmiOperationElement getOperationbyName(XmiClassElement classname, String attrName ) {
+		ArrayList<XmiOperationElement> operlist = classname.getOperations();
+		for (XmiOperationElement elem : operlist) {
+			if (elem.getName().equals(attrName)) {
+				return elem;
+			}
+		}
+		return null;
+	}
 	/**
 	 * Compares 2 class elements' attributes
 	 * 
