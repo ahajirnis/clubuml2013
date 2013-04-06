@@ -131,17 +131,19 @@ public class UmlUploadProcessor implements UploadProcessor {
 		try {
 			Diagram diagramObj = new Diagram();
 			diagramObj.setDiagramName(fileName);
-			diagramObj.setEcoreFilePath(path);
-			diagramObj.setInEdition(false);
-			diagramObj.setOwnerId(userID);
+			diagramObj.setFilePath(path);
+			diagramObj.setMerged(0);
+			diagramObj.setUserId(userID);
 			diagramObj.setProjectId(2);
 			DiagramDAO.addDiagram(diagramObj);
 
+			/*
 			EditingHistory editObj = new EditingHistory();
 			editObj.setDiagramId(diagramObj.getDiagramId());
 			editObj.setUserId(userID);
 
 			EditingHistoryDAO.addHistory(editObj);
+			*/
 		} catch (IllegalArgumentException e) {
 		}
 	}
