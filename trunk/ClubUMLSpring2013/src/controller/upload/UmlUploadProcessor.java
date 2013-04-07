@@ -487,9 +487,10 @@ public class UmlUploadProcessor implements UploadProcessor {
 					}
 					logging.Log.LogCreate().Info("Size of messageList " + String.valueOf(messageList.size()));
 					for(XmiElement msg:messageList) {
-						if (msg.getAttributeValue("messageSort").equals("createMessage") && coveryByList.contains(msg.getElementId())) {
+						if (msg.getAttributeValue("messageSort")!=null && msg.getAttributeValue("messageSort").equals("createMessage") && coveryByList.contains(msg.getAttributeValue("receiveEvent"))) {
 							xmiElemLifLin.setLifelineType("placeholder_object");
 							logging.Log.LogCreate().Info("Creating placeholder object = " + xmiElemLifLin.elem.getElementId());
+							break;
 						}
 						else {
 							xmiElemLifLin.setLifelineType("object");
@@ -529,7 +530,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 					objType = obj.getLifelineType();
 					objName = obj.getLifelineName();
 					logging.Log.LogCreate().Info("picElem.getLifelineList()  " +  obj.getLifelineName());
-					LifelineNic[i] = (String) objName.substring(0, 1)+i;
+					LifelineNic[i] = (String) objName.substring(0, 1).toUpperCase()+i;
 					obj.setLifelineNic(LifelineNic[i]);
 					if(objType.equals("object"))
 						out.write(objType+"("+LifelineNic[i]+",\""+objName+"\");\n");
@@ -583,6 +584,10 @@ public class UmlUploadProcessor implements UploadProcessor {
 					XmiElementMessage  msg= picElem.getMessageList().get(m);
 					String msgSort,msgName,msgSender,msgReceiver;
 					msgSort = msg.getmessageSort();
+					if(msgSort == null)
+					{
+						msgSort = "message";
+					}
 					logging.Log.LogCreate().Info("msgSort = " + msgSort );
 					msgName = msg.getmessageName();
 					msgSender = msg.getSender().getLifelineNic();
