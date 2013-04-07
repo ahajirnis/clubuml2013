@@ -29,7 +29,8 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_MEMVBER_END = "ownedEnd";
 	private final static String PAPYRUS_LOWER_VALUE = "lowerValue";
 	private final static String PAPYRUS_UPPER_VALUE = "upperValue";
-
+	private final static String PAPYRUS_DEFAULT_VALUE = "defaultValue";
+	
 	// UML Types
 	private final static String PAPYRUS_PACKAGE_TYPE_CLASS = "uml:Class";
 	private final static String PAPYRUS_PACKAGE_TYPE_INTERFACE = "uml:Interface";
@@ -84,6 +85,7 @@ public class XmiClassDiagramParser {
 	 * Used for testing to see the information stored for this parser
 	 */
 	private void TestPrintOutput() {
+		
 	// TESTing shows all elements
 			System.out.println("TEST OUTPUT ELEMENTS");
 			for (XmiBaseElement Class : rootElements) {
@@ -485,10 +487,28 @@ public class XmiClassDiagramParser {
 		String association = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_ASSOCIATION);
 
-		XmiAttributeElement xmiClass = new XmiAttributeElement(id, name, type,
+		XmiAttributeElement xmiAttribute = new XmiAttributeElement(id, name, type,
 				visibility);
 
-		return xmiClass;
+		List<XmiElement> childrenElement = xmiElement.getChildElemList();
+
+		for (XmiElement child : childrenElement) {		
+			String tag = child.getElementName();
+
+			switch (tag) {
+			case PAPYRUS_LOWER_VALUE:
+				xmiAttribute.setLowerValue(createXmiValueElement(child));
+				break;
+			case PAPYRUS_UPPER_VALUE:
+				xmiAttribute.setUpperValue(createXmiValueElement(child));
+				break;
+			case PAPYRUS_DEFAULT_VALUE:
+				xmiAttribute.setDefaultValue(createXmiDefaultValueElement(child));
+				break;
+			}
+		}
+		
+		return xmiAttribute;
 	}
 
 	private XmiOperationElement createXmiOperationElement(XmiElement xmiElement) {
@@ -616,15 +636,36 @@ public class XmiClassDiagramParser {
 	}
 
 	private XmiValueElement createXmiValueElement(XmiElement xmiElement) {
-		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
+		String type = xmiElement.getAttributeValue(PAPYRUS_XMI_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String value = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VALUE);
 
-		XmiValueElement xmiValue = new XmiValueElement(id, type, value);
-
-		return xmiValue;
+		return new XmiValueElement(id, type, value);
 	}
 
+	private XmiValueElement createXmiDefaultValueElement(XmiElement xmiElement) {
+		String type = xmiElement.getAttributeValue(PAPYRUS_XMI_ATTRIBUTE_TYPE);
+		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+		String value = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VALUE);
+		
+		if (value == null) {
+			return new XmiValueElement(id, type, true);
+		} else if (value.isEmpty()) {
+			return new XmiValueElement(id, type, true);
+		} else {
+			return new XmiValueElement(id, name, type, value);
+		}
+	}
+	
+	/**
+	 * Returns the generic parsed information
+	 * @return ModelFileInfo for the notation file
+	 */
+	public ModelFileInfo getNotationFile() {
+		return notationmodelInfo;
+	}
+	
 	/**
 	 * Returns the list of Active Root elements
 	 * 
@@ -651,7 +692,4 @@ public class XmiClassDiagramParser {
 	public List<XmiTypeElement> getTypeElements() {
 		return primitiveElements;
 	}
-
-	
-
 }
