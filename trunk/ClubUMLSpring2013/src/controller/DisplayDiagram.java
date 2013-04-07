@@ -210,57 +210,54 @@ public class DisplayDiagram extends HttpServlet {
      */
 
     public void downloadDiagram(String[] checked, HttpServletRequest request, HttpServletResponse response)
-	    throws FileNotFoundException, IOException {
+	    throws ServletException, FileNotFoundException, IOException {
 
-	int id = Integer.parseInt(checked[0]);
-	String fileName = DiagramDAO.getDiagram(id).getDiagramName();
-
-	// the absolute path of folder where all diagrams store.
-	String filePath = DiagramDAO.getDiagram(id).getFilePath();
-	String[] splitPath = filePath.split("/");
-	String targetPath = "/" + splitPath[0] + "/" + splitPath[1] + "/";
+		int id = Integer.parseInt(checked[0]) -1;
+	    ArrayList<domain.Diagram> diagrams = DiagramDAO.getDiagramList(2);
 	
-	ServletContext context = getServletContext();
-	String targetRealPath = context.getRealPath(targetPath);
-	String reportRealPath = context.getRealPath("/reports/");
+		// the absolute path of folder where all diagrams store.
+		String filePath = diagrams.get(id).getFilePath();
+		String[] splitPath = filePath.split("/");
+		String targetPath = "/" + splitPath[0] + "/" + splitPath[1] + "/";
+		ServletContext context = getServletContext();
+		String targetRealPath = context.getRealPath(targetPath);
+		String reportRealPath = context.getRealPath("/reports/");
+		DownloadDirectory dirObj = new DownloadDirectory();
+	    DownloadZipfile zipObj = new DownloadZipfile();
+	    File tmpdir = dirObj.createDirectory(reportRealPath);
+	    
+	    String outputFile = splitPath[2] + ".zip";
+	    String downloadPath = dirObj.getDownloadPath();
+	    String output = downloadPath + "\\" + outputFile;
+		try {
+		    zipObj.downloadZipfileProcessor(targetRealPath, output);
+		    OutputStream ops = response.getOutputStream();
+		    byte bytes[] = new byte[1024];
+		    int length = 0;
+			
+		    File fileLoad = new File(downloadPath, outputFile);
 	
-	DownloadDirectory dirObj = new DownloadDirectory();
-    DownloadZipfile zipObj = new DownloadZipfile();
-    File tmpdir = dirObj.createDirectory(reportRealPath);
-    
-    String outputFile = splitPath[2] + ".zip";
-    String downloadPath = dirObj.getDownloadPath();
-    String output = downloadPath + "\\" + outputFile;
-
-	try {
-	    zipObj.downloadZipfileProcessor(targetRealPath, output);
-		
-	    OutputStream ops = response.getOutputStream();
-	    byte bytes[] = new byte[1024];
-	    int length = 0;
-		
-	    File fileLoad = new File(downloadPath, outputFile);
-
-	    String mimetype = context.getMimeType(outputFile);
-	    response.setHeader("Content-disposition", "attachment;filename=" + outputFile);
-	    response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
-	    response.setContentLength((int) fileLoad.length());
-
-	    DataInputStream in = new DataInputStream(new FileInputStream(fileLoad));
-
-	    while ((in != null) && ((length = in.read(bytes)) != -1)) {
-	    	ops.write(bytes, 0, length);
-	    }
-	    ops.flush();
-	    ops.close();
-	    in.close();
-	    
-	    dirObj.deleteDirectory(tmpdir);
-	    
-	} catch (IOException ex) {
-	    Logger.getLogger(DisplayDiagram.class.getName()).log(Level.SEVERE, null, ex);
-	}
-
+		    String mimetype = context.getMimeType(outputFile);
+		    response.setHeader("Content-disposition", "attachment;filename=" + outputFile);
+		    response.setContentType((mimetype != null) ? mimetype : "application/octet-stream");
+		    response.setContentLength((int) fileLoad.length());
+	
+		    DataInputStream in = new DataInputStream(new FileInputStream(fileLoad));
+	
+		    while ((in != null) && ((length = in.read(bytes)) != -1)) {
+		    	ops.write(bytes, 0, length);
+		    }
+		    ops.flush();
+		    ops.close();
+		    in.close();
+		    dirObj.deleteDirectory(tmpdir);
+		    
+		} catch (IOException ex) {
+			dirObj.deleteDirectory(tmpdir);
+			System.out.println(ex);
+			RequestDispatcher rd = request.getRequestDispatcher("Display");
+			rd.forward(request, response);
+		}
     }
     
     
@@ -308,7 +305,7 @@ public class DisplayDiagram extends HttpServlet {
     	    
     	    dirObj.deleteDirectory(tmpdir);
     	} catch (IOException ex) {
-
+			System.out.println(ex);
     	}
     }
 }
