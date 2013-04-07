@@ -18,9 +18,7 @@ public abstract class SequencePngFile implements UploadProcessor{
 		Path dstSeqPicFile = new java.io.File(pFileDir + "sequence.pic").toPath();
 		Path temp = java.nio.file.Files.copy(srcSeqPicFile, dstSeqPicFile,REPLACE_EXISTING);
 		logging.Log.LogCreate().Info(temp.toString());
-		//String umlPicutilPath = pLibPath + "pic2plot";
-		//String picFileName = "\"" + pFileDir + pInFileName + "\"";
-		//String pngFileName = "\"" + pFileDir + "Sequence_diagram_" + pFileName + ".png" + "\"";
+
 		String picFileName = pFileDir + pInFileName;
 		String pngFileName = pFileDir + "Sequence_diagram_" + pFileName + ".png";
 		
@@ -28,50 +26,22 @@ public abstract class SequencePngFile implements UploadProcessor{
 		logging.Log.LogCreate().Info(pngFileName);
 
 		// Command to generate PNG file from pic file
-		String command[] = { umlPicutilPath, "-Tpng",  picFileName, ">", pngFileName };
-		
+		FileWriter fw = null;
 		try {
-			//Process procObj = Runtime.getRuntime().exec(umlPicutilPath + " -Tpng " + picFileName);
-			Process procObj = Runtime.getRuntime().exec(command);
-			BufferedReader in = new BufferedReader(  
-                    new InputStreamReader(procObj.getInputStream()));  
-			String line = null;  
-			while ((line = in.readLine()) != null) {  
-			    System.out.println(line);  
-			    logging.Log.LogCreate().Info("Here is the standard output of the line:\n" + line.toString());
-			}  
-//			logging.Log.LogCreate().Info("Here is projectObj:\n" + procObj);
-//			java.io.File file = new java.io.File(pngFileName);
-//			if (!file.exists()) {
-//			file.createNewFile();
-//				logging.Log.LogCreate().Info("Here is the standard output of the command:\n");
-//			}
-//			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-//			
-//			BufferedWriter bw = new BufferedWriter(fw);
-//			BufferedReader stdInput = new BufferedReader(new 
-//		             InputStreamReader(procObj.getInputStream()));
-//
-//		        BufferedReader stdError = new BufferedReader(new 
-//		             InputStreamReader(procObj.getErrorStream()));
-//		        String s = "";
-//		        int t;
-//		        // read the output from the command
-//		        logging.Log.LogCreate().Info("Here is the standard output of the command:\n");
-//		        while (( t = stdInput.read()) != -1) {
-//		        	bw.write(t);		        	
-//		        }
-//		        bw.close();	
-//		        // read any errors from the attempted command
-//		        logging.Log.LogCreate().Info("Here is the standard error of the command (if any):\n");
-//		        while ((s = stdError.readLine()) != null) {
-//		        	logging.Log.LogCreate().Info(s);
-//		        }			
-//			
-//			int exitVal = procObj.waitFor();
-//			if (exitVal != 0) {
-//				Log.LogCreate().Info("Error in creating the png file " + String.valueOf(exitVal));
-//			}
+			fw = new FileWriter("C:\\test.bat");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedWriter bw=new BufferedWriter(fw);
+		bw.write(umlPicutilPath + " -Tpng " + picFileName + ">" + pngFileName + "\n" + "EXIT");
+		bw.close();
+		fw.close();
+		String command[] = new String[]{"cmd","/k","start","C:\\test.bat"};  
+		try {
+			//Process procObj = Runtime.getRuntime().exec(command);
+			 Runtime.getRuntime().exec(command);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.LogCreate().Info("Error 2: generating png file failed .." + e.getMessage());
