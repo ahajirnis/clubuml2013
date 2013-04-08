@@ -120,6 +120,8 @@ public class UmlUploadProcessor implements UploadProcessor {
 			String image_file_name = "Sequence_diagram_" + umlInfo.getFileName()
 					+ ".png";
 			String folder = diagramPath + "/" + umlInfo.getFileName();
+			logging.Log.LogCreate().Info("Image_File_Name:"+ image_file_name);
+			logging.Log.LogCreate().Info("Folder:"+ folder);
 			this.storeDatabase(folder, image_file_name, id);
 		}
 	}
@@ -597,7 +599,15 @@ public class UmlUploadProcessor implements UploadProcessor {
 						//out.write("active("+ msgSender+");\n");
 						msg.getSender().setactiveFlag(1);
 					}
-					out.write(msgSort+"("+msgSender+","+msgReceiver+","+"\""+msgName+"\");\n");	
+					if(msgSort.equals("create_message"))
+					{
+						out.write(msgSort+"("+msgSender+","+msgReceiver+","+"\""+msg.getReceiver().getLifelineName()+"\");\n");
+					}
+					else
+					{
+						out.write(msgSort+"("+msgSender+","+msgReceiver+","+"\""+msgName+"\");\n");	
+					}
+					
 					for(int sn=0; sn < senderNum;sn++)
 					{
 						if(Sender[sn].name.equals(msgSender))
