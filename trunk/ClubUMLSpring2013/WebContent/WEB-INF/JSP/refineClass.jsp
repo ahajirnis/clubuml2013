@@ -91,7 +91,7 @@
 	<tr><td id=errorMsg class=hidden ></td></tr>
 	<tr><td><button onclick=save() >SAVE</button></td></tr>
 </table>
-<form id=requestForm class=hidden action="ServerTestStub" method=post >
+<form id=requestForm class=hidden action="MergeController" method=post >
 	<input name=request type=text value="" />
 </form>
 </body>

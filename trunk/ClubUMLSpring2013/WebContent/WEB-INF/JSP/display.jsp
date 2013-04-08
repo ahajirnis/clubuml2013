@@ -118,9 +118,11 @@
 		<form action="DisplayDiagram" method="post"
 			onsubmit="return checkFields()">
 			<input type="submit" id="displayButton" value="Display" name="submit" />
-			<input type="submit" id="downloadButton" value="Download"
-				name="submit" /> <input type="submit" id="compareButton"
-				value="Go to compare" name="submit" />
+			<input type="submit" id="downloadButton" value="Download" name="submit" />
+			<input type="submit" id="compareButton" value="Go to compare" name="submit" />
+			<!-- Merge -->
+			<button id=merge onclick=sendRefresh() >Merge</button>
+			<!-- End Merge -->
 			<table>
 				<tr>
 					<td></td>
@@ -139,5 +141,22 @@
 		</form>
 	</div>
 	</div>
+	<!-- Merge -->
+	<form id=requestForm action="MergeController" method=POST >
+		<input name=request value="" />
+	</form>
+	<script>
+		function sendRefresh() {
+			var form = document.getElementById("requestForm");
+			var request = document.getElementsByName("request")[0];
+			
+			var req = {};
+			req.Request = "Refresh";
+			
+			request.value = JSON.stringify(req);
+			form.submit();
+		}
+	</script>
+	<!-- End Merges -->
 </body>
 </html>
