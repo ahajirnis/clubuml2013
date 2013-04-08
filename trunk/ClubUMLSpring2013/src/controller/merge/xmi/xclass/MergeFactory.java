@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class MergeFactory {
 /***
- * 
  * MergeFactory - Returns an instance of an Merge object depending on
  * the merging type. 
  * 
