@@ -48,8 +48,7 @@ public class Refresh implements Request {
 		
 		//  Read elements in sameClass
 		for(XmiMergedClass element : comparer.getSameClass()){
-			same.add(element.getClass1().getName());
-			same.add(element.getClass2().getName());
+			same.add(element.getNewName());
 		}
 		
 		//  Input three ArrayLists in our return obj
