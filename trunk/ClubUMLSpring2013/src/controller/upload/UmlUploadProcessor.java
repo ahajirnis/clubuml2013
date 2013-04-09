@@ -110,14 +110,14 @@ public class UmlUploadProcessor implements UploadProcessor {
 
 		if (isClassDiag) {
 			new Uml2ClassUploadProcessor().process();
-			String image_file_name = "class_diagram_" + umlInfo.getFileName()
+			String image_file_name = umlInfo.getFileName()
 					+ ".png";
 			String folder = diagramPath + "/" + umlInfo.getFileName();
 			this.storeDatabase(folder, image_file_name, id);
 		}
 		if (isSeqDiag) {
 			new Uml2SequenceDiagramUploadProcessor().process();
-			String image_file_name = "Sequence_diagram_" + umlInfo.getFileName()
+			String image_file_name = umlInfo.getFileName()
 					+ ".png";
 			String folder = diagramPath + "/" + umlInfo.getFileName();
 			logging.Log.LogCreate().Info("Image_File_Name:"+ image_file_name);
