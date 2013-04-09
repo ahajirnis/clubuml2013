@@ -183,23 +183,42 @@ public class DisplayDiagram extends HttpServlet {
 		ArrayList<domain.Diagram> diagrams = DiagramDAO.getDiagramList(2);
 	    if (!diagrams.isEmpty()) {
 
-		for (int i = 0; i < diagrams.size(); i++) {
-		    if (diagrams.get(i).getDiagramId() == diagramId1) {
-
-			//set the first diagram in diagram list as the default display diagram..
-			request.setAttribute("firstPath", diagrams.get(i).getFilePath() + ".png");
-			request.setAttribute("diagramId1", diagrams.get(i).getDiagramId());
-
-			ArrayList<Comment> commentListObj = CommentDAO.getComment(diagramId1);
-			if (!commentListObj.isEmpty()) {
-			    for (int j = 0; j < commentListObj.size(); j++) {
-				commentListObj.get(j).setUserName(UserDAO.getUser(commentListObj.get(j).getUserId()).getUserName());
+			for (int i = 0; i < diagrams.size(); i++) {
+			    if (diagrams.get(i).getDiagramId() == diagramId1) {
+					// Set the first diagram in diagram list as the default display diagram..
+					request.setAttribute("firstPath", diagrams.get(i).getFilePath() + ".png");
+					request.setAttribute("diagramId1", diagrams.get(i).getDiagramId());
+		
+					// No longer comments attached to diagrams, only to merge/compare operations
+					/*
+					ArrayList<Comment> commentListObj = CommentDAO.getComment(diagramId1);
+					if (!commentListObj.isEmpty()) {
+					    for (int j = 0; j < commentListObj.size(); j++) {
+					    	commentListObj.get(j).setUserName(UserDAO.getUser(commentListObj.get(j).getUserId()).getUserName());
+					    }
+					    request.setAttribute("comments", commentListObj);
+					}
+					*/
+					
+					//TODO check this out from Display.java...
+					/*
+					ArrayList<Comment> commentListObj = CommentDAO.getComment(diagrams.get(0).getDiagramId());
+				    if (!commentListObj.isEmpty()) {
+					for (int i = 0; i < commentListObj.size(); i++) {
+					    commentListObj.get(i).setUserName(UserDAO.getUser(commentListObj.get(i).getUserId()).getUserName());
+					}
+					request.setAttribute("comments", commentListObj);
+				    }	
+			    	} catch(Exception e){
+			    		System.out.println(e.getMessage());
+			    	}
+			    	*/
+					// Bug fix - send empty comments ArrayList
+					request.setAttribute("comments", new ArrayList<Comment>());
 			    }
-			    request.setAttribute("comments", commentListObj);
+			    
 			}
-		    }
-		}
-		request.setAttribute("diagrams", diagrams);
+			request.setAttribute("diagrams", diagrams);
 	    }
 	    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/display.jsp");
 		dispatcher.forward(request, response);
