@@ -16,25 +16,25 @@ import controller.util.FileUtil;
 public class XmiClassDiagramComparer implements ComparerIntf {
 	private final static String REQUEST_PACKAGE = "controller.comparer.xmi.request";
 	private final static String KEY_REQUEST = "Request";
-	
+
 	// These request will be removed in final version
 	private final static String REQUEST_REFRESH = "Refresh";
 	private final static String REQUEST_CONSOLIDATE = "Consolidate";
 	private final static String REQUEST_ADD = "Add";
 	private final static String REQUEST_BREAK = "Break";
 	private final static String REQUEST_COMPARE = "Compare";
-	
+
 	// Parser elements that contain the metamodel
 	private XmiClassDiagramParser ClassDiagram1;
 	private XmiClassDiagramParser ClassDiagram2;
 
 	// Store merged classes
 	private ArrayList<XmiMergedClass> sameClass = new ArrayList<XmiMergedClass>();
-	
+
 	// Classes unique to diagram 1
 	private ArrayList<XmiClassElement> uniqueClass1 = new ArrayList<XmiClassElement>();
-	
-	// Classes unqiey to diagram 2
+
+	// Classes unique to diagram 2
 	private ArrayList<XmiClassElement> uniqueClass2 = new ArrayList<XmiClassElement>();
 
 	/**
@@ -69,21 +69,52 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 						+ classDiagram2Uml.getFileName(),
 				classDiagram2Notation.getDestFilePath()
 						+ classDiagram2Notation.getFileName());
-		
+
 		GenerateClassLists();
 	}
 
 	/**
-	 * Based on the JSON object's request, this method invokes the
-	 * desired request and returns a JSON object.
+	 * Based on the JSON object's request, this method invokes the desired
+	 * request and returns a JSON object.
 	 * 
 	 * JSON structure is documented in the JSON documentation.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject action(JSONObject jsonObj) {
-		String request = (String)jsonObj.get(KEY_REQUEST);
+
+		String request = (String) jsonObj.get(REQUEST_PACKAGE + KEY_REQUEST);
 		
-		switch(request) {
+		// Create request object via Reflection
+		Request requestObj;
+
+		try {
+			requestObj = (Request) Class.forName(request).newInstance();
+			return requestObj.request(jsonObj, this);
+		} catch (Exception e) {
+			JSONObject failResponse = new JSONObject();
+			failResponse.put("Response", "Fail");
+			failResponse.put("Message", e.toString());
+			return failResponse;
+		}
+
+	}
+
+	// *************************************************************************
+	// Unofficial stubs below - Decoupling Request objects and
+	// XmiClassDiagramComparer
+	// *************************************************************************
+
+	/**
+	 * Based on the JSON object's request, this method invokes the desired
+	 * request and returns a JSON object.
+	 * 
+	 * JSON structure is documented in the JSON documentation.
+	 */
+	public JSONObject actionTest(JSONObject jsonObj) {
+		String request = (String) jsonObj.get(KEY_REQUEST);
+
+		switch (request) {
 		case REQUEST_REFRESH:
 			return Refresh(jsonObj);
 		case REQUEST_COMPARE:
@@ -95,100 +126,70 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		case REQUEST_BREAK:
 			return Break(jsonObj);
 		}
-		
+
 		JSONObject jObj = new JSONObject();
 		jObj.put("Response", "Fail");
 		return jObj;
 	}
-
-	// Note: This method will replace the action() method above when we're ready to connect 
-	// the real request elements
-	//
-	// Request classes that needs to be created under controller.comparer.xmi.request package:
-	//  Refresh
-	//  Compare
-	//	Consolidate
-	//	Add 
-	//	Break
-	public JSONObject actionTest(JSONObject jsonObj) {
-
-		String request = (String)jsonObj.get(REQUEST_PACKAGE + KEY_REQUEST);
-		
-		try {
-			// Create request object via Reflection
-			Request requestObj = (Request) Class.forName(request).newInstance();
-			return requestObj.request(jsonObj, this);
-		} catch (Exception e) {
-			// Return null object for any error, no request
-			// Possible errors:
-			// 	1. request variable string is null
-			//	2. Attempting to instantiate a class that doesn't exist
-			return null;
-		}
-	}
 	
-	// *************************************************************************
-	// Unofficial stubs below - Decoupling Request objects and XmiClassDiagramComparer
-	// *************************************************************************
-
 	@SuppressWarnings("unchecked")
 	private JSONObject Refresh(JSONObject jsonObj) {
-		
+
 		JSONObject jObj = new JSONObject();
 		ArrayList<String> class1 = new ArrayList<String>();
 		class1.add("Vehicle");
-		
+
 		ArrayList<String> class2 = new ArrayList<String>();
 		class2.add("Vehicle");
 		class2.add("Bus");
-		
+
 		ArrayList<String> same = new ArrayList<String>();
 		same.add("Car");
 		same.add("Bike");
-		
+
 		jObj.put("Class1", class1);
 		jObj.put("Class2", class2);
 		jObj.put("Same", same);
 		jObj.put("Response", "Success");
 		return jObj;
 	}
-	
+
 	private JSONObject Compare(JSONObject jsonObj) {
 		JSONObject jObj = new JSONObject();
-		
-		jObj.put("Class1","Vehicle");
-		jObj.put("Class2","Vehicle");
-		
+
+		jObj.put("Class1", "Vehicle");
+		jObj.put("Class2", "Vehicle");
+
 		ArrayList<String> arraylist = new ArrayList<String>();
-		
+
 		HashMap<String, ArrayList<String>> attr = new HashMap<String, ArrayList<String>>();
 		arraylist.add("<Undefined> Color");
 		attr.put("Class2", arraylist);
-		
+
 		arraylist = new ArrayList<String>();
-		
+
 		HashMap<String, ArrayList<String>> op = new HashMap<String, ArrayList<String>>();
 		arraylist.add("Start()");
 		op.put("Class1", arraylist);
 		arraylist = new ArrayList<String>();
 		arraylist.add("Stop()");
 		op.put("Class2", arraylist);
-		
+
 		jObj.put("Attribute", attr);
 		jObj.put("Operation", op);
 		jObj.put("Response", "Success");
 		return jObj;
 	}
-	
+
 	private JSONObject Consolidate(JSONObject jsonObj) {
 		JSONObject jObj = new JSONObject();
 		jObj.put("Response", "Success");
 		return jObj;
 	}
-	
+
 	private JSONObject Add(JSONObject jsonObj) {
 		JSONObject jObj = new JSONObject();
-		
+
 		jObj.put("Class2", "Bus");
 		ArrayList<String> arraylist = new ArrayList<String>();
 		arraylist.add("<Undefined> Benches");
@@ -199,13 +200,15 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		jObj.put("Response", "Success");
 		return jObj;
 	}
-	
+
 	private JSONObject Break(JSONObject jsonObj) {
 		JSONObject jObj = new JSONObject();
 		jObj.put("Response", "Success");
 		return jObj;
 	}
 
+	// ********** END TEST STUBS **********************************
+	
 	/**
 	 * @return the sameClass
 	 */
@@ -214,7 +217,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	}
 
 	/**
-	 * @param sameClass the sameClass to set
+	 * @param sameClass
+	 *            the sameClass to set
 	 */
 	public void setSameClass(ArrayList<XmiMergedClass> sameClass) {
 		this.sameClass = sameClass;
@@ -228,7 +232,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	}
 
 	/**
-	 * @param uniqueClass1 the uniqueClass1 to set
+	 * @param uniqueClass1
+	 *            the uniqueClass1 to set
 	 */
 	public void setUniqueClass1(ArrayList<XmiClassElement> uniqueClass1) {
 		this.uniqueClass1 = uniqueClass1;
@@ -242,7 +247,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	}
 
 	/**
-	 * @param uniqueClass2 the uniqueClass2 to set
+	 * @param uniqueClass2
+	 *            the uniqueClass2 to set
 	 */
 	public void setUniqueClass2(ArrayList<XmiClassElement> uniqueClass2) {
 		this.uniqueClass2 = uniqueClass2;
@@ -261,43 +267,44 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	public final XmiClassDiagramParser getClassDiagram2() {
 		return ClassDiagram2;
 	}
-	
+
 	/**
 	 * Create the list of unique and same class lists.
 	 */
 	private void GenerateClassLists() {
-		
+
 		// Keep track of class elements to remove (avoid concurrency issues)
 		ArrayList<XmiClassElement> trackRemoveClass1 = new ArrayList<XmiClassElement>();
 		ArrayList<XmiClassElement> trackRemoveClass2 = new ArrayList<XmiClassElement>();
-		
-		// populate unique elements then search for classes that are perfectly the same
-		for (XmiClassElement class1 : ClassDiagram1.getClassElements() ){
+
+		// populate unique elements then search for classes that are perfectly
+		// the same
+		for (XmiClassElement class1 : ClassDiagram1.getClassElements()) {
 			uniqueClass1.add(class1);
 		}
-		
-		for (XmiClassElement class2 : ClassDiagram2.getClassElements() ){
+
+		for (XmiClassElement class2 : ClassDiagram2.getClassElements()) {
 			uniqueClass2.add(class2);
 		}
-		
+
 		for (XmiClassElement class1 : uniqueClass1) {
 			for (XmiClassElement class2 : uniqueClass2) {
 				if (class1.equals(class2)) {
 					trackRemoveClass1.add(class1);
 					trackRemoveClass2.add(class2);
 					sameClass.add(new XmiMergedClass(class1, class2));
-				} 
+				}
 			}
 		}
-		
+
 		// remove not unique classes
-		for (XmiClassElement class1 : trackRemoveClass1 ){
+		for (XmiClassElement class1 : trackRemoveClass1) {
 			uniqueClass1.remove(class1);
 		}
-		
-		for (XmiClassElement class2 : trackRemoveClass2 ){
+
+		for (XmiClassElement class2 : trackRemoveClass2) {
 			uniqueClass2.remove(class2);
 		}
 	}
-	
+
 }

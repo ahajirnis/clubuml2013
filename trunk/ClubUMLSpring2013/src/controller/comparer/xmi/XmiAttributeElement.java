@@ -2,6 +2,10 @@ package controller.comparer.xmi;
 
 public class XmiAttributeElement extends XmiBaseElement {
 
+	private XmiValueElement lowerValue;
+	private XmiValueElement upperValue; 
+	private XmiValueElement defaultValue; 
+	
 	public XmiAttributeElement(String id, String name, String type,
 			String visibility) {
 		super(id, name, type, visibility);
@@ -10,5 +14,47 @@ public class XmiAttributeElement extends XmiBaseElement {
 	@Override
 	public String toString() {
 		return super.toString();
+	}
+
+	/**
+	 * @return the lowerValue
+	 */
+	public XmiValueElement getLowerValue() {
+		return lowerValue;
+	}
+
+	/**
+	 * @param lowerValue the lowerValue to set
+	 */
+	public void setLowerValue(XmiValueElement lowerValue) {
+		this.lowerValue = lowerValue;
+	}
+
+	/**
+	 * @return the upperValue
+	 */
+	public XmiValueElement getUpperValue() {
+		return upperValue;
+	}
+
+	/**
+	 * @param upperValue the upperValue to set
+	 */
+	public void setUpperValue(XmiValueElement upperValue) {
+		this.upperValue = upperValue;
+	}
+
+	/**
+	 * @return the defaultValue
+	 */
+	public XmiValueElement getDefaultValue() {
+		return defaultValue;
+	}
+
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public void setDefaultValue(XmiValueElement defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 }

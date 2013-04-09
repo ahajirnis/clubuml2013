@@ -18,18 +18,18 @@ public class XmiMergedClass {
 	private XmiClassElement class2;
 	
 	// Class 1 elements to keep in final class
-	private ArrayList<XmiAttributeElement> attributes1;
-	private ArrayList<XmiOperationElement> operations1;
-	private ArrayList<XmiGeneralizationElement> generalizations1;
-	private ArrayList<XmiClassElement> nestedClasses1;
-	private ArrayList<XmiAssociationElement> associations1;
+	private ArrayList<XmiAttributeElement> attributes1 = new ArrayList<XmiAttributeElement>();
+	private ArrayList<XmiOperationElement> operations1 = new ArrayList<XmiOperationElement>();
+	private ArrayList<XmiGeneralizationElement> generalizations1 = new ArrayList<XmiGeneralizationElement>();
+	private ArrayList<XmiClassElement> nestedClasses1 = new ArrayList<XmiClassElement>();
+	private ArrayList<XmiAssociationElement> associations1 = new ArrayList<XmiAssociationElement>();
 	
 	// Class 2 elements to keep in final class
-	private ArrayList<XmiAttributeElement> attributes2;
-	private ArrayList<XmiOperationElement> operations2;
+	private ArrayList<XmiAttributeElement> attributes2 = new ArrayList<XmiAttributeElement>();
+	private ArrayList<XmiOperationElement> operations2 = new ArrayList<XmiOperationElement>();
 	private ArrayList<XmiGeneralizationElement> generalizations2;
-	private ArrayList<XmiClassElement> nestedClasses2;
-	private ArrayList<XmiAssociationElement> associations2;
+	private ArrayList<XmiClassElement> nestedClasses2 = new ArrayList<XmiClassElement>();
+	private ArrayList<XmiAssociationElement> associations2 = new ArrayList<XmiAssociationElement>();
 	
 	/**
 	 * Default constructor

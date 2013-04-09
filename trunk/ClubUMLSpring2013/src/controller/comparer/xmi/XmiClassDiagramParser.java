@@ -20,6 +20,7 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_CLASS_DIAG = "PapyrusUMLClassDiagram";
 
 	// Tags
+	private final static String PAPYRUS_HEADER_ELEM = "uml:Model";
 	private final static String PAPYRUS_NOTATION_ELEM = "notation:Diagram";
 	private final static String PAPYRUS_PACKAGED_ELEM = "packagedElement";
 	private final static String PAPYRUS_OPERATION_ELEM = "ownedOperation";
@@ -55,6 +56,10 @@ public class XmiClassDiagramParser {
 	private String umlFileName;
 	private String notationFileName;
 
+	// Stores the header tag for uml:Model's name and id
+	private String umlModelName;
+	private String umlModelId;
+	
 	private ModelFileInfo modelUmlInfo;
 	private ModelFileInfo notationmodelInfo;
 
@@ -76,7 +81,7 @@ public class XmiClassDiagramParser {
 		umlFileName = umlFile;
 		notationFileName = notationFile;
 		activeIdList = new ArrayList<String>();
-
+		
 		this.process();
 		this.postProcess();
 	}
@@ -331,8 +336,20 @@ public class XmiClassDiagramParser {
 	 */
 	private void BuildXmiCompareElementStructure(ModelFileInfo modelUmlInfo) {
 
-		// boolean classFlag = false;
-
+		// Obtain name and id of uml diagram
+		List<XmiElement> headerList = modelUmlInfo
+				.findElementsByName(PAPYRUS_HEADER_ELEM);
+		
+		
+		if (!headerList.isEmpty()) {
+			// Only 1 element in the headerList
+			XmiElement header = headerList.get(0);
+			
+			this.umlModelName = header.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+			this.umlModelId = header.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
+		}
+		
+		// Iterate through all packagedElemets to construct Class model
 		List<XmiElement> packagedElemList = modelUmlInfo
 				.findElementsByName(PAPYRUS_PACKAGED_ELEM);
 
@@ -691,5 +708,33 @@ public class XmiClassDiagramParser {
 	 */
 	public List<XmiTypeElement> getTypeElements() {
 		return primitiveElements;
+	}
+
+	/**
+	 * @return the umlModeName
+	 */
+	public String getUmlModeName() {
+		return umlModelName;
+	}
+
+	/**
+	 * @param umlModeName the umlModeName to set
+	 */
+	public void setUmlModeName(String umlModeName) {
+		this.umlModelName = umlModeName;
+	}
+
+	/**
+	 * @return the umlModelId
+	 */
+	public String getUmlModelId() {
+		return umlModelId;
+	}
+
+	/**
+	 * @param umlModelId the umlModelId to set
+	 */
+	public void setUmlModelId(String umlModelId) {
+		this.umlModelId = umlModelId;
 	}
 }
