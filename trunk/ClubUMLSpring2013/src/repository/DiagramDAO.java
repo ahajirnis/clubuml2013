@@ -122,7 +122,6 @@ public class DiagramDAO {
 		diagram.setFileType(rs.getString("fileType"));
 		diagram.setNotationFileName(rs.getString("notationFileName"));
 		diagram.setNotationFilePath(rs.getString("notationFilePath"));
-		diagram.setDiagramName(rs.getString("diFlieName"));
 		diagram.setDiFilepath(rs.getString("diFilePath"));
 		diagram.setCreatedTime(rs.getString("createTime"));
 		
