@@ -10,7 +10,7 @@ public abstract class SequencePngFile implements UploadProcessor{
 	public static void createPngFile(String pFileName, String pInFileName,
 			String pFileDir, String pLibPath) {
 	try {
-		final String umlPicutilPath = "C:\\GnuWin32\\bin\\pic2plot.exe";
+		final String umlPicutilPath = "D:\\GnuWin32\\bin\\pic2plot.exe";
 		//logging.Log.LogCreate().Info("pFileName =" + pFileName + " pInFileName=" + pInFileName + " pFileDir= " + pFileDir + " pLibPath = " + pLibPath);
 		logging.Log.LogCreate().Info(umlPicutilPath);
 		Path srcSeqPicFile =new java.io.File(pLibPath + "sequence.pic").toPath();
@@ -20,7 +20,7 @@ public abstract class SequencePngFile implements UploadProcessor{
 		logging.Log.LogCreate().Info(temp.toString());
 
 		String picFileName = pFileDir + pInFileName;
-		String pngFileName = pFileDir + "Sequence_diagram_" + pFileName + ".png";
+		String pngFileName = pFileDir + pFileName + ".png";
 		
 		logging.Log.LogCreate().Info(picFileName);
 		logging.Log.LogCreate().Info(pngFileName);
@@ -34,7 +34,7 @@ public abstract class SequencePngFile implements UploadProcessor{
 			e.printStackTrace();
 		}
 		BufferedWriter bw=new BufferedWriter(fw);
-		bw.write(umlPicutilPath + " -Tpng " + picFileName + ">" + pngFileName + "\n" + "EXIT");
+		bw.write(umlPicutilPath + " -Tpng --bitmap-size 1000x1000 " + picFileName + ">" + pngFileName + "\n" + "EXIT");
 		bw.close();
 		fw.close();
 		String command[] = new String[]{"cmd","/k","start","C:\\test.bat"};  
