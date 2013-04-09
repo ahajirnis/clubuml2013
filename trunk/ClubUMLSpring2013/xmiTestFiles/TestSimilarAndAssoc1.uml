@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_rfLzEKBZEeKRtLhtAW3Qcg" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_4Ez20KBZEeKRtLhtAW3Qcg" name="Vehicle">
+    <ownedAttribute xmi:id="__trssKBZEeKRtLhtAW3Qcg" name="Color" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AMoSgKBaEeKRtLhtAW3Qcg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AMoSgaBaEeKRtLhtAW3Qcg" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_AMoSgqBaEeKRtLhtAW3Qcg">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_CUdhsKBaEeKRtLhtAW3Qcg" name="currentSpeed" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_CpbsIKBaEeKRtLhtAW3Qcg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_CpbsIaBaEeKRtLhtAW3Qcg" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_CpbsIqBaEeKRtLhtAW3Qcg">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_HEJxsKBfEeKRtLhtAW3Qcg" name="passenger" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HS4xQKBfEeKRtLhtAW3Qcg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HS4xQaBfEeKRtLhtAW3Qcg" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_HS4xQqBfEeKRtLhtAW3Qcg">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_5Lnt4KBZEeKRtLhtAW3Qcg" name="Automobile">
+    <generalization xmi:id="_9t4YIKBZEeKRtLhtAW3Qcg" general="_4Ez20KBZEeKRtLhtAW3Qcg"/>
+    <ownedOperation xmi:id="_FfPboKBaEeKRtLhtAW3Qcg" name="openDoor"/>
+    <ownedOperation xmi:id="_-t148KBcEeKRtLhtAW3Qcg" name="toggleDoorState"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_6aU8sKBZEeKRtLhtAW3Qcg" name="Bike">
+    <generalization xmi:id="_-M-u8KBZEeKRtLhtAW3Qcg" general="_4Ez20KBZEeKRtLhtAW3Qcg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_V_SREKBbEeKRtLhtAW3Qcg" name="Bus">
+    <generalization xmi:id="_ZBSCcKBbEeKRtLhtAW3Qcg" general="_4Ez20KBZEeKRtLhtAW3Qcg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_KDrlQKBcEeKRtLhtAW3Qcg" name="TestVehicle"/>
+</uml:Model>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_jlX-IJdZEeKFEN9tS02o5Q" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_j8A8gJdZEeKFEN9tS02o5Q" name="Vehicle">
+    <ownedAttribute xmi:id="_otJwQJdZEeKFEN9tS02o5Q" name="Color" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pLQBgJdZEeKFEN9tS02o5Q" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pLQokJdZEeKFEN9tS02o5Q" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_pLRPoJdZEeKFEN9tS02o5Q">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_BGEpoJnQEeKJI5fce7MoPg" name="Color" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_BwzosJnQEeKJI5fce7MoPg" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_BwzosZnQEeKJI5fce7MoPg" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_Bw0PwJnQEeKJI5fce7MoPg">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_kr2eAJdZEeKFEN9tS02o5Q" name="Car">
+    <generalization xmi:id="_mLBxwJdZEeKFEN9tS02o5Q" general="_j8A8gJdZEeKFEN9tS02o5Q"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_qsvCYJdZEeKFEN9tS02o5Q" name="Bike">
+    <generalization xmi:id="_tinqYJdZEeKFEN9tS02o5Q" general="_j8A8gJdZEeKFEN9tS02o5Q"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_dZRZgJnQEeKJI5fce7MoPg" name="Bus">
+    <generalization xmi:id="_fiXM8JnQEeKJI5fce7MoPg" general="_j8A8gJdZEeKFEN9tS02o5Q"/>
+  </packagedElement>
+</uml:Model>

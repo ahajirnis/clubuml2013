@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_R7_soJdZEeKFEN9tS02o5Q" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_ScejgJdZEeKFEN9tS02o5Q" name="Vehicle"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_V_R74JdZEeKFEN9tS02o5Q" name="Car">
+    <generalization xmi:id="_d0T-cJdZEeKFEN9tS02o5Q" general="_ScejgJdZEeKFEN9tS02o5Q"/>
+    <ownedOperation xmi:id="_aAP28JdZEeKFEN9tS02o5Q" name="OpenDoor"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_c39q8JdZEeKFEN9tS02o5Q" name="Bike">
+    <generalization xmi:id="_eI1c8JdZEeKFEN9tS02o5Q" general="_ScejgJdZEeKFEN9tS02o5Q"/>
+  </packagedElement>
+</uml:Model>
