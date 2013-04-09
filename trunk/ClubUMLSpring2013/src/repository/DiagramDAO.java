@@ -40,11 +40,12 @@ public class DiagramDAO {
 	    //pstmt.setBoolean(2, diagram.isInEdition());
 	    //pstmt.setInt(3, diagram.getOwnerId());
 	    //pstmt.setString(4, diagram.getEcoreFilePath());
-	    System.out.println("diagram upload SQL test");
-	    System.out.println(diagram.getProjectId());
-	    System.out.println(diagram.getUserId());
-	    System.out.println(diagram.getDiagramType());
-	    System.out.println(diagram.getMerged());
+	    
+	    //System.out.println("diagram upload SQL test");
+	    //System.out.println(diagram.getProjectId());
+	    //System.out.println(diagram.getUserId());
+	    //System.out.println(diagram.getDiagramType());
+	    //System.out.println(diagram.getMerged());
 		
 		pstmt.setInt(1,diagram.getProjectId()); // this need to be implementing 
 		pstmt.setInt(2,diagram.getUserId());
@@ -123,6 +124,7 @@ public class DiagramDAO {
 		diagram.setNotationFilePath(rs.getString("notationFilePath"));
 		diagram.setDiagramName(rs.getString("diFlieName"));
 		diagram.setDiFilepath(rs.getString("diFilePath"));
+		diagram.setCreatedTime(rs.getString("createTime"));
 		
 		searchResult.add(diagram);
 	    }
