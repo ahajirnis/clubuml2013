@@ -83,7 +83,7 @@ public class Display extends HttpServlet {
 		request.setAttribute("diagramId1", diagrams.get(0).getDiagramId());
 	    }
 	    ArrayList<Comment> commentListObj = CommentDAO.getComment(diagrams.get(0).getDiagramId());
-	    if (!commentListObj.isEmpty()) {
+	    if (commentListObj != null && !commentListObj.isEmpty()) {
 		for (int i = 0; i < commentListObj.size(); i++) {
 		    commentListObj.get(i).setUserName(UserDAO.getUser(commentListObj.get(i).getUserId()).getUserName());
 		}
