@@ -21,7 +21,7 @@ public class SimilarityCheck {
 	 * @param name2
 	 * 			The name of element2
 	 */
-	SimilarityCheck(String name1, String name2){
+	public SimilarityCheck(String name1, String name2){
 		setElementName1(name1);
 		setElementName2(name2);
 	}
