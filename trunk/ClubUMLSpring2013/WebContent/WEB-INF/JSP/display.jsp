@@ -27,6 +27,11 @@
 		$("#displayButton").click(function() {
 			type = this.id.toString();
 		});
+		// Merge function
+		$("#mergeButton").click(function() {
+			type = this.id.toString();
+		});
+		// end
 	});
 	function checkFields() {
 		if (type == "downloadButton") {
@@ -50,6 +55,24 @@
 			alert("Please select 1 diagram to display");
 			return false;
 		}
+		// merge function
+		if (type == "mergeButton") {
+			var req = $("#req");
+			var form = $("#requestForm");
+			var checked = $(".myCheckBox:checked");
+			if (checked.length == 2) {
+				var reqO = {};
+				reqO.Request = "Refresh";
+				reqO.ClassDiagram1 = checked[0].value;
+				reqO.ClassDiagram2 = checked[1].value;
+				req.value = JSON.stringify(reqO);
+				form.submit();
+				return false;
+			}
+			alert("Please select 2 diagram to merge");
+			return false;
+		}
+		// end
 	}
 	
 	function displayClassDiagramFields(element) {
@@ -121,7 +144,7 @@
 			<input type="submit" id="downloadButton" value="Download" name="submit" />
 			<input type="submit" id="compareButton" value="Go to compare" name="submit" />
 			<!-- Merge -->
-			<button id=merge onclick=sendRefresh() >Merge</button>
+			<input type="submit" id="mergeButton" value="Go To Merge" name="submit" />
 			<!-- End Merge -->
 			<table>
 				<tr>
@@ -140,23 +163,11 @@
 			</table>
 		</form>
 	</div>
-	</div>
-	<!-- Merge -->
+	
+	<!-- Merge Form -->
 	<form id=requestForm action="MergeController" method=POST >
-		<input name=request value="" />
+		<input name=request id=req value="" />
 	</form>
-	<script>
-		function sendRefresh() {
-			var form = document.getElementById("requestForm");
-			var request = document.getElementsByName("request")[0];
-			
-			var req = {};
-			req.Request = "Refresh";
-			
-			request.value = JSON.stringify(req);
-			form.submit();
-		}
-	</script>
 	<!-- End Merges -->
 </body>
 </html>

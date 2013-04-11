@@ -94,7 +94,7 @@ function sendRequest(mo) {
 		</tr>
 	</table>
 	 -->
-	<table>
+	
 		<!-- 
 		<tr>
 			<th>${response.Diagram1 } ONLY</th>
@@ -102,7 +102,7 @@ function sendRequest(mo) {
 			<th>${response.Diagram2 } ONLY</th>
 		</tr>
 		 -->
-		
+	<table>
 		<tr>
 			<td>
 				<c:forEach items="${response.Diagram1 }" var="entry" >

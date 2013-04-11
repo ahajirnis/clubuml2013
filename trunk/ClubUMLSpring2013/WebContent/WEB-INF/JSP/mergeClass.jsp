@@ -91,46 +91,64 @@
 <table>
 	<tr><td>
 		<input name=sc1 value="${response.Class1 }" />
+	</td><td>
 		<input name=sc2 value="${response.Class2 }" />
 	</td></tr>
-	<tr><th>
+	<tr><th colspan=2 >
 		DEFINE NEW NAME
 	</th></tr>
-	<tr><td>
+	<tr><td colspan=2>
 		<input type=text value="${response.Class1 }_${response.Class2 }" name="newClassName" onfocus="this.select();" />
+	</td></tr>
+	<tr><td>
 		<button onclick=getName(this) >${response.Class1 }</button>
+	</td><td>
 		<button onclick=getName(this) >${response.Class2 }</button>
-	</td><tr>
-	<tr><th>ATTRIBUTES</th></tr>
+	</td></tr>
+	
+</table>
+<table>
+	<tr><th colspan=3 >ATTRIBUTES</th></tr>
+	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
 	<c:forEach items="${response.Attributes.Class1 }" var="entry" >
 		<label><input type=checkbox name="scac1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
-	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
-		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
-		<br>
-	</c:forEach>
+	<td>
 	<c:forEach items="${response.Attributes.Same }" var="entry" >
 		<label><input type=checkbox name="scas" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
+	</td>
+	<td>
+	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
+		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
+		<br>
+	</c:forEach>
 	</td></tr>
-	<tr><th>METHODS</th></tr>
+	<tr><th colspan=3 >METHODS</th></tr>
+	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
 	<c:forEach items="${response.Operations.Class1 }" var="entry" >
 		<label><input type=checkbox name="scmc1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
-	<c:forEach items="${response.Operations.Class2 }" var="entry" >
-		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
-		<br>
-	</c:forEach>
+	</td>
+	<td>
 	<c:forEach items="${response.Operations.Same }" var="entry" >
 		<label><input type=checkbox name="scms" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
+	</td>
+	<td>
+	<c:forEach items="${response.Operations.Class2 }" var="entry" >
+		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
+		<br>
+	</c:forEach>
 	</td></tr>
+</table>
+<table>
 	<tr><td id=errorMsg class=hidden ></td></tr>
 	<tr><td><button onclick=save() >SAVE</button></td></tr>
 </table>
