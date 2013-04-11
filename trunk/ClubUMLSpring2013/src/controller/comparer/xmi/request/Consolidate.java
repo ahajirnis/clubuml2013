@@ -1,3 +1,4 @@
+
 package controller.comparer.xmi.request;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Consolidate implements Request {
 		
 		final String JSON_REQ_CONSOLIDATE_CLASS_1 = "Class1";
 		final String JSON_REQ_CONSOLIDATE_CLASS_2 = "Class2";
-		final String JSON_REQ_CONSOLIDATE_CLASS_NAME = "class";
+		final String JSON_REQ_CONSOLIDATE_CLASS_NAME = "Class";
 		final String JSON_REQ_CONSOLIDATE_CLASS_ATTR = "Attributes";
 		final String JSON_REQ_CONSOLIDATE_CLASS_OPER = "Operations";
 		final String JSON_REQ_CONSOLIDATE_NEW_CLASS = "Name";
@@ -49,68 +50,87 @@ public class Consolidate implements Request {
 				// Extracting the values from class1
 				HashMap class1_info = (HashMap)jsonObj.get(JSON_REQ_CONSOLIDATE_CLASS_1);
 				
-				String class1Name = (String)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_NAME);
-				XmiClassElement classElement1 = Utility.getClassByName(comparer.getUniqueClass1(), class1Name);
+				if(class1_info != null ) {
 				
-				//Get the list of attributes
-				ArrayList attrList1 = (ArrayList)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_ATTR);
-				
-				if (attrList1 != null ) {
-					ArrayList <XmiAttributeElement> attrlist = new ArrayList<XmiAttributeElement> (); 
-					for (int i =0; i < attrList1.size(); i++) {
-						Object Attrval = attrList1.get(i);
+						String class1Name = (String)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_NAME);
+						XmiClassElement classElement1 = Utility.getClassByName(comparer.getUniqueClass1(), class1Name);
 						
-						XmiAttributeElement  elem = Utility.getAttributebyName(classElement1,Attrval.toString());
-						attrList1.add(elem);
-					}
-					mergedclass.setAttributes(attrlist);
-				}
-				
-				
-				// Get the list of operation
-				ArrayList operlist1 = (ArrayList)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);	
-				
-				if (operlist1 != null) {
-					// Get the list of attributes
-					ArrayList<XmiOperationElement> operList = new ArrayList<XmiOperationElement> ();
-					for (int i =0; i < operlist1.size(); i++) {
-						Object operval  = operlist1.get(i);
-						XmiOperationElement elem = Utility.getOperationbyName(classElement1,operval.toString());
-						operList.add(elem);
-					}
-					mergedclass.setOperations(operList);
+						//Get the list of attributes
+						ArrayList attrList1 = (ArrayList)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_ATTR);
+					
+						mergedclass.setClass1(classElement1);
+						mergedclass.setNewName(class1Name);
+						
+						if (attrList1 != null ) {
+							ArrayList <XmiAttributeElement> attrlist = new ArrayList<XmiAttributeElement> (); 
+							for (int i =0; i < attrList1.size(); i++) {
+								Object Attrval = attrList1.get(i);
+								
+								XmiAttributeElement  elem = Utility.getAttributebyName(classElement1,Attrval.toString());
+								attrList1.add(elem);
+							}
+							mergedclass.setAttributes(attrlist);
+						}
+						
+						
+						// Get the list of operation
+						ArrayList operlist1 = (ArrayList)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);	
+						
+						if (operlist1 != null) {
+							// Get the list of attributes
+							ArrayList<XmiOperationElement> operList = new ArrayList<XmiOperationElement> ();
+							for (int i =0; i < operlist1.size(); i++) {
+								Object operval  = operlist1.get(i);
+								XmiOperationElement elem = Utility.getOperationbyName(classElement1,operval.toString());
+								operList.add(elem);
+							}
+							mergedclass.setOperations(operList);
+						}
+						
 				}
 				// Extracting the values from Class2 
 				HashMap class2_info = (HashMap)jsonObj.get(JSON_REQ_CONSOLIDATE_CLASS_2);
-				String class2Name = (String)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_NAME);			
-				XmiClassElement classElement2 = Utility.getClassByName(comparer.getUniqueClass2(), class2Name);
 				
-				// Get the list of attributes
-				ArrayList jSonAttrlist2 = (ArrayList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_ATTR);
-				if (jSonAttrlist2 != null) {
-					ArrayList <XmiAttributeElement> attrlist2 = new ArrayList<XmiAttributeElement> (); 
-					for (int i =0; i < jSonAttrlist2.size(); i++) {
-						Object Attrval = jSonAttrlist2.get(i);
-						XmiAttributeElement  elem = Utility.getAttributebyName(classElement2,Attrval.toString());
-						attrlist2.add(elem);
-					}
-					mergedclass.setAttributes2(attrlist2);
+				if(class2_info != null) {
+						String class2Name = (String)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_NAME);			
+						XmiClassElement classElement2 = Utility.getClassByName(comparer.getUniqueClass2(), class2Name);
+						
+						mergedclass.setClass1(classElement2);
+						mergedclass.setNewName(class2Name);
+						System.out.println(class2Name);
+						
+						// Get the list of attributes
+						ArrayList jSonAttrlist2 = (ArrayList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_ATTR);
+						if (jSonAttrlist2 != null) {
+							ArrayList <XmiAttributeElement> attrlist2 = new ArrayList<XmiAttributeElement> (); 
+							for (int i =0; i < jSonAttrlist2.size(); i++) {
+								Object Attrval = jSonAttrlist2.get(i);
+								XmiAttributeElement  elem = Utility.getAttributebyName(classElement2,Attrval.toString());
+								attrlist2.add(elem);
+							}
+							mergedclass.setAttributes2(attrlist2);
+						}
+						// Get the list of operation
+						LinkedList jSonOperlist2 = (LinkedList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);
+						if (jSonOperlist2 != null) {
+							ArrayList<XmiOperationElement> operList2 = new ArrayList<XmiOperationElement> ();				
+							// Get the list of attributes
+							for (int i =0; i < jSonOperlist2.size(); i++) {
+								Object operval = jSonOperlist2.get(i);					
+								// Get the element information
+								XmiOperationElement elem = Utility.getOperationbyName(classElement2,operval.toString());
+								// add the element to the list 
+								operList2.add(elem);
+			
+							}
+							// add the operation list to the mergedClass.
+							mergedclass.setOperations2(operList2);
+						}
 				}
-				// Get the list of operation
-				LinkedList jSonOperlist2 = (LinkedList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);
-				if (jSonOperlist2 != null) {
-					ArrayList<XmiOperationElement> operList2 = new ArrayList<XmiOperationElement> ();				
-					// Get the list of attributes
-					for (int i =0; i < jSonOperlist2.size(); i++) {
-						Object operval = jSonOperlist2.get(i);					
-						// Get the element information
-						XmiOperationElement elem = Utility.getOperationbyName(classElement1,operval.toString());
-						// add the element to the list 
-						operList2.add(elem);
-	
-					}
-					// add the operation list to the mergedClass.
-					mergedclass.setOperations2(operList2);
+				
+				String newName = (String) jsonObj.get(JSON_REQ_CONSOLIDATE_NEW_CLASS);
+				if(newName != null) {
+					mergedclass.setNewName(newName);
 				}
 				comparer.getSameClass().add(mergedclass);
 				//comparer.setUniqueClass1(classElement2);
@@ -124,9 +144,5 @@ public class Consolidate implements Request {
 		}
 		return response;
 
-	}
-	
-	
-	
-	
+	}	
 }
