@@ -2,16 +2,19 @@ package controller.comparer.xmi.request;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import controller.comparer.xmi.Utility;
+import controller.comparer.xmi.XmiAssociationElement;
 import controller.comparer.xmi.XmiAttributeElement;
 import controller.comparer.xmi.XmiBaseElement;
 import controller.comparer.xmi.XmiClassDiagramComparer;
 import controller.comparer.xmi.XmiClassElement;
 import controller.comparer.xmi.XmiGeneralizationElement;
+import controller.comparer.xmi.XmiMemberEndElement;
 import controller.comparer.xmi.XmiOperationElement;
 import controller.merge.xmi.xclass.XmiMergedClass;
 
@@ -51,34 +54,48 @@ public class Next implements Request {
 		JSONArray listOfGeneralization2 = new JSONArray();
 		JSONArray listOfAssociation1 = new JSONArray();
 		JSONArray listOfAssociation2 = new JSONArray();
-		
+				
 		for(int i=0 ; i < comparer.getSameClass().size() ; i++) {
-			System.out.println("Search class: " + comparer.getSameClass().get(i).getNewName());
 			XmiMergedClass sameClass = comparer.getSameClass().get(i);
-
 			if (sameClass.getClass1() != null) {
+				String parentClass;
+				String childClass;
+				String elementText; 
 				//GeneralizationList
 				for(XmiGeneralizationElement general : sameClass.getClass1().getGeneralization()){
-					JSONObject element = new JSONObject();
-					element.put(ELEMENT_ID, general.getId());
-					element.put(ELEMENT_TEXT, general.toString());
-					listOfGeneralization1.add(element);
-					System.out.println("Diagram1");
-					System.out.println("id: " + general.getId());
-					System.out.println("text: " + general.toString());
+					childClass = sameClass.getClass1().getName();
+					parentClass = Utility.getClassNameById(comparer.getUniqueClass1(), general.getParent());
+					elementText = childClass + " inherits " + parentClass;
+						
+					//check if parent exist in the arrayList of XmiMergedClass 
+					if(!Utility.checkExistXmiMergedClass(comparer.getSameClass(), parentClass)) {
+						JSONObject element = new JSONObject();
+						element.put(ELEMENT_ID, general.getId());
+						element.put(ELEMENT_TEXT, elementText);
+						listOfGeneralization1.add(element);
+					}	
 				}
 				//AssociationList
 			}
-			if (sameClass.getClass2() != null) {
+			//check if the class2 of generalization already exist 
+			if (sameClass.getClass2() != null && !sameClass.getClass1().equals(sameClass.getClass2())) {
+				System.out.println("Diagram2");
+				String parentClass;
+				String childClass;
+				String elementText; 
 				//GeneralizationList
 				for(XmiGeneralizationElement general : sameClass.getClass2().getGeneralization()){
-					JSONObject element = new JSONObject();
-					element.put(ELEMENT_ID, general.getId());
-					element.put(ELEMENT_TEXT, general.toString());
-					listOfGeneralization2.add(element);
-					System.out.println("Diagram2");
-					System.out.println("id: " + general.getId());
-					System.out.println("text: " + general.toString());
+					childClass = sameClass.getClass2().getName();
+					parentClass = Utility.getClassNameById(comparer.getUniqueClass2(), general.getParent());
+					elementText = childClass + " inherits " + parentClass;
+					
+					//check if parent exist in the arrayList of XmiMergedClass 
+					if(!Utility.checkExistXmiMergedClass(comparer.getSameClass(), parentClass)) {
+						JSONObject element = new JSONObject();
+						element.put(ELEMENT_ID, general.getId());
+						element.put(ELEMENT_TEXT, elementText);
+						listOfGeneralization2.add(element);
+					}	
 				}
 				//AssociationList
 			}
@@ -91,7 +108,6 @@ public class Next implements Request {
 		obj.put(TITLE_RESPONSE, "Success");
 		obj.put(TITLE_DIAGRAM1, diagram1);
 		obj.put(TITLE_DIAGRAM2, diagram2);		
-
 		return obj;
 	}
 }
