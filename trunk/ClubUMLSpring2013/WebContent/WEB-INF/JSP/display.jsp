@@ -57,14 +57,20 @@
 		}
 		// merge function
 		if (type == "mergeButton") {
-			var req = $("#req");
-			var form = $("#requestForm");
-			var checked = $(".myCheckBox:checked");
+			var req = document.getElementById("req");
+			var form = document.getElementById("requestForm");
+			var check = document.getElementsByName("check");
+			var checked = [];
+			for(var i=0; i<check.length; i++) {
+				if(check[i].checked) {
+					checked.push(check[i]);
+				}
+			}
 			if (checked.length == 2) {
 				var reqO = {};
 				reqO.Request = "Refresh";
-				reqO.ClassDiagram1 = checked[0].value;
-				reqO.ClassDiagram2 = checked[1].value;
+				reqO.Diagram1 = checked[0].value;
+				reqO.Diagram2 = checked[1].value;
 				req.value = JSON.stringify(reqO);
 				form.submit();
 				return false;
@@ -168,7 +174,6 @@
 				</table>
 			</form>
 		</div>
-	
 	</div>
 	
 	</div>
