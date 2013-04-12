@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import controller.merge.xmi.xclass.XmiMergedClass;
+
 public final class Utility {
 
 	/**
@@ -166,5 +168,22 @@ public final class Utility {
 										
 				
 				return attr1.equals(attr2);
+	}
+
+	/**
+	 * check if the class exist in the arrayList of XmiMergedClass 
+	 * @param List<XmiMergedClass>
+	 * @param className
+	 * @return true if className exist in the arrayList of XmiMergedClass
+	 * 		   false if className not exist in the arrayList of XmiMergedClass 
+	 */
+	public static boolean checkExistXmiMergedClass(List<XmiMergedClass> array,
+			String className) {		
+		for (XmiMergedClass classElement : array) {
+			if (classElement.getNewName().equals(className)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
