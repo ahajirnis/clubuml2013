@@ -319,12 +319,36 @@ ol li .send {
     color: white;
     padding-left: 50px;
 }
+#diagramBox{
+	-moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #dedede;
+    width: 600px;
+    height: 575px;
+    margin: 20px;
+    margin-right: 10px;
+    float: left;
+    -moz-box-shadow: 0 0 1px 1px #888;
+    -webkit-box-shadow: 0 0 1px 1px #888;
+    box-shadow: 0 0 1px 1px #888;
+}
+
+
+#rightContainer{
+	width: 600px;
+	float: right;
+}
+#myContainer{
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
 #box{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    float: right;
     width: 440px;
     margin-top: 20px;
     margin-right: 50px;
@@ -338,7 +362,6 @@ ol li .send {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    float: right;
     width: 440px;
     margin-top: 20px;
     margin-right: 50px;
@@ -347,35 +370,19 @@ ol li .send {
     -webkit-box-shadow: 0 0 1px 1px #888;
     box-shadow: 0 0 1px 1px #888;
 }
-#diagramBox{
-    -webkit-border-radius: 5px;
-    background-color: #dedede;
-    width: 600px;
-    height: 575px;
-    float: left;
-    -moz-box-shadow: 0 0 1px 1px #888;
-    -webkit-box-shadow: 0 0 1px 1px #888;
-    box-shadow: 0 0 1px 1px #888;
-    margin-top: 20px;
-}
 #list{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    width: 480px;
-    height: 450px;
-    float: right;
+    width: 460px;
+    height: 460px;
     margin-top: 20px;
     margin-right: 50px;
+    padding:10px;
     -moz-box-shadow: 0 0 1px 1px #888;
     -webkit-box-shadow: 0 0 1px 1px #888;
     box-shadow: 0 0 1px 1px #888;
-}
-#myContainer{
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #list form input{

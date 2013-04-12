@@ -97,21 +97,7 @@
 	<div id="myHeader">
 		<h1 id="banner">Class Diagrams</h1>
 	</div>
-	<div id="myContainer">
-		<div id="box">
-			<span id="DiagramSelectLabel">Class Diagram Format: (.ecore)</span> 
-			<select onchange="displayClassDiagramFields(this)">
-					<option value="ecore">ECORE</option>
-					<option value="xmi">XMI</option>
-			</select> 
-			<form action="UploadServlet" method="post" enctype="multipart/form-data">		
-					<input id="file1" type="file" name="file" size="50" />
-					<input id="file2" type="file" name="file2" size="50" style="display:none"/>
-					<input id="file3" type="file" name="file3" size="50" style="display:none"/>
-					<input class="submit" type="submit" value="upload">
-			</form>
-		</div>
-	</div>
+	
 	<div id="diagramBox">
 		<c:if test="${requestScope.diagramId1 != null}">
 			<img src="${requestScope.firstPath}" width="100%" height="450px" />
@@ -130,42 +116,61 @@
 			</div>
 		</c:if>
 	</div>
-
-	<div id="box2">
-		<form action="DisplayDiagram" method="post">
-			<input type="submit" id="downloadProjectButton" value="DownloadProject"
-				name="submit" />
-		</form>
-	</div>
-	<div id="list">
-		<form action="DisplayDiagram" method="post"
-			onsubmit="return checkFields()">
-			<input type="submit" id="displayButton" value="Display" name="submit" />
-			<input type="submit" id="downloadButton" value="Download" name="submit" />
-			<input type="submit" id="compareButton" value="Go to compare" name="submit" />
-			<!-- Merge -->
-			<input type="submit" id="mergeButton" value="Go To Merge" name="submit" />
-			<!-- End Merge -->
-			<table>
-				<tr>
-					<td></td>
-					<td><b>Image</b></td>
-					<td><b>Edited</b></td>
-				</tr>
-				<c:forEach items="${requestScope.diagrams}" var="diagram">
+    
+    <div id="rightContainer">
+	
+		<div id="box">
+			<span id="DiagramSelectLabel">Class Diagram Format: (.ecore)</span> 
+			<select onchange="displayClassDiagramFields(this)">
+					<option value="ecore">ECORE</option>
+					<option value="xmi">XMI</option>
+			</select> 
+			<form action="UploadServlet" method="post" enctype="multipart/form-data">		
+					<input id="file1" type="file" name="file" size="50" />
+					<input id="file2" type="file" name="file2" size="50" style="display:none"/>
+					<input id="file3" type="file" name="file3" size="50" style="display:none"/>
+					<input class="submit" type="submit" value="upload">
+			</form>
+		</div>
+	
+		<div id="box2">
+			<form action="DisplayDiagram" method="post">
+				<input type="submit" id="downloadProjectButton" value="DownloadProject"
+					name="submit" />
+			</form>
+		</div>
+		
+		<div id="list">
+			<form action="DisplayDiagram" method="post"
+				onsubmit="return checkFields()">
+				<input type="submit" id="displayButton" value="Display" name="submit" />
+				<input type="submit" id="downloadButton" value="Download" name="submit" />
+				<input type="submit" id="compareButton" value="Go to compare" name="submit" />
+				<!-- Merge -->
+				<input type="submit" id="mergeButton" value="Go To Merge" name="submit" />
+				<!-- End Merge -->
+				<table>
 					<tr>
-						<td><input class="myCheckBox" type="checkbox" name="check"
-							value="${diagram.diagramId}" /></td>
-						<td>${diagram.diagramName}</td>
-						<td>${diagram.createdTime}</td>
+						<td></td>
+						<td><b>Image</b></td>
+						<td><b>Edited</b></td>
 					</tr>
-				</c:forEach>
-			</table>
-		</form>
+					<c:forEach items="${requestScope.diagrams}" var="diagram">
+						<tr>
+							<td><input class="myCheckBox" type="checkbox" name="check"
+								value="${diagram.diagramId}" /></td>
+							<td>${diagram.diagramName}</td>
+							<td>${diagram.createdTime}</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</form>
+		</div>
+	
 	</div>
 	
 	<!-- Merge Form -->
-	<form id=requestForm action="MergeController" method=POST style="display: none;" >
+	<form id=requestForm action="ClassMergeComunicator" method=POST style="display: none;" >
 		<input name=request id=req value="" />
 	</form>
 	<!-- End Merges -->
