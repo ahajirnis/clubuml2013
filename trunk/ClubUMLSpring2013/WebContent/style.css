@@ -319,13 +319,19 @@ ol li .send {
     color: white;
     padding-left: 50px;
 }
+
+#mainContainer{
+    width: 1200px;
+    float: left;
+}
+
 #diagramBox{
 	-moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    width: 600px;
-    height: 575px;
+    width: 550px;
+    height: 650px;
     margin: 20px;
     margin-right: 10px;
     float: left;
@@ -349,7 +355,7 @@ ol li .send {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    width: 440px;
+    width: 460px;
     margin-top: 20px;
     margin-right: 50px;
     padding:20px;
@@ -362,7 +368,7 @@ ol li .send {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    width: 440px;
+    width: 460px;
     margin-top: 20px;
     margin-right: 50px;
     padding:20px;
@@ -375,8 +381,8 @@ ol li .send {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #dedede;
-    width: 460px;
-    height: 460px;
+    width: 480px;
+    height: 480px;
     margin-top: 20px;
     margin-right: 50px;
     padding:10px;

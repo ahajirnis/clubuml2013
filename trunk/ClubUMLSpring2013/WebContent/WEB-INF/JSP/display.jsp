@@ -98,6 +98,8 @@
 		<h1 id="banner">Class Diagrams</h1>
 	</div>
 	
+	<div id="mainContainer">
+	
 	<div id="diagramBox">
 		<c:if test="${requestScope.diagramId1 != null}">
 			<img src="${requestScope.firstPath}" width="100%" height="450px" />
@@ -166,6 +168,8 @@
 				</table>
 			</form>
 		</div>
+	
+	</div>
 	
 	</div>
 	
