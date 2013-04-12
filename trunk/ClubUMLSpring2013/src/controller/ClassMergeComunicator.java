@@ -58,7 +58,7 @@ public class ClassMergeComunicator extends HttpServlet {
 		String jsonString= request.getParameter("request");
 		// test
 		System.out.print("get massage:"+jsonString);
-		//test
+		// test
 		reqobj = (JSONObject) JSONValue.parse(jsonString);
 		
 		obj=comparer.action(reqobj);
@@ -73,7 +73,7 @@ public class ClassMergeComunicator extends HttpServlet {
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_REFRESH:
-				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp.jsp");
+				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
 				break;		
 			case REQUEST_CONSOLIDATE:
