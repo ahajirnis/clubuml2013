@@ -39,10 +39,8 @@ public class Consolidate implements Request {
 		final String JSON_REQ_CONSOLIDATE_NEW_CLASS = "Name";
 		JSONObject response = new JSONObject();
 		try {
-			
-	
 			String requestVal = (String) jsonObj.get(JSON_REQ);
-			
+
 			// Verify we received the correct request message
 			if (requestVal.equals(JSON_REQ_CONSOLIDATE)){
 				
@@ -71,8 +69,6 @@ public class Consolidate implements Request {
 							}
 							mergedclass.setAttributes(attrlist);
 						}
-						
-						
 						// Get the list of operation
 						ArrayList operlist1 = (ArrayList)class1_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);	
 						
@@ -86,7 +82,7 @@ public class Consolidate implements Request {
 							}
 							mergedclass.setOperations(operList);
 						}
-						
+						comparer.getUniqueClass1().remove(classElement1);
 				}
 				// Extracting the values from Class2 
 				HashMap class2_info = (HashMap)jsonObj.get(JSON_REQ_CONSOLIDATE_CLASS_2);
@@ -97,7 +93,6 @@ public class Consolidate implements Request {
 						
 						mergedclass.setClass1(classElement2);
 						mergedclass.setNewName(class2Name);
-						System.out.println(class2Name);
 						
 						// Get the list of attributes
 						ArrayList jSonAttrlist2 = (ArrayList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_ATTR);
@@ -126,6 +121,7 @@ public class Consolidate implements Request {
 							// add the operation list to the mergedClass.
 							mergedclass.setOperations2(operList2);
 						}
+						comparer.getUniqueClass2().remove(classElement2);
 				}
 				
 				String newName = (String) jsonObj.get(JSON_REQ_CONSOLIDATE_NEW_CLASS);
@@ -136,11 +132,9 @@ public class Consolidate implements Request {
 				//comparer.setUniqueClass1(classElement2);
 				response.put("Response", "Success");
 			}
-			
-		
 		} catch (Exception ex) {
 			// Set up failed response
-			response.put("Response", "Failed");
+			response.put("Response", "Fail");
 		}
 		return response;
 
