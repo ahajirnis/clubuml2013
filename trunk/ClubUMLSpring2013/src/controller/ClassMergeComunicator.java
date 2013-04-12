@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author Yanwu shen
  */
-@WebServlet("/MergeController")
+@WebServlet("/ClassMergeComunicator")
 public class ClassMergeComunicator extends HttpServlet {
 	 /**
      * Handles the HTTP
@@ -48,7 +48,7 @@ public class ClassMergeComunicator extends HttpServlet {
 			comparer= new XmiClassDiagramComparer( XmiFiles1, XmiFiles2);
 	}
 	
-	 
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			    throws ServletException, IOException {
 		

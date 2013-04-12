@@ -51,4 +51,12 @@
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>
+  <servlet>
+  	<servlet-name>ClassMergeComunicator</servlet-name>
+  	<servlet-class>controller.ClassMergeComunicator</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ClassMergeComunicator</servlet-name>
+  	<url-pattern>/ClassMergeComunicator</url-pattern>
+  </servlet-mapping>
 </web-app>
