@@ -165,7 +165,7 @@
 	</div>
 	
 	<!-- Merge Form -->
-	<form id=requestForm action="MergeController" method=POST >
+	<form id=requestForm action="MergeController" method=POST style="display: none;" >
 		<input name=request id=req value="" />
 	</form>
 	<!-- End Merges -->
