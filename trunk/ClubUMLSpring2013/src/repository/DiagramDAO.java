@@ -169,7 +169,7 @@ public class DiagramDAO {
 		diagram.setFileType(rs.getString("fileType"));
 		diagram.setNotationFileName(rs.getString("notationFileName"));
 		diagram.setNotationFilePath(rs.getString("notationFilePath"));
-		diagram.setDiagramName(rs.getString("diFileName"));
+		diagram.setDiFileName(rs.getString("diFlieName")); // TODO diFlieName typo in DB
 		diagram.setDiFilepath(rs.getString("diFilePath"));
 
 	    pstmt.close();

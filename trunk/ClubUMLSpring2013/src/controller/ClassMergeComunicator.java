@@ -89,14 +89,26 @@ public class ClassMergeComunicator extends HttpServlet {
 				Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
 				Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
 				
-				// TODO cd1ID and cd2ID should be correct, but cd1 and cd2 are null
+				// to get the .uml file names:
+				String cd1UmlFileName = cd1.getFilePath().substring(
+						cd1.getFilePath().lastIndexOf("/") + 1,
+						cd1.getFilePath().length());
+				String cd2UmlFileName = cd2.getFilePath().substring(
+						cd2.getFilePath().lastIndexOf("/") + 1,
+						cd2.getFilePath().length());
+				
+				// to get the UML path without the file names:
+				String cd1UmlPath = cd1.getFilePath().substring(0,
+						cd1.getFilePath().lastIndexOf("/") + 1);
+				String cd2UmlPath = cd2.getFilePath().substring(0,
+						cd2.getFilePath().lastIndexOf("/") + 1);
 				
 				List<FileInfo> lfi1 = new ArrayList<FileInfo>();
 				List<FileInfo> lfi2 = new ArrayList<FileInfo>();
 				FileInfo fi1_not = new FileInfo(cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
-				FileInfo fi1_uml = new FileInfo(cd1.getFilePath(), cd1.getDiagramName(), "");
+				FileInfo fi1_uml = new FileInfo(cd1UmlPath, cd1UmlFileName, "");
 				FileInfo fi2_not = new FileInfo(cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
-				FileInfo fi2_uml = new FileInfo(cd2.getFilePath(), cd2.getDiagramName(), "");
+				FileInfo fi2_uml = new FileInfo(cd2UmlPath, cd2UmlFileName, "");
 				lfi1.add(fi1_not); lfi1.add(fi1_uml);
 				lfi2.add(fi2_not); lfi2.add(fi2_uml);
 				
@@ -124,5 +136,40 @@ public class ClassMergeComunicator extends HttpServlet {
 		}
 	
 		
+	public static void main(String[] args) {
+		// test Refresh
+		int cd1ID = 54;
+		int cd2ID = 55;
+		Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
+		Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
+		
+		// to get the .uml file names:
+		String cd1UmlFileName = cd1.getFilePath().substring(
+				cd1.getFilePath().lastIndexOf("/") + 1,
+				cd1.getFilePath().length());
+		String cd2UmlFileName = cd2.getFilePath().substring(
+				cd2.getFilePath().lastIndexOf("/") + 1,
+				cd2.getFilePath().length());
+		
+		// to get the UML path without the file names:
+		String cd1UmlPath = cd1.getFilePath().substring(0,
+				cd1.getFilePath().lastIndexOf("/") + 1);
+		String cd2UmlPath = cd2.getFilePath().substring(0,
+				cd2.getFilePath().lastIndexOf("/") + 1);
+		
+		List<FileInfo> lfi1 = new ArrayList<FileInfo>();
+		List<FileInfo> lfi2 = new ArrayList<FileInfo>();
+		FileInfo fi1_not = new FileInfo(cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
+		FileInfo fi1_uml = new FileInfo(cd1UmlPath, cd1UmlFileName, "");
+		FileInfo fi2_not = new FileInfo(cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
+		FileInfo fi2_uml = new FileInfo(cd2UmlPath, cd2UmlFileName, "");
+		lfi1.add(fi1_not); lfi1.add(fi1_uml);
+		lfi2.add(fi2_not); lfi2.add(fi2_uml);
+		
+		XmiClassDiagramComparer testComparer = new XmiClassDiagramComparer(lfi1, lfi2);
+		System.out.println(testComparer.getClassDiagram1().getUmlModeName());
+		System.out.println(testComparer.getClassDiagram2().getUmlModeName());
 	}
+
+}
 
