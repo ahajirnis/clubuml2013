@@ -72,6 +72,10 @@
 				reqO.Diagram1 = checked[0].value;
 				reqO.Diagram2 = checked[1].value;
 				req.value = JSON.stringify(reqO);
+				
+				// DEBUG - show diagram IDs
+				//alert(checked[0].value + " " + checked[1].value);
+				
 				form.submit();
 				return false;
 			}
@@ -179,7 +183,7 @@
 	</div>
 	
 	<!-- Merge Form -->
-	<form id=requestForm action="ClassMergeComunicator" method=POST style="display: none;" >
+	<form id=requestForm action="ClassMergeComunicator" method=POST style="display: none;" onsubmit="return checkFields()">
 		<input name=request id=req value="" />
 	</form>
 	<!-- End Merges -->
