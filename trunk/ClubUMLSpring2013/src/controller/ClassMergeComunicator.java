@@ -62,16 +62,20 @@ public class ClassMergeComunicator extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			    throws ServletException, IOException {
 		
+		// Get diagram IDs from checked boxes
+		//String[] checked = (String[]) request.getParameterValues("check");
+		//int diagramId1 = Integer.parseInt(checked[0]);
+		//int diagramId2 = Integer.parseInt(checked[1]);
 		
 		JSONObject obj,reqobj;
 		RequestDispatcher dispatcher;
 		
 		String jsonString= request.getParameter("request");
 		// test
-		System.out.print("get massage:"+jsonString);
+		//System.out.print("JSON request:"+jsonString);
 		// test
 		reqobj = (JSONObject) JSONValue.parse(jsonString);
-		jsonString= (String) reqobj.get("Request");
+		
 		
 		
 		
