@@ -31,7 +31,7 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_LOWER_VALUE = "lowerValue";
 	private final static String PAPYRUS_UPPER_VALUE = "upperValue";
 	private final static String PAPYRUS_DEFAULT_VALUE = "defaultValue";
-	
+
 	// UML Types
 	private final static String PAPYRUS_PACKAGE_TYPE_CLASS = "uml:Class";
 	private final static String PAPYRUS_PACKAGE_TYPE_INTERFACE = "uml:Interface";
@@ -52,6 +52,7 @@ public class XmiClassDiagramParser {
 	private final static String PAPYRUS_ATTRIBUTE_VALUE = "value";
 	private final static String PAPYRUS_MEMBER_END = "memberEnd";
 	private final static String PAPYRUS_AGGREGATION = "aggregation";
+	private final static String PAPYRUS_NAVIGABLE = "navigableOwnedEnd";
 
 	private String umlFileName;
 	private String notationFileName;
@@ -59,7 +60,7 @@ public class XmiClassDiagramParser {
 	// Stores the header tag for uml:Model's name and id
 	private String umlModelName;
 	private String umlModelId;
-	
+
 	private ModelFileInfo modelUmlInfo;
 	private ModelFileInfo notationmodelInfo;
 
@@ -81,7 +82,7 @@ public class XmiClassDiagramParser {
 		umlFileName = umlFile;
 		notationFileName = notationFile;
 		activeIdList = new ArrayList<String>();
-		
+
 		this.process();
 		this.postProcess();
 	}
@@ -90,40 +91,40 @@ public class XmiClassDiagramParser {
 	 * Used for testing to see the information stored for this parser
 	 */
 	private void TestPrintOutput() {
-		
-	// TESTing shows all elements
-			System.out.println("TEST OUTPUT ELEMENTS");
-			for (XmiBaseElement Class : rootElements) {
 
-				if (Class instanceof XmiClassElement) {
+		// TESTing shows all elements
+		System.out.println("TEST OUTPUT ELEMENTS");
+		for (XmiBaseElement Class : rootElements) {
 
-					System.out.println("Class " + Class.toString());
+			if (Class instanceof XmiClassElement) {
 
-					for (XmiAttributeElement elelment : ((XmiClassElement) Class)
-							.getAttributes()) {
-						System.out.println("Attribute " + elelment.toString());
-					}
+				System.out.println("Class " + Class.toString());
 
-					for (XmiOperationElement element : ((XmiClassElement) Class)
-							.getOperations()) {
-						System.out.println("Operation " + element.toString());
-					}
-
-					for (XmiClassElement elelment : ((XmiClassElement) Class)
-							.getNestedClass()) {
-						System.out.println("Nested: " + elelment.toString());
-					}
-
-					for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
-							.getGeneralization()) {
-						System.out.println("Generalization " + elelment.toString());
-					}
-				} else if (Class instanceof XmiTypeElement) {
-					System.out.println("Primitive " + Class.toString());
+				for (XmiAttributeElement elelment : ((XmiClassElement) Class)
+						.getAttributes()) {
+					System.out.println("Attribute " + elelment.toString());
 				}
+
+				for (XmiOperationElement element : ((XmiClassElement) Class)
+						.getOperations()) {
+					System.out.println("Operation " + element.toString());
+				}
+
+				for (XmiClassElement elelment : ((XmiClassElement) Class)
+						.getNestedClass()) {
+					System.out.println("Nested: " + elelment.toString());
+				}
+
+				for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
+						.getGeneralization()) {
+					System.out.println("Generalization " + elelment.toString());
+				}
+			} else if (Class instanceof XmiTypeElement) {
+				System.out.println("Primitive " + Class.toString());
 			}
+		}
 	}
-	
+
 	// Process is the same as the Upload Xmi functionality (Refactor code)
 	private void process() {
 		// Parse the UML File
@@ -202,7 +203,7 @@ public class XmiClassDiagramParser {
 		DefineReferenceTypeName();
 		DefineGeneralizationParent();
 	}
-	
+
 	/**
 	 * 
 	 * @param ElemName
@@ -268,8 +269,6 @@ public class XmiClassDiagramParser {
 		}
 
 	}
-	
-
 
 	/**
 	 * DefineReferenceTypeName
@@ -314,8 +313,9 @@ public class XmiClassDiagramParser {
 	/**
 	 * DefineGeneralizationParent
 	 * 
-	 * Runs through genearlization elements and defines the parent element. Must be
-	 * done during post processing to make sure parent (XmiClassElement) exists.
+	 * Runs through genearlization elements and defines the parent element. Must
+	 * be done during post processing to make sure parent (XmiClassElement)
+	 * exists.
 	 */
 	private void DefineGeneralizationParent() {
 
@@ -339,16 +339,16 @@ public class XmiClassDiagramParser {
 		// Obtain name and id of uml diagram
 		List<XmiElement> headerList = modelUmlInfo
 				.findElementsByName(PAPYRUS_HEADER_ELEM);
-		
-		
+
 		if (!headerList.isEmpty()) {
 			// Only 1 element in the headerList
 			XmiElement header = headerList.get(0);
-			
-			this.umlModelName = header.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
+
+			this.umlModelName = header
+					.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
 			this.umlModelId = header.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		}
-		
+
 		// Iterate through all packagedElemets to construct Class model
 		List<XmiElement> packagedElemList = modelUmlInfo
 				.findElementsByName(PAPYRUS_PACKAGED_ELEM);
@@ -501,15 +501,12 @@ public class XmiClassDiagramParser {
 		String visibility = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
 
-		String association = xmiElement
-				.getAttributeValue(PAPYRUS_ATTRIBUTE_ASSOCIATION);
-
-		XmiAttributeElement xmiAttribute = new XmiAttributeElement(id, name, type,
-				visibility);
+		XmiAttributeElement xmiAttribute = new XmiAttributeElement(id, name,
+				type, visibility);
 
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
-		for (XmiElement child : childrenElement) {		
+		for (XmiElement child : childrenElement) {
 			String tag = child.getElementName();
 
 			switch (tag) {
@@ -520,11 +517,12 @@ public class XmiClassDiagramParser {
 				xmiAttribute.setUpperValue(createXmiValueElement(child));
 				break;
 			case PAPYRUS_DEFAULT_VALUE:
-				xmiAttribute.setDefaultValue(createXmiDefaultValueElement(child));
+				xmiAttribute
+						.setDefaultValue(createXmiDefaultValueElement(child));
 				break;
 			}
 		}
-		
+
 		return xmiAttribute;
 	}
 
@@ -535,7 +533,7 @@ public class XmiClassDiagramParser {
 		String visibility = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_VISIBILITY);
 
-		XmiOperationElement xmiClass = new XmiOperationElement(id, name, type,
+		XmiOperationElement xmiOperation = new XmiOperationElement(id, name, type,
 				visibility);
 
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
@@ -544,17 +542,17 @@ public class XmiClassDiagramParser {
 			if (!child.getFoundMatch()) {
 				continue;
 			}
-			
+
 			String tag = child.getElementName();
 
 			switch (tag) {
 			case PAPYRUS_PARAMETER_ELEM:
-				xmiClass.addParameter(createXmiParameterElement(child));
+				xmiOperation.addParameter(createXmiParameterElement(child));
 				break;
 			}
 		}
 
-		return xmiClass;
+		return xmiOperation;
 	}
 
 	private XmiParameterElement createXmiParameterElement(XmiElement xmiElement) {
@@ -566,10 +564,8 @@ public class XmiClassDiagramParser {
 		String direction = xmiElement
 				.getAttributeValue(PAPYRUS_ATTRIBUTE_DIRECTION);
 
-		XmiParameterElement xmiClass = new XmiParameterElement(id, name, type,
-				visibility, direction);
+		return new XmiParameterElement(id, name, type, visibility, direction);
 
-		return xmiClass;
 	}
 
 	private XmiGeneralizationElement createXmiGeneralizationElement(
@@ -578,10 +574,7 @@ public class XmiClassDiagramParser {
 		String generalization = xmiElement
 				.getAttributeValue(PAPYRUS_GENERALIZATION_DIRECTION);
 
-		XmiGeneralizationElement xmiClass = new XmiGeneralizationElement(id,
-				generalization);
-
-		return xmiClass;
+		return new XmiGeneralizationElement(id, generalization);
 	}
 
 	private XmiAssociationElement createXmiAssociationElement(
@@ -590,24 +583,29 @@ public class XmiClassDiagramParser {
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
 
-		XmiAssociationElement xmiClass = new XmiAssociationElement(id, name,
-				type);
+		XmiAssociationElement xmiAssociation = new XmiAssociationElement(id,
+				name, type);
+
+		String navigable = xmiElement.getAttributeValue(PAPYRUS_NAVIGABLE);
+		if (navigable != null) {
+			xmiAssociation.setNavigable(navigable);
+		}
 
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
-			
+
 			if (!child.getFoundMatch()) {
 				continue;
 			}
-			
+
 			String tag = child.getElementName();
 
 			switch (tag) {
 			case PAPYRUS_MEMVBER_END:
 				XmiMemberEndElement memberEndChild = createXmiMemberEndElement(child);
-				xmiClass.addMemberEnd(memberEndChild);
-				memberEndChild.setAssociation(xmiClass);
+				xmiAssociation.addMemberEnd(memberEndChild);
+				memberEndChild.setAssociation(xmiAssociation);
 				break;
 			}
 		}
@@ -665,7 +663,7 @@ public class XmiClassDiagramParser {
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
 		String value = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_VALUE);
-		
+
 		if (value == null) {
 			return new XmiValueElement(id, type, true);
 		} else if (value.isEmpty()) {
@@ -674,15 +672,16 @@ public class XmiClassDiagramParser {
 			return new XmiValueElement(id, name, type, value);
 		}
 	}
-	
+
 	/**
 	 * Returns the generic parsed information
+	 * 
 	 * @return ModelFileInfo for the notation file
 	 */
 	public ModelFileInfo getNotationFile() {
 		return notationmodelInfo;
 	}
-	
+
 	/**
 	 * Returns the list of Active Root elements
 	 * 
@@ -709,7 +708,7 @@ public class XmiClassDiagramParser {
 	public List<XmiAssociationElement> getAssociationElements() {
 		return associationElements;
 	}
-	
+
 	/**
 	 * Returns the list of Active Type elements
 	 * 
@@ -727,7 +726,8 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
-	 * @param umlModeName the umlModeName to set
+	 * @param umlModeName
+	 *            the umlModeName to set
 	 */
 	public void setUmlModeName(String umlModeName) {
 		this.umlModelName = umlModeName;
@@ -741,7 +741,8 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
-	 * @param umlModelId the umlModelId to set
+	 * @param umlModelId
+	 *            the umlModelId to set
 	 */
 	public void setUmlModelId(String umlModelId) {
 		this.umlModelId = umlModelId;

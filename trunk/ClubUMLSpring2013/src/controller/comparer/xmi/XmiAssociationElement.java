@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class XmiAssociationElement extends XmiBaseElement {
 
 	private final static int MEMBER_END_SIZE = 2;
-	
+	private String navigableOwnedEnd;
 	private ArrayList<XmiMemberEndElement> memberEnd = new ArrayList<XmiMemberEndElement>(MEMBER_END_SIZE);
 	
 	public XmiAssociationElement(String id, String name, String type) {
@@ -22,6 +22,24 @@ public class XmiAssociationElement extends XmiBaseElement {
 		memberEnd.add(element);
 	}
 	
+	public ArrayList<XmiMemberEndElement> getMemberEnds() {
+		return memberEnd;
+	}
+
+	/**
+	 * @return the navigableOwnedEnd
+	 */
+	public String getNavigable() {
+		return navigableOwnedEnd;
+	}
+
+	/**
+	 * @param navigable the navigableOwnedEnd to set
+	 */
+	public void setNavigable(String navigable) {
+		this.navigableOwnedEnd = navigable;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -31,6 +49,10 @@ public class XmiAssociationElement extends XmiBaseElement {
 		int result = super.hashCode();
 		result = prime * result
 				+ ((memberEnd == null) ? 0 : memberEnd.hashCode());
+		result = prime
+				* result
+				+ ((navigableOwnedEnd == null) ? 0 : navigableOwnedEnd
+						.hashCode());
 		return result;
 	}
 
@@ -54,6 +76,13 @@ public class XmiAssociationElement extends XmiBaseElement {
 				return false;
 			}
 		} else if (!memberEnd.equals(other.memberEnd)) {
+			return false;
+		}
+		if (navigableOwnedEnd == null) {
+			if (other.navigableOwnedEnd != null) {
+				return false;
+			}
+		} else if (!navigableOwnedEnd.equals(other.navigableOwnedEnd)) {
 			return false;
 		}
 		return true;
