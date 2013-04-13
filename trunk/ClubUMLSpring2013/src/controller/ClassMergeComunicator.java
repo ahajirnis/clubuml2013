@@ -11,6 +11,7 @@ import domain.Diagram;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -70,16 +71,13 @@ public class ClassMergeComunicator extends HttpServlet {
 		JSONObject obj,reqobj;
 		RequestDispatcher dispatcher;
 		
-		String jsonString= request.getParameter("request");
-		// test
-		//System.out.print("JSON request:"+jsonString);
-		// test
-		reqobj = (JSONObject) JSONValue.parse(jsonString);
+		String reqString= request.getParameter("request");
+		reqobj = (JSONObject) JSONValue.parse(reqString);
+		
+		String reqType = (String) reqobj.get("Request");
 		
 		
-		
-		
-		switch (jsonString) 
+		switch (reqType) 
 		{
 			case REQUEST_COMPARE:
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/mergeClass.jsp");
@@ -90,6 +88,9 @@ public class ClassMergeComunicator extends HttpServlet {
 				int cd2ID = Integer.parseInt((String) reqobj.get("Diagram2"));
 				Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
 				Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
+				
+				// TODO cd1ID and cd2ID should be correct, but cd1 and cd2 are null
+				
 				List<FileInfo> lfi1 = new ArrayList<FileInfo>();
 				List<FileInfo> lfi2 = new ArrayList<FileInfo>();
 				FileInfo fi1_not = new FileInfo(cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
