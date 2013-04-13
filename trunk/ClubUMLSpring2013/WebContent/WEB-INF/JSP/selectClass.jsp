@@ -128,7 +128,7 @@ function sendRequest(mo) {
 		<tr><td id=errorMsg ></td></tr>
 		</table>
 	</form>
-	<form id=requestForm class=hidden action="MergeController" method=post>
+	<form id=requestForm class=hidden action="ClassMergeComunicator" method=post>
 		<input name=request type=text value="" readonly onclick=sendRequest() />
 	</form>
 	<table>
