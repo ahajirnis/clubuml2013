@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class XmiAssociationElement extends XmiBaseElement {
 
 	private final static int MEMBER_END_SIZE = 2;
-	private String navigableOwnedEnd;
+	private String navigableOwnedEnd = "";
 	private ArrayList<XmiMemberEndElement> memberEnd = new ArrayList<XmiMemberEndElement>(MEMBER_END_SIZE);
 	
 	public XmiAssociationElement(String id, String name, String type) {
