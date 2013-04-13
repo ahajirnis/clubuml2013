@@ -702,6 +702,15 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
+	 * Returns the list of Active Class elements
+	 * 
+	 * @return List object of XmiElement
+	 */
+	public List<XmiAssociationElement> getAssociationElements() {
+		return associationElements;
+	}
+	
+	/**
 	 * Returns the list of Active Type elements
 	 * 
 	 * @return List object of XmiElement
