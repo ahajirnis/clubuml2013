@@ -63,7 +63,7 @@ public class Compare implements Request{
 					
 					//read attributes from Class2
 					for(XmiAttributeElement a : classB.getAttributes()){
-						atts1.add(a.getName());
+						atts2.add(a.getName());
 					}
 					
 					//read operations from Class1
@@ -84,6 +84,7 @@ public class Compare implements Request{
 							atts2.remove(a1.getName());
 						}
 					}
+					
 					
 					// check for similar attribute names
 					for(String a1 : atts1){
