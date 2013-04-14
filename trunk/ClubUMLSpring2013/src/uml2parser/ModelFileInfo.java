@@ -246,7 +246,7 @@ public class ModelFileInfo {
 	/**
 	 * @param the fileNameNoPath to set
 	 */
-	public void setFileNameNoPath(String fileNameNoPath) {
+	private void setFileNameNoPath(String fileNameNoPath) {
 		if (fileNameNoPath != null) {
 			this.fileNameNoPath = fileNameNoPath;
 		} else {

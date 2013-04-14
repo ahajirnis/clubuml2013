@@ -3,7 +3,7 @@ package controller.comparer.xmi;
 public class XmiBaseElement {
 
 	private static final String DEFAULT_VISIBILITY = "public";
-	private static final String DEFAULT_TYPE = "<Undefined>";
+	public static final String DEFAULT_TYPE = "<Undefined>";
 
 	private String id;
 	private String name;

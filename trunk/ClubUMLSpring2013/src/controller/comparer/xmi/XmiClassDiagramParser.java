@@ -669,7 +669,7 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
-	 * Returns the generic parsed information
+	 * Returns the generic parsed information Notation file
 	 * 
 	 * @return ModelFileInfo for the notation file
 	 */
@@ -677,6 +677,15 @@ public class XmiClassDiagramParser {
 		return notationmodelInfo;
 	}
 
+	/**
+	 * Returns the generic parsed information for the UML file
+	 * 
+	 * @return ModelFileInfo for the uml file
+	 */
+	public ModelFileInfo getUmlFile() {
+		return modelUmlInfo;
+	}
+	
 	/**
 	 * Returns the list of Active Root elements
 	 * 
