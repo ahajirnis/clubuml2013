@@ -40,15 +40,15 @@ public class MergeFactory {
 		{
 			if(diagramType.equals("xmiClassDiagram"))
 			{
-				merger = new XmiMergedClass();
+				//merger = new XmiMergedClass();
 			}
 			else if(diagramType.equals("ecoreClassDiagram"))
 			{
-				merger = new EcoreMergedClass();
+				//merger = new EcoreMergedClass();
 			}
 			else if(diagramType.equals("xmiSequenceDiagram"))
 			{
-				merger = new SequenceMergedClass();
+				//merger = new SequenceMergedClass();
 			}
 		}
 		return merger;
