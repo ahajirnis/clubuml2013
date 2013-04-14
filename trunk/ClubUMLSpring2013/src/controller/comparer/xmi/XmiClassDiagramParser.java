@@ -85,7 +85,6 @@ public class XmiClassDiagramParser {
 
 		this.process();
 		this.postProcess();
-		TestPrintOutput();
 	}
 
 	/**
