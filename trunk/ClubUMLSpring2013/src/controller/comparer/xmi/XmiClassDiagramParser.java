@@ -95,21 +95,16 @@ public class XmiClassDiagramParser {
 		// TESTing shows all elements
 		System.out.println("TEST OUTPUT ELEMENTS");
 		for (XmiBaseElement Class : rootElements) {
-
 			if (Class instanceof XmiClassElement) {
-
-				System.out.println("Class " + Class.toString());
 
 				for (XmiAttributeElement elelment : ((XmiClassElement) Class)
 						.getAttributes()) {
 					System.out.println("Attribute " + elelment.toString());
 				}
-
 				for (XmiOperationElement element : ((XmiClassElement) Class)
 						.getOperations()) {
 					System.out.println("Operation " + element.toString());
 				}
-
 				for (XmiClassElement elelment : ((XmiClassElement) Class)
 						.getNestedClass()) {
 					System.out.println("Nested: " + elelment.toString());
@@ -335,7 +330,6 @@ public class XmiClassDiagramParser {
 	 * algorithm.
 	 */
 	private void BuildXmiCompareElementStructure(ModelFileInfo modelUmlInfo) {
-
 		// Obtain name and id of uml diagram
 		List<XmiElement> headerList = modelUmlInfo
 				.findElementsByName(PAPYRUS_HEADER_ELEM);
@@ -376,7 +370,6 @@ public class XmiClassDiagramParser {
 							break;
 						}
 						case PAPYRUS_PACKAGE_TYPE_CLASS: {
-
 							XmiClassElement classElement = createXmiClassElement(packagedElemList
 									.get(i));
 
@@ -387,7 +380,6 @@ public class XmiClassDiagramParser {
 							break;
 						}
 						case PAPYRUS_PACKAGE_TYPE_INTERFACE: {
-
 							XmiClassElement classElement = createXmiClassElement(packagedElemList
 									.get(i));
 
@@ -397,12 +389,9 @@ public class XmiClassDiagramParser {
 							break;
 						}
 						case PAPYRUS_PACKAGE_TYPE_ASSOCIATION: {
-
 							XmiAssociationElement assocationElement = createXmiAssociationElement(packagedElemList
 									.get(i));
-
 							rootElements.add(assocationElement);
-
 							associationElements.add(assocationElement);
 							break;
 						}
@@ -485,9 +474,11 @@ public class XmiClassDiagramParser {
 		String value = attribute.getValue();
 
 		if (name.equals(PAPYRUS_XMI_ATTRIBUTE_TYPE)
-				&& (value.equals(PAPYRUS_PACKAGE_TYPE_CLASS)
+				&& (value.equals(PAPYRUS_PACKAGE_TYPE_ASSOCIATION) 
+						|| value.equals(PAPYRUS_PACKAGE_TYPE_CLASS)
 						|| value.equals(PAPYRUS_PACKAGE_TYPE_INTERFACE) || value
 							.equals(PAPYRUS_PACKAGE_TYPE_PRIMITIVE))) {
+			
 			return true;
 		}
 
@@ -582,10 +573,11 @@ public class XmiClassDiagramParser {
 		String type = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_TYPE);
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String name = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_NAME);
-
+		
 		XmiAssociationElement xmiAssociation = new XmiAssociationElement(id,
 				name, type);
 
+		System.out.println("XmiAssociationElement id: " + id + " name: " + name + " type: " + type);
 		String navigable = xmiElement.getAttributeValue(PAPYRUS_NAVIGABLE);
 		if (navigable != null) {
 			xmiAssociation.setNavigable(navigable);
@@ -594,23 +586,25 @@ public class XmiClassDiagramParser {
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
-
-			if (!child.getFoundMatch()) {
-				continue;
-			}
-
 			String tag = child.getElementName();
-
+			System.out.println("childrenElement : " + tag);
+			
+//			if (!child.getFoundMatch()) {
+//				continue;
+//			}
+			
 			switch (tag) {
 			case PAPYRUS_MEMVBER_END:
+				System.out.println(">>>PAPYRUS_MEMVBER_END");
 				XmiMemberEndElement memberEndChild = createXmiMemberEndElement(child);
 				xmiAssociation.addMemberEnd(memberEndChild);
+				System.out.println("memberEndChild id : " + memberEndChild.getAssociationId());
 				memberEndChild.setAssociation(xmiAssociation);
 				break;
 			}
 		}
 
-		return null;
+		return xmiAssociation;
 	}
 
 	private XmiMemberEndElement createXmiMemberEndElement(XmiElement xmiElement) {
