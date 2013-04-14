@@ -297,12 +297,18 @@ public class UmlUploadProcessor implements UploadProcessor {
 
 					for (int j = 0; j < childlist.size(); j++) {
 						XmiElement childElem = childlist.get(j);
+						//logging.Log.LogCreate().Info("Creating Attribute list" );
+						
+						if (childElem == null ) {
+							//logging.Log.LogCreate().Info("ChildElem is null" );
+							continue;
+						} 
 						if (childElem.getFoundMatch()) {
 							// Operations
 							if (childElem.getElementName().equals(
 									"ownedOperation")) {
-								List<Attribute> attriblistchild = childElem
-										.getAttrib();
+								//logging.Log.LogCreate().Info("Creating ownedOperation" );
+								List<Attribute> attriblistchild = childElem.getAttrib();
 								for (int idx = 0; idx < attriblistchild.size(); idx++) {
 									if (attriblistchild.get(idx).getName()
 											.equals("name")) {
@@ -315,9 +321,9 @@ public class UmlUploadProcessor implements UploadProcessor {
 								}
 							} else if (childElem.getElementName().equals(
 									"ownedAttribute")) {
+								//logging.Log.LogCreate().Info("Creating ownedAttribute" );
 								// Here we only will process the Attributes
-								List<Attribute> attriblistchild = childElem
-										.getAttrib();
+								List<Attribute> attriblistchild = childElem.getAttrib();
 								String attrStr = "";
 								String type = "";
 								String name = "";
@@ -327,6 +333,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 											.equals("name")) {
 										name = attriblistchild.get(idx)
 												.getValue();
+										//logging.Log.LogCreate().Info("Attribute name = " + name);
 										break;
 									}
 
@@ -345,6 +352,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 													hrefVal.indexOf('#') + 1,
 													hrefVal.length());
 											switch (hrefVal) {
+											case "LiteralString":
 											case "String":
 												type = "String";
 												break;
@@ -360,28 +368,23 @@ public class UmlUploadProcessor implements UploadProcessor {
 											case "UnlimitdNatural":
 												type = "long";
 												break;
-
+											default: 
+												type ="int";
+												break;
 											}
 										}
 
 									}
 								}
-								if (!type.isEmpty())
+								if (type!= null && !type.isEmpty())
 									out.write("\t" + type + " " + name + ";\n");
-								else
-									out.write("\t int" + " " + name + ";\n");
+								else {
+									out.write("\t int " + name + ";\n");
+									
+								}
+									
 							}
 
-						} else if (childElem.getElementName().equals(
-								"ownedAttribute")) {
-
-							String xmiID = childElem.getAttributeValue("type");
-							XmiElement elem = modelUmlInfo
-									.getXmiElementFromId(xmiID);
-							String type = elem.getAttributeValue("name");
-							out.write("\t " + type + " "
-									+ childElem.getAttributeValue("name")
-									+ ";\n");
 						}
 					}
 					out.write("}\n");
