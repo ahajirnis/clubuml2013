@@ -577,7 +577,6 @@ public class XmiClassDiagramParser {
 		XmiAssociationElement xmiAssociation = new XmiAssociationElement(id,
 				name, type);
 
-		System.out.println("XmiAssociationElement id: " + id + " name: " + name + " type: " + type);
 		String navigable = xmiElement.getAttributeValue(PAPYRUS_NAVIGABLE);
 		if (navigable != null) {
 			xmiAssociation.setNavigable(navigable);
@@ -587,7 +586,6 @@ public class XmiClassDiagramParser {
 
 		for (XmiElement child : childrenElement) {
 			String tag = child.getElementName();
-			System.out.println("childrenElement : " + tag);
 			
 //			if (!child.getFoundMatch()) {
 //				continue;
@@ -595,10 +593,8 @@ public class XmiClassDiagramParser {
 			
 			switch (tag) {
 			case PAPYRUS_MEMVBER_END:
-				System.out.println(">>>PAPYRUS_MEMVBER_END");
 				XmiMemberEndElement memberEndChild = createXmiMemberEndElement(child);
 				xmiAssociation.addMemberEnd(memberEndChild);
-				System.out.println("memberEndChild id : " + memberEndChild.getAssociationId());
 				memberEndChild.setAssociation(xmiAssociation);
 				break;
 			}
