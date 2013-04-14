@@ -16,20 +16,32 @@ public class ModelFileInfo {
 	
 	
 	XmiIdToElementMap xmiIdElement;
+	
 	/**
 	 * Name of the file that was parsed. 
 	 */
 	private String fileName;
+
+	/**
+	 * Name of the file with out path. 
+	 */
+	private String fileNameNoPath;
+	
 	/**
 	 * List of top level elements in this XMI file
 	 */
 	private List<XmiElement> list; 
+	
 	/**
 	 * Constructor
 	 * @param fileName
 	 */
 	public ModelFileInfo(String fileName) {
 		this.fileName = fileName;
+		
+		String[] fileParts = fileName.split("[\\\\|/]");
+		fileNameNoPath = fileParts[fileParts.length - 1];
+		
 		xmiIdElement = new XmiIdToElementMap();
 		list= new ArrayList<XmiElement>();
 	}
@@ -195,5 +207,12 @@ public class ModelFileInfo {
 	
 	public XmiElement getXmiElementFromId(String id) {
 		return xmiIdElement.getElementFromId(id);
+	}
+	
+	/**
+	 * @return the FileName without the path
+	 */
+	public String getFileNameNoPath() {
+		return fileNameNoPath;
 	}
 }
