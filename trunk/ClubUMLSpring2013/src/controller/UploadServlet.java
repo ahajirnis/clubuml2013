@@ -198,6 +198,12 @@ public class UploadServlet extends HttpServlet {
 			diagramObj.setMerged(0);
 			diagramObj.setUserId(userID);
 			diagramObj.setProjectId(2);
+			diagramObj.setDiagramType("Ecore");
+			//diagramObj.setDiFileName("baseFileName" + ".di");
+			//diagramObj.setNotationFileName("baseFileName" + ".notation");
+			//diagramObj.setDiFilepath("folder");
+			//diagramObj.setNotationFilePath("folder");
+			//diagramObj.setDiagramType("diagramType");
 			DiagramDAO.addDiagram(diagramObj);
 			
 			/*
