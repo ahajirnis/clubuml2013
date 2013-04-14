@@ -85,6 +85,7 @@ public class XmiClassDiagramParser {
 
 		this.process();
 		this.postProcess();
+		TestPrintOutput();
 	}
 
 	/**
@@ -118,6 +119,15 @@ public class XmiClassDiagramParser {
 				System.out.println("Primitive " + Class.toString());
 			}
 		}
+		
+		for (XmiAssociationElement association : associationElements) {
+			System.out.println("Association " + association.toString());
+			
+			for (XmiMemberEndElement memberEnd : association.getMemberEnds()) {
+				System.out.println("Member End " + memberEnd.toString());
+			}
+		}
+		
 	}
 
 	// Process is the same as the Upload Xmi functionality (Refactor code)
@@ -587,10 +597,6 @@ public class XmiClassDiagramParser {
 		for (XmiElement child : childrenElement) {
 			String tag = child.getElementName();
 			
-//			if (!child.getFoundMatch()) {
-//				continue;
-//			}
-			
 			switch (tag) {
 			case PAPYRUS_MEMVBER_END:
 				XmiMemberEndElement memberEndChild = createXmiMemberEndElement(child);
@@ -617,7 +623,7 @@ public class XmiClassDiagramParser {
 		XmiMemberEndElement xmiClass = new XmiMemberEndElement(id, name, type);
 
 		if (aggregationValue != null) {
-			xmiClass.setAggregation(AggregationValues.valueOf(aggregationValue));
+			xmiClass.setAggregation(AggregationValues.valueOf(aggregationValue.toUpperCase()));
 		}
 
 		xmiClass.setAssociationId(associationId);

@@ -128,7 +128,6 @@ public class ModelFileInfo {
 				
 				String href = childElem.getAttributeValue("href");
 				if (href != null) {
-					System.out.println("href added " + href );
 					this.hrefToElementMap.put(href, childElem);
 				}
 				retval = true;
@@ -143,7 +142,6 @@ public class ModelFileInfo {
 			
 			String href = childElem.getAttributeValue("href");
 			if (href != null) {
-				System.out.println("href added " + href );
 				this.hrefToElementMap.put(href, childElem);
 			}
 			retval = true;
