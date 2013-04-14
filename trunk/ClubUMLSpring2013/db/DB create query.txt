@@ -1,6 +1,6 @@
 /*
 Created: 2013/2/15
-Modified: 2013/3/14
+Modified: 2013/3/24
 Model: MySQL 5.0
 Database: MySQL 5.0
 */
@@ -11,86 +11,76 @@ Database: MySQL 5.0
 
 CREATE TABLE project
 (
-  projectId Int(11) NOT NULL,
+  projectId Int(11) NOT NULL AUTO_INCREMENT,
   projectName Varchar(45) NOT NULL,
   starDate Varchar(45),
-  desceiption Varchar(255)
+  desceiption Varchar(255),
+ PRIMARY KEY (projectId)
 )
-;
-
-ALTER TABLE project ADD PRIMARY KEY (projectId)
 ;
 
 -- Table user
 
 CREATE TABLE user
 (
-  userId Int(11) NOT NULL,
+  userId Int(11) NOT NULL AUTO_INCREMENT,
   userName Varchar(45) NOT NULL,
   email Varchar(45) NOT NULL,
   password Varchar(45) NOT NULL,
   securityQ Varchar(60),
-  securityA Varchar(60)
+  securityA Varchar(60),
+ PRIMARY KEY (userId)
 )
-;
-
-ALTER TABLE user ADD PRIMARY KEY (userId)
 ;
 
 -- Table diagram
 
 CREATE TABLE diagram
 (
-  diagramId Int(11) NOT NULL,
+  diagramId Int(11) NOT NULL AUTO_INCREMENT,
   projectId Int(11) NOT NULL,
   userId Int(11) NOT NULL,
-  diagramType Varchar(45) NOT NULL,
-  diagramName Varchar(45) NOT NULL,
-  createTime Timestamp NOT NULL,
-  filePath Varchar(45) NOT NULL,
-  fileType Varchar(20) NOT NULL,
-  merged Tinyint NOT NULL,
+  diagramType Varchar(45),
+  diagramName Varchar(45),
+  createTime Timestamp NULL,
+  filePath Varchar(45),
+  fileType Varchar(20),
+  merged Tinyint,
   notationFileName Varchar(45),
   notationFilePath Varchar(45),
   diFlieName Varchar(45),
-  diFilepath Varchar(45)
+  diFilepath Varchar(45),
+ PRIMARY KEY (diagramId)
 )
-;
-
-ALTER TABLE diagram ADD PRIMARY KEY (diagramId)
 ;
 
 -- Table report
 
 CREATE TABLE report
 (
-  reportId Int(11) NOT NULL,
+  reportId Int(11) NOT NULL AUTO_INCREMENT,
   diagramA Int(11) NOT NULL,
   diagramB Int(11) NOT NULL,
   mergedDiagram Int(11),
   type Varchar(20) NOT NULL,
   time Timestamp NOT NULL,
   reportFilePath Varchar(45) NOT NULL,
-  reportFileName Varchar(45) NOT NULL
+  reportFileName Varchar(45) NOT NULL,
+ PRIMARY KEY (reportId)
 )
-;
-
-ALTER TABLE report ADD PRIMARY KEY (reportId)
 ;
 
 -- Table comment
 
 CREATE TABLE comment
 (
-  commentId Int(11) NOT NULL,
-  userId Int(11) NOT NULL,
-  reportId Int(11) NOT NULL,
+  commentId Int(11) NOT NULL AUTO_INCREMENT,
+  userId Int(11),
+  reportId Int(11),
   content Varchar(255),
-  writenTime Timestamp NULL
+  writenTime Timestamp NULL,
+ PRIMARY KEY (commentId)
 )
-;
-
-ALTER TABLE comment ADD PRIMARY KEY (userId,reportId,commentId)
 ;
 
 -- Create relationships section ------------------------------------------------- 
@@ -107,12 +97,15 @@ ALTER TABLE report ADD CONSTRAINT Relationship4 FOREIGN KEY (diagramA) REFERENCE
 ALTER TABLE report ADD CONSTRAINT Relationship5 FOREIGN KEY (diagramB) REFERENCES diagram (diagramId) ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE comment ADD CONSTRAINT userComment FOREIGN KEY (userId) REFERENCES user (userId) ON DELETE NO ACTION ON UPDATE NO ACTION
-;
-
-ALTER TABLE comment ADD CONSTRAINT commentDiagram FOREIGN KEY (reportId) REFERENCES report (reportId) ON DELETE NO ACTION ON UPDATE NO ACTION
-;
-
 ALTER TABLE report ADD CONSTRAINT Relationship6 FOREIGN KEY (mergedDiagram) REFERENCES diagram (diagramId) ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
+ALTER TABLE comment ADD CONSTRAINT Relationship7 FOREIGN KEY (userId) REFERENCES user (userId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE comment ADD CONSTRAINT Relationship8 FOREIGN KEY (reportId) REFERENCES report (reportId) ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+-- insert sample data--------------------------------------
+insert into project value (1,'clubuml1',now(),'des1');
+
+insert into project value (2,'clubuml2',now(),'des2')
