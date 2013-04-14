@@ -29,7 +29,7 @@ public class CommentDAO {
 	ResultSet rs;
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "INSERT INTO comment(userId , content , writtenTime , reportId) VALUES(?,?,NOW(),?);";
+	    String sql = "INSERT INTO comment(userId , content , writenTime , reportId) VALUES(?,?,NOW(),?);";
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	    pstmt.setInt(1, comment.getUserId());
 	    pstmt.setString(2, comment.getContent());
@@ -64,7 +64,7 @@ public class CommentDAO {
 	ArrayList<Comment> searchResult = new ArrayList<>();
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "SELECT * FROM comment where reportId = ? ORDER BY `writtenTime` DESC;";
+	    String sql = "SELECT * FROM comment where reportId = ? ORDER BY `writenTime` DESC;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setInt(1, reportId);
 
@@ -77,7 +77,7 @@ public class CommentDAO {
 		comt.setContent(rs.getString("content"));
 		comt.setUserId(rs.getInt("userId"));
 		comt.setReportId(rs.getInt("reportId"));
-		comt.setCommentTime(rs.getString("writtenTime"));
+		comt.setCommentTime(rs.getString("writenTime"));
 		searchResult.add(comt);
 	    }
 
@@ -101,7 +101,7 @@ public class CommentDAO {
     public static boolean updateComment(Comment comment) {
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "UPDATE comment SET content = ? , writtenTime = ? WHERE commentId = ?;";
+	    String sql = "UPDATE comment SET content = ? , writenTime = ? WHERE commentId = ?;";
 	    PreparedStatement pstmt = conn.prepareStatement(sql);
 	    pstmt.setString(1, comment.getContent());
 	    pstmt.setString(2, comment.getCommentTime());
