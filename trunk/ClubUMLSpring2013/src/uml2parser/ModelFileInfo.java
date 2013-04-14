@@ -1,6 +1,7 @@
 package uml2parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import logging.Log;
 import org.xml.sax.Attributes;
@@ -17,6 +18,8 @@ public class ModelFileInfo {
 	
 	XmiIdToElementMap xmiIdElement;
 	
+	private HashMap <String, XmiElement> hrefToElementMap = new HashMap <String, XmiElement>();
+	
 	/**
 	 * Name of the file that was parsed. 
 	 */
@@ -26,6 +29,11 @@ public class ModelFileInfo {
 	 * Name of the file with out path. 
 	 */
 	private String fileNameNoPath;
+	
+	/**
+	 * Name of the file with out path. 
+	 */
+	private String fileNameNoExtension;
 	
 	/**
 	 * List of top level elements in this XMI file
@@ -39,8 +47,15 @@ public class ModelFileInfo {
 	public ModelFileInfo(String fileName) {
 		this.fileName = fileName;
 		
-		String[] fileParts = fileName.split("[\\\\|/]");
-		fileNameNoPath = fileParts[fileParts.length - 1];
+		if (this.fileName != null) {
+			String[] fileParts = fileName.split("[\\\\|/]");
+			setFileNameNoPath(fileParts[fileParts.length - 1]);
+		}
+		
+		if (fileNameNoPath != null) {
+			String[] fileParts = fileNameNoPath.split("\\.");
+			setFileNameNoExtension(fileParts[0]);
+		}
 		
 		xmiIdElement = new XmiIdToElementMap();
 		list= new ArrayList<XmiElement>();
@@ -62,6 +77,11 @@ public class ModelFileInfo {
 		String id = elem.getElementId();
 		if (id != null) {
 			xmiIdElement.addElement(id,elem);
+		}
+		
+		String href = elem.getAttributeValue("href");
+		if (href != null) {
+			this.hrefToElementMap.put(href, elem);
 		}
 	}
 	/**
@@ -105,6 +125,12 @@ public class ModelFileInfo {
 				if(id != null) {
 					xmiIdElement.addElement(id,childElem);
 				}
+				
+				String href = childElem.getAttributeValue("href");
+				if (href != null) {
+					System.out.println("href added " + href );
+					this.hrefToElementMap.put(href, childElem);
+				}
 				retval = true;
 			}
 		} else if (parentElem.getElementId().equals(listElem.getElementId())){
@@ -113,6 +139,12 @@ public class ModelFileInfo {
 			String id = childElem.getElementId();
 			if(id != null) {
 				xmiIdElement.addElement(id,childElem);
+			}
+			
+			String href = childElem.getAttributeValue("href");
+			if (href != null) {
+				System.out.println("href added " + href );
+				this.hrefToElementMap.put(href, childElem);
 			}
 			retval = true;
 		} else {
@@ -209,10 +241,42 @@ public class ModelFileInfo {
 		return xmiIdElement.getElementFromId(id);
 	}
 	
+	public XmiElement getXmiElementFromHref(String href) {
+		return hrefToElementMap.get(href);
+	}
+	
+	/**
+	 * @param the fileNameNoPath to set
+	 */
+	public void setFileNameNoPath(String fileNameNoPath) {
+		if (fileNameNoPath != null) {
+			this.fileNameNoPath = fileNameNoPath;
+		} else {
+			this.fileNameNoPath = "";
+		}
+	}
+	
 	/**
 	 * @return the FileName without the path
 	 */
 	public String getFileNameNoPath() {
 		return fileNameNoPath;
+	}
+	
+	/**
+	 * @return the fileNameNoExtension
+	 */
+	public String getFileNameNoExtension() {
+		return fileNameNoExtension;
+	}
+	/**
+	 * @param fileNameNoExtension the fileNameNoExtension to set
+	 */
+	private void setFileNameNoExtension(String fileNameNoExtension) {
+		if (fileNameNoExtension != null) {
+			this.fileNameNoExtension = fileNameNoExtension;
+		} else {
+			this.fileNameNoExtension = "";
+		}
 	}
 }
