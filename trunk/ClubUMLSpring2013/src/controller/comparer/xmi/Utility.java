@@ -69,6 +69,16 @@ public final class Utility {
 		return "";
 	}
 
+	/**
+	 * Gets the association from the ArrayList of XmiAssociationElement
+	 * 
+	 * @param array
+	 *            of XmiAssociationElement
+	 * @param id
+	 *            of target element
+	 *            
+	 * @return the element of XmiAssociationElement if found, else null
+	 */
 	public static XmiAssociationElement getAssociationById(
 			ArrayList<XmiAssociationElement> array, String id) {
 
@@ -81,6 +91,16 @@ public final class Utility {
 		return null;
 	}
 
+	/**
+	 * Gets the class by id from the ArrayList of XmiClassElement
+	 * 
+	 * @param array
+	 *            of XmiClassElement
+	 * @param id
+	 *            of target element
+	 *            
+	 * @return the element of XmiClassElement if found, else null
+	 */
 	public static XmiClassElement getClassById(List<XmiClassElement> array,
 			String id) {
 		for (XmiClassElement element : array) {
@@ -92,6 +112,16 @@ public final class Utility {
 		return null;
 	}
 
+	/**
+	 * Gets the class by name from the ArrayList of XmiClassElement
+	 * 
+	 * @param array
+	 *            of XmiClassElement
+	 * @param name
+	 *            of target element
+	 *            
+	 * @return the element of XmiClassElement if found, else null
+	 */
 	public static XmiClassElement getClassByName(List<XmiClassElement> array,
 			String name) {
 		for (XmiClassElement element : array) {
@@ -105,8 +135,13 @@ public final class Utility {
 
 	/**
 	 * Get XmiMergedClass if the Id exists for either Class.
+	 * 
 	 * @param array
+	 * 			of XmiMergedClass
+	 * 
 	 * @param Id
+	 * 			of target element
+	 * 			
 	 * @return
 	 */
 	public static XmiMergedClass getMergedClassByClassId(List<XmiMergedClass> array,
@@ -126,6 +161,16 @@ public final class Utility {
 		return null;
 	}
 	
+	/**
+	 * Gets the Attributes by name from XmiClassElement
+	 * 
+	 * @param classname
+	 *            of XmiClassElement
+	 * @param attrName
+	 *            of target element
+	 *            
+	 * @return the element of XmiAttributeElement if found, else null
+	 */
 	public static XmiAttributeElement getAttributebyName(XmiClassElement classname, String attrName ) {
 		ArrayList<XmiAttributeElement> attrlist = classname.getAttributes();
 		for (XmiAttributeElement elem : attrlist) {
@@ -136,6 +181,16 @@ public final class Utility {
 		return null;
 	}
 	
+	/**
+	 * Gets the Operations by name from XmiClassElement
+	 * 
+	 * @param classname
+	 *            of XmiClassElement
+	 * @param attrName
+	 *            of target element
+	 *            
+	 * @return the element of XmiOperationElement if found, else null
+	 */
 	public static XmiOperationElement getOperationbyName(XmiClassElement classname, String attrName ) {
 		ArrayList<XmiOperationElement> operlist = classname.getOperations();
 		for (XmiOperationElement elem : operlist) {

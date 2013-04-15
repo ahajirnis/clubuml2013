@@ -11,6 +11,18 @@ public class XmiBaseElement {
 	private String typeName;
 	private String visibility;
 
+	/**
+	 * Constructor to initialize necessary class members
+	 *
+	 * @param id
+	 * 			The ID of the element
+	 * @param name
+	 * 			The name of the element
+	 * @param type
+	 * 			The type of the element
+	 * @param visibility
+	 * 			The visibility of the element
+	 */
 	public XmiBaseElement(String id, String name, String type, String visibility) {
 
 		this.id = id;

@@ -76,7 +76,7 @@ public class SynonymCheck {
                 return false;
             }
         } catch (Exception e) {
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
         }
         return false;
     }
