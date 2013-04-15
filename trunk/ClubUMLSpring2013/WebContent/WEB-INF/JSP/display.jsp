@@ -101,6 +101,13 @@
 			selectLabel.innerHTML = "Class Diagram Format: (.di, .notation, .uml)";
 		}
 	}
+	
+	function toggleChecked(status) {
+		$(".myCheckBox").each( function() {
+			$(this).attr("checked",status);
+		})
+	}
+
 </script>
 </head>
 <body style="background-color: #F3F3F3">
@@ -163,7 +170,10 @@
 				<!-- End Merge -->
 				<table>
 					<tr>
-						<td></td>
+						<td>
+						<input type="checkbox" name="checkall"
+								value="10" onclick="toggleChecked(this.checked)">
+						</td>
 						<td><b>Image</b></td>
 						<td><b>Edited</b></td>
 					</tr>
