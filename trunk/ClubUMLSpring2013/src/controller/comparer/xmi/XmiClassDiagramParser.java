@@ -77,7 +77,8 @@ public class XmiClassDiagramParser {
 	private ArrayList<XmiClassElement> classElements = new ArrayList<XmiClassElement>();
 	private ArrayList<XmiTypeElement> primitiveElements = new ArrayList<XmiTypeElement>();
 	private ArrayList<XmiAssociationElement> associationElements = new ArrayList<XmiAssociationElement>();
-
+	private ArrayList<XmiGeneralizationElement> generalizationElements = new ArrayList<XmiGeneralizationElement>();
+	
 	XmiClassDiagramParser(String umlFile, String notationFile) {
 		umlFileName = umlFile;
 		notationFileName = notationFile;
@@ -539,10 +540,6 @@ public class XmiClassDiagramParser {
 		List<XmiElement> childrenElement = xmiElement.getChildElemList();
 
 		for (XmiElement child : childrenElement) {
-			if (!child.getFoundMatch()) {
-				continue;
-			}
-
 			String tag = child.getElementName();
 
 			switch (tag) {
@@ -573,8 +570,13 @@ public class XmiClassDiagramParser {
 		String id = xmiElement.getAttributeValue(PAPYRUS_ATTRIBUTE_ID);
 		String generalization = xmiElement
 				.getAttributeValue(PAPYRUS_GENERALIZATION_DIRECTION);
-
-		return new XmiGeneralizationElement(id, generalization);
+		
+		XmiGeneralizationElement gen = new XmiGeneralizationElement(id, generalization);
+		
+		// Populate a list of generalizations
+		generalizationElements.add(gen);
+		
+		return gen;
 	}
 
 	private XmiAssociationElement createXmiAssociationElement(
@@ -705,14 +707,23 @@ public class XmiClassDiagramParser {
 	}
 
 	/**
-	 * Returns the list of Active Class elements
+	 * Returns the list of Active association elements
 	 * 
-	 * @return List object of XmiElement
+	 * @return List object of XmiAssociationElement
 	 */
 	public List<XmiAssociationElement> getAssociationElements() {
 		return associationElements;
 	}
 
+	/**
+	 * Returns the list of Active generalization elements
+	 * 
+	 * @return List object of XmiAssociationElement
+	 */
+	public List<XmiGeneralizationElement> getGeneralizationElements() {
+		return generalizationElements;
+	}
+	
 	/**
 	 * Returns the list of Active Type elements
 	 * 

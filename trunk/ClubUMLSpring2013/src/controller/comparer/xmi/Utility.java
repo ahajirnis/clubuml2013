@@ -103,6 +103,29 @@ public final class Utility {
 		return null;
 	}
 
+	/**
+	 * Get XmiMergedClass if the Id exists for either Class.
+	 * @param array
+	 * @param Id
+	 * @return
+	 */
+	public static XmiMergedClass getMergedClassByClassId(List<XmiMergedClass> array,
+			String Id) {
+		for (XmiMergedClass element : array) {
+			if (element.getClass1() != null) {
+				if (element.getClass1().getId().equals(Id)) {
+					return element;
+				}
+			} else if (element.getClass2() != null) {
+				if (element.getClass2().getId().equals(Id)) {
+					return element;
+				}
+			}
+		}
+
+		return null;
+	}
+	
 	public static XmiAttributeElement getAttributebyName(XmiClassElement classname, String attrName ) {
 		ArrayList<XmiAttributeElement> attrlist = classname.getAttributes();
 		for (XmiAttributeElement elem : attrlist) {
@@ -122,6 +145,24 @@ public final class Utility {
 		}
 		return null;
 	}
+	
+	/**
+	 * Retrieve a generalization element by ID
+	 * @param array
+	 * @param Id
+	 * @return generalization element if found, else null
+	 */
+	public static XmiGeneralizationElement getGeneralizationById(List<XmiGeneralizationElement> array,
+			String Id) {
+		for (XmiGeneralizationElement element : array) {
+			if (element.getId().equals(Id)) {
+				return element;
+			}
+		}
+
+		return null;
+	}
+	
 	/**
 	 * Compares 2 class elements' attributes
 	 * 
