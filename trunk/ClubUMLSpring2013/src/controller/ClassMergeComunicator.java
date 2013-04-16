@@ -11,16 +11,13 @@ import domain.Diagram;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 /**
  * @author Yanwu shen
  */
@@ -114,7 +111,8 @@ public class ClassMergeComunicator extends HttpServlet {
 				
 				comparer = new XmiClassDiagramComparer(lfi1, lfi2);
 				
-				obj=comparer.action(reqobj);
+				//obj=comparer.action(reqobj); // action() doesn't work
+				obj=comparer.actionTest(reqobj);
 				request.setAttribute("response", obj);
 				
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
@@ -138,8 +136,14 @@ public class ClassMergeComunicator extends HttpServlet {
 		
 	public static void main(String[] args) {
 		// test Refresh
-		int cd1ID = 54;
-		int cd2ID = 55;
+		int cd1ID = 62;
+		int cd2ID = 63;
+		
+		JSONObject obj,reqobj;
+		
+		String reqString= "{\"Request\":\"Refresh\"}";
+		reqobj = (JSONObject) JSONValue.parse(reqString);
+		
 		Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
 		Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
 		
@@ -166,9 +170,23 @@ public class ClassMergeComunicator extends HttpServlet {
 		lfi1.add(fi1_not); lfi1.add(fi1_uml);
 		lfi2.add(fi2_not); lfi2.add(fi2_uml);
 		
+		// DEBUG
+		System.out.println(lfi1.get(0).getDestFilePath() + lfi1.get(0).getFileName());
+		System.out.println(lfi1.get(1).getDestFilePath() + lfi1.get(1).getFileName());
+		System.out.println(lfi2.get(0).getDestFilePath() + lfi2.get(0).getFileName());
+		System.out.println(lfi2.get(1).getDestFilePath() + lfi2.get(1).getFileName());
+		
 		XmiClassDiagramComparer testComparer = new XmiClassDiagramComparer(lfi1, lfi2);
-		System.out.println(testComparer.getClassDiagram1().getUmlModeName());
-		System.out.println(testComparer.getClassDiagram2().getUmlModeName());
+		
+		obj = testComparer.actionTest(reqobj);
+		
+		// DEBUG
+		System.out.println(obj.toJSONString());
+		
+		//request.setAttribute("response", obj);
+		
+		//dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
+		//dispatcher.forward(request, response);
 	}
 
 }

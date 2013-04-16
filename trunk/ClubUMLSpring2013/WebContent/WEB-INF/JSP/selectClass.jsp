@@ -104,8 +104,13 @@ function sendRequest(mo) {
 		 -->
 	<table>
 		<tr>
+		<td>Classes unique to left diagram:</td>
+		<td>Classes in common:</td>
+		<td>Classes unique to right diagram:</td>
+		</tr>
+		<tr>
 			<td>
-				<c:forEach items="${response.Diagram1 }" var="entry" >
+				<c:forEach items="${response.Class1 }" var="entry" >
 					<label><input type=checkbox name="scd1co" value="${entry }" />${entry }</label>
 				 	<br>
 				</c:forEach>
@@ -117,7 +122,7 @@ function sendRequest(mo) {
 				</c:forEach>
 			</td>
 			<td>
-				<c:forEach items="${response.Diagram2 }" var="entry" >
+				<c:forEach items="${response.Class2 }" var="entry" >
 					<label><input type=checkbox name="scd2co" value="${entry }" />${entry }</label>
 				 	<br>
 				</c:forEach>
