@@ -23,51 +23,51 @@
 		// create message JSON Object
 		var req = {};
 		req.Request = "Consolidate";
+		
 		// set Something from Class1
 		req.Class1 = {};
 		req.Class1.Class = sc1.value;
-		req.Class1.Elements = {};
-		req.Class1.Elements.Attributes = [];
+		req.Class1.Attributes = [];
 		for(var i=0; i<scac1.length; i++) {
 			if(scac1[i].checked) {
-				req.Class1.Elements.Attributes.push(scac1[i].value);
+				req.Class1.Attributes.push(scac1[i].value);
 			}
 		}
-		req.Class1.Elements.Operations = [];
+		req.Class1.Operations = [];
 		for(var i=0; i<scmc1.length; i++) {
 			if(scmc1[i].checked) {
-				req.Class1.Elements.Operations.push(scmc1[i].value);
+				req.Class1.Operations.push(scmc1[i].value);
 			}
 		}
+		
 		// set Something from Class2
 		req.Class2 = {};
 		req.Class2.Class = sc2.value;
-		req.Class2.Elements = {};
-		req.Class2.Elements.Attributes = [];
+		req.Class2.Attributes = [];
 		for(var i=0; i<scac2.length; i++) {
 			if(scac2[i].checked) {
-				req.Class2.Elements.Attributes.push(scac2[i].value);
+				req.Class2.Attributes.push(scac2[i].value);
 			}
 		}
-		req.Class2.Elements.Operations = [];
+		req.Class2.Operations = [];
 		for(var i=0; i<scmc2.length; i++) {
 			if(scmc2[i].checked) {
-				req.Class2.Elements.Operations.push(scmc2[i].value);
+				req.Class2.Operations.push(scmc2[i].value);
 			}
 		}
+		
 		// set Something from Same
 		req.Same = {};
-		req.Same.Elements = {};
-		req.Same.Elements.Attributes = [];
+		req.Same.Attributes = [];
 		for(var i=0; i<scas.length; i++) {
 			if(scas[i].checked) {
-				req.Same.Elements.Attributes.push(scas[i].value);
+				req.Same.Attributes.push(scas[i].value);
 			}
 		}
-		req.Same.Elements.Operations = [];
+		req.Same.Operations = [];
 		for(var i=0; i<scms.length; i++) {
 			if(scms[i].checked) {
-				req.Same.Elements.Operations.push(scms[i].value);
+				req.Same.Operations.push(scms[i].value);
 			}
 		}
 		// add new name to req
@@ -111,18 +111,18 @@
 	<tr><th colspan=3 >ATTRIBUTES</th></tr>
 	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
-	<c:forEach items="${response.Attributes.Class1 }" var="entry" >
+	<c:forEach items="${response.Attribute.Class1 }" var="entry" >
 		<label><input type=checkbox name="scac1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	<td>
-	<c:forEach items="${response.Attributes.Same }" var="entry" >
+	<c:forEach items="${response.Attribute.Same }" var="entry" >
 		<label><input type=checkbox name="scas" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
+	<c:forEach items="${response.Attribute.Class2 }" var="entry" >
 		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
@@ -130,19 +130,19 @@
 	<tr><th colspan=3 >METHODS</th></tr>
 	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
-	<c:forEach items="${response.Operations.Class1 }" var="entry" >
+	<c:forEach items="${response.Operation.Class1 }" var="entry" >
 		<label><input type=checkbox name="scmc1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Operations.Same }" var="entry" >
+	<c:forEach items="${response.Operation.Same }" var="entry" >
 		<label><input type=checkbox name="scms" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Operations.Class2 }" var="entry" >
+	<c:forEach items="${response.Operation.Class2 }" var="entry" >
 		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>

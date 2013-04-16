@@ -77,6 +77,8 @@ public class ClassMergeComunicator extends HttpServlet {
 		switch (reqType) 
 		{
 			case REQUEST_COMPARE:
+				obj=comparer.actionTest(reqobj);
+				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/mergeClass.jsp");
 				dispatcher.forward(request, response);
 				break;
@@ -119,14 +121,20 @@ public class ClassMergeComunicator extends HttpServlet {
 				dispatcher.forward(request, response);
 				break;		
 			case REQUEST_CONSOLIDATE:
+				obj=comparer.actionTest(reqobj);
+				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
 				break;	
 			case REQUEST_ADD:
+				obj=comparer.actionTest(reqobj);
+				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/refineClass.jsp");
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_BREAK:
+				obj=comparer.actionTest(reqobj);
+				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
 				break;
@@ -135,12 +143,12 @@ public class ClassMergeComunicator extends HttpServlet {
 	
 		
 	public static void main(String[] args) {
-		// test Refresh
-		int cd1ID = 62;
-		int cd2ID = 63;
 		
 		JSONObject obj,reqobj;
 		
+		// test Refresh
+		int cd1ID = 64;
+		int cd2ID = 65;
 		String reqString= "{\"Request\":\"Refresh\"}";
 		reqobj = (JSONObject) JSONValue.parse(reqString);
 		
@@ -170,12 +178,6 @@ public class ClassMergeComunicator extends HttpServlet {
 		lfi1.add(fi1_not); lfi1.add(fi1_uml);
 		lfi2.add(fi2_not); lfi2.add(fi2_uml);
 		
-		// DEBUG
-		System.out.println(lfi1.get(0).getDestFilePath() + lfi1.get(0).getFileName());
-		System.out.println(lfi1.get(1).getDestFilePath() + lfi1.get(1).getFileName());
-		System.out.println(lfi2.get(0).getDestFilePath() + lfi2.get(0).getFileName());
-		System.out.println(lfi2.get(1).getDestFilePath() + lfi2.get(1).getFileName());
-		
 		XmiClassDiagramComparer testComparer = new XmiClassDiagramComparer(lfi1, lfi2);
 		
 		obj = testComparer.actionTest(reqobj);
@@ -183,10 +185,17 @@ public class ClassMergeComunicator extends HttpServlet {
 		// DEBUG
 		System.out.println(obj.toJSONString());
 		
-		//request.setAttribute("response", obj);
+		// test Compare
+		String reqString2= "{\"Class1\":\"Vehicle\",\"Class2\":\"Vehicle\",\"Request\":\"Compare\"}";
+		reqobj = (JSONObject) JSONValue.parse(reqString2);
+		obj = testComparer.actionTest(reqobj);
+		System.out.println(obj.toJSONString());
 		
-		//dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
-		//dispatcher.forward(request, response);
+		// test Consolidate
+		String reqString3 = "{\"Request\":\"Consolidate\",\"Class1\":{\"Class\":\"Vehicle\",\"Attributes\":[],\"Operations\":[\"Start()\"]},\"Class2\":{\"Class\":\"Vehicle\",\"Attributes\":[\"<Undefined> Color\"],\"Operations\":[]},\"Same\":{\"Attributes\":[],\"Operations\":[]},\"Name\":\"Vehicle_Vehicle\"}";
+		reqobj = (JSONObject) JSONValue.parse(reqString3);
+		obj = testComparer.actionTest(reqobj);
+		System.out.println(obj.toJSONString());
 	}
 
 }
