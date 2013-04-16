@@ -52,64 +52,42 @@ public class Next implements Request {
 						
 		HashMap<String, Object> diagram1 = new HashMap<String, Object>();
 		HashMap<String, Object> diagram2 = new HashMap<String, Object>();
-		JSONArray listOfGeneralization1 = new JSONArray();
-		JSONArray listOfGeneralization2 = new JSONArray();
 		JSONArray listOfAssociation1;
 		JSONArray listOfAssociation2;
-						
+		JSONArray listOfGeneralization1;
+		JSONArray listOfGeneralization2;
+		
 		listOfAssociation1 = accociationStructure(comparer.getClassDiagram1(), comparer.getSameClass());
-		listOfAssociation2 = accociationStructure(comparer.getClassDiagram2(), comparer.getSameClass());
-
-		for(int i=0 ; i < comparer.getSameClass().size() ; i++) {
-			XmiMergedClass sameClass = comparer.getSameClass().get(i);
-			if (sameClass.getClass1() != null) {
-				String parentClass;
-				String childClass;
-				String elementText; 
-				//GeneralizationList
-				for(XmiGeneralizationElement general : sameClass.getClass1().getGeneralization()){
-					childClass = sameClass.getClass1().getName();
-					parentClass = Utility.getClassNameById(comparer.getUniqueClass1(), general.getParent());
-					elementText = childClass + " inherits " + parentClass;
-						
-					//check if parent exist in the arrayList of XmiMergedClass 
-					if(!Utility.checkExistXmiMergedClass(comparer.getSameClass(), parentClass)) {
-						JSONObject element = new JSONObject();
-						element.put(ELEMENT_ID, general.getId());
-						element.put(ELEMENT_TEXT, elementText);
-						listOfGeneralization1.add(element);
-					}	
-				}
-			}
-			//check if the class2 of generalization already exist 
-			if (sameClass.getClass2() != null && !sameClass.getClass1().equals(sameClass.getClass2())) {
-				String parentClass;
-				String childClass;
-				String elementText; 
-				//GeneralizationList
-				for(XmiGeneralizationElement general : sameClass.getClass2().getGeneralization()){
-					childClass = sameClass.getClass2().getName();
-					parentClass = Utility.getClassNameById(comparer.getUniqueClass2(), general.getParent());
-					elementText = childClass + " inherits " + parentClass;
-					//check if parent exist in the arrayList of XmiMergedClass 
-					if(!Utility.checkExistXmiMergedClass(comparer.getSameClass(), parentClass)) {
-						JSONObject element = new JSONObject();
-						element.put(ELEMENT_ID, general.getId());
-						element.put(ELEMENT_TEXT, elementText);
-						listOfGeneralization2.add(element);
-					}	
-				}
-			}	
-			diagram1.put(ASSOCIATION, listOfAssociation1);
-			diagram1.put(GENERALIZATION, listOfGeneralization1);
-			diagram2.put(ASSOCIATION, listOfAssociation2);
-			diagram2.put(GENERALIZATION, listOfGeneralization2);
-		}
+		listOfAssociation2 = accociationStructure(comparer.getClassDiagram2(), comparer.getSameClass());		
+		checkSameElement(listOfAssociation1, listOfAssociation2);
+		
+		listOfGeneralization1 = generalizationStructure(comparer.getClassDiagram1(), comparer.getSameClass());
+		listOfGeneralization2 = generalizationStructure(comparer.getClassDiagram2(), comparer.getSameClass());
+		checkSameElement(listOfGeneralization1, listOfGeneralization2);	
+			
+		diagram1.put(ASSOCIATION, listOfAssociation1);
+		diagram1.put(GENERALIZATION, listOfGeneralization1);
+		diagram2.put(ASSOCIATION, listOfAssociation2);
+		diagram2.put(GENERALIZATION, listOfGeneralization2);
 
 		obj.put(TITLE_RESPONSE, "Success");
 		obj.put(TITLE_DIAGRAM1, diagram1);
 		obj.put(TITLE_DIAGRAM2, diagram2);		
 		return obj;
+	}
+	
+	private static void checkSameElement(JSONArray list1, JSONArray list2) {
+		for(int i=0 ; i < list1.size(); i++) {
+			HashMap<String, Object> association1 = (HashMap<String, Object>) list1.get(i);
+			String text1 = (String) association1.get(ELEMENT_TEXT);
+			for(int j=0 ; j < list2.size(); j++) {
+				HashMap<String, Object> association2 = (HashMap<String, Object>) list2.get(j);
+				String text2 = (String) association2.get(ELEMENT_TEXT);
+				if(text1.equals(text2)) {
+					list2.remove(j);
+				}
+			}
+		}
 	}
 	
 	private static String aggregationValue(AggregationValues aggregate) {
@@ -132,8 +110,8 @@ public class Next implements Request {
 		for (XmiAssociationElement association : classDiagram.getAssociationElements()) {
 		    XmiClassElement class1; 
 		    XmiClassElement class2;
-		    AggregationValues aggregate;
-		    JSONObject element = new JSONObject();
+		    AggregationValues aggregate1;
+		    AggregationValues aggregate2;
 
 		    if(association.getMemberEnds().size() == 2) {
 			    XmiMemberEndElement end1 = association.getMemberEnds().get(0);
@@ -141,49 +119,103 @@ public class Next implements Request {
 	
 			    class1 = Utility.getClassById(classDiagram.getClassElements(), end1.getTypeName());
 			    class2 = Utility.getClassById(classDiagram.getClassElements(), end2.getTypeName());
-			    aggregate = end1.getAggregation();
+			    aggregate1 = end1.getAggregation();
+			    aggregate2 = end2.getAggregation();
 			    class1Name = class1.getName();
 			    class2Name = class2.getName();
+			    String strAssociation;
+			    String elementText;
 
 			    //check if the class exists in the arrayList of XmiMergedClass 
 				if(Utility.checkExistXmiMergedClass(sameClass, class1Name)
-						&& Utility.checkExistXmiMergedClass(sameClass, class2Name)) {	
-					String strAgrregation = aggregationValue(aggregate);
-					String elementText = class1Name + strAgrregation + class2Name;
-					element.put(ELEMENT_ID, association.getId());
-					element.put(ELEMENT_TEXT, elementText);
-			        if (association.getNavigable().contains(class1.getId())) {
-			        	String strNavigable = class1Name + " is navigable to " + class2Name;
-			        	element.put(ELEMENT_ID, association.getId());
-						element.put(ELEMENT_TEXT, strNavigable);
+						&& Utility.checkExistXmiMergedClass(sameClass, class2Name)) {
+					JSONObject elementAggr1 = new JSONObject();
+					strAssociation = aggregationValue(aggregate1);
+					elementText = class2Name + strAssociation + class1Name ;
+					elementAggr1.put(ELEMENT_ID, end1.getId());
+					elementAggr1.put(ELEMENT_TEXT, elementText);
+				    listOfAssociation.add(elementAggr1);
+				    
+				    JSONObject elementAggr2 = new JSONObject();
+				    strAssociation = aggregationValue(aggregate2);
+					elementText = class1Name + strAssociation + class2Name ;
+					elementAggr2.put(ELEMENT_ID, end2.getId());
+					elementAggr2.put(ELEMENT_TEXT, elementText);
+				    listOfAssociation.add(elementAggr2);
+				    
+			        if (association.getNavigable().contains(end1.getId())) {
+			        	JSONObject element1 = new JSONObject();
+			        	elementText = class1Name + " is navigable from " + class2Name;
+			        	element1.put(ELEMENT_ID, end1.getId());
+			        	element1.put(ELEMENT_TEXT, elementText);
+						listOfAssociation.add(element1);
+			        }
+			        if (association.getNavigable().contains(end2.getId())) {
+			        	JSONObject element1 = new JSONObject();
+			        	elementText = class2Name + " is navigable from " + class1Name;
+			        	element1.put(ELEMENT_ID, end2.getId());
+			        	element1.put(ELEMENT_TEXT, elementText);
+						listOfAssociation.add(element1);
 			        }
 				}
 		    } else if (association.getMemberEnds().size() == 1) {
 		    	XmiMemberEndElement end1 = association.getMemberEnds().get(0);
 	
 			    class1 = Utility.getClassById(classDiagram.getClassElements(), end1.getTypeName());
-			    aggregate = end1.getAggregation();
+			    aggregate1 = end1.getAggregation();
 			    class1Name = class1.getName();
+			    String strAssociation;
+			    String elementText;
 
 			    if(!class2Name.isEmpty()) {
 				    //check if the class exists in the arrayList of XmiMergedClass 
 					if(Utility.checkExistXmiMergedClass(sameClass, class1Name)
 						&& Utility.checkExistXmiMergedClass(sameClass, class2Name)) {	
-						String strAgrregation = aggregationValue(aggregate);
-						String elementText = class1Name + strAgrregation + class2Name;
-						element.put(ELEMENT_ID, association.getId());
-						element.put(ELEMENT_TEXT, elementText);
+						JSONObject elementAggr1 = new JSONObject();
+						strAssociation = aggregationValue(aggregate1);
+						elementText = class2Name + strAssociation + class1Name;
+						elementAggr1.put(ELEMENT_ID, end1.getId());
+						elementAggr1.put(ELEMENT_TEXT, elementText);
+						listOfAssociation.add(elementAggr1);
+						if (association.getNavigable().contains(end1.getId())) {
+							JSONObject element1 = new JSONObject();
+							elementText = class1Name + " is navigable from " + class2Name;
+				        	element1.put(ELEMENT_ID, end1.getId());
+				        	element1.put(ELEMENT_TEXT, elementText);
+							listOfAssociation.add(element1);
+				        }
 					}
-			        if (association.getNavigable().contains(class1.getId())) {
-			        	String strNavigable = class1Name + " is navigable to " + class2Name;
-			        	element.put(ELEMENT_ID, association.getId());
-						element.put(ELEMENT_TEXT, strNavigable);
-			        }
 			    }
 		    } 
-		    if(!element.isEmpty())
-		    	listOfAssociation.add(element);
+		    
 		}	
 		return listOfAssociation;
+	}
+	
+	private static JSONArray generalizationStructure(XmiClassDiagramParser classDiagram,ArrayList<XmiMergedClass> sameClass) {
+		JSONArray listOfGeneralization = new JSONArray();
+	
+		for(int i=0 ; i < sameClass.size() ; i++) {
+			XmiMergedClass mergedClass = sameClass.get(i);
+			if (mergedClass.getClass1() != null) {
+				String parentClass;
+				String childClass;
+				String elementText; 
+				//GeneralizationList
+				for(XmiGeneralizationElement general : mergedClass.getClass1().getGeneralization()){
+					childClass = mergedClass.getClass1().getName();
+					parentClass = Utility.getClassNameById((ArrayList<XmiClassElement>) classDiagram.getClassElements(), general.getParent());
+					elementText = childClass + " inherits " + parentClass;
+					//check if parent exist in the arrayList of XmiMergedClass 
+					if(Utility.checkExistXmiMergedClass(sameClass, parentClass)) {
+						JSONObject element = new JSONObject();
+						element.put(ELEMENT_ID, general.getId());
+						element.put(ELEMENT_TEXT, elementText);
+						listOfGeneralization.add(element);
+					}	
+				}
+			}
+		}
+		return listOfGeneralization;
 	}
 }
