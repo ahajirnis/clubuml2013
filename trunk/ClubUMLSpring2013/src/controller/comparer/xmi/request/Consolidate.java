@@ -106,7 +106,7 @@ public class Consolidate implements Request {
 							mergedclass.setAttributes2(attrlist2);
 						}
 						// Get the list of operation
-						LinkedList jSonOperlist2 = (LinkedList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);
+						ArrayList jSonOperlist2 = (ArrayList)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_OPER);
 						if (jSonOperlist2 != null) {
 							ArrayList<XmiOperationElement> operList2 = new ArrayList<XmiOperationElement> ();				
 							// Get the list of attributes
@@ -134,12 +134,12 @@ public class Consolidate implements Request {
 				// Do a Refresh to set the Response
 				JSONObject refreshReq = new JSONObject();
 				refreshReq.put("Request","Refresh");
-				response = comparer.actionTest(refreshReq);
+				response = comparer.action(refreshReq);
 				
-				//response.put("Response", "Success");
 			}
 		} catch (Exception ex) {
 			// Set up failed response
+			ex.printStackTrace();
 			response.put("Response", "Fail");
 		}
 		return response;
