@@ -176,6 +176,7 @@
 						</td>
 						<td><b>Image</b></td>
 						<td><b>Edited</b></td>
+						<td><b>Type</b></td>
 					</tr>
 					<c:forEach items="${requestScope.diagrams}" var="diagram">
 						<tr>
@@ -183,6 +184,7 @@
 								value="${diagram.diagramId}" /></td>
 							<td>${diagram.diagramName}</td>
 							<td>${diagram.createdTime}</td>
+							<td>${diagram.diagramType}</td>
 						</tr>
 					</c:forEach>
 				</table>
