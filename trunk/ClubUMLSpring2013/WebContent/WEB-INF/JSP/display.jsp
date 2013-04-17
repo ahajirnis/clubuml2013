@@ -164,9 +164,9 @@
 				onsubmit="return checkFields()">
 				<input type="submit" id="displayButton" value="Display" name="submit" />
 				<input type="submit" id="downloadButton" value="Download" name="submit" />
-				<input type="submit" id="compareButton" value="Go to compare" name="submit" />
+				<input type="submit" id="compareButton" value="Go to compare" name="submit" <c:if test="${type=='sequence'}">disabled="true"</c:if> />
 				<!-- Merge -->
-				<input type="submit" id="mergeButton" value="Go To Merge" name="submit" />
+				<input type="submit" id="mergeButton" value="Go To Merge" name="submit" <c:if test="${type=='sequence'}">disabled="true"</c:if> />
 				<!-- End Merge -->
 				<table>
 					<tr>
