@@ -77,63 +77,74 @@ public class ClassMergeComunicator extends HttpServlet {
 		switch (reqType) 
 		{
 			case REQUEST_COMPARE:
-				obj=comparer.actionTest(reqobj);
+				obj=comparer.action(reqobj);
 				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/mergeClass.jsp");
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_REFRESH:
-				int cd1ID = Integer.parseInt((String) reqobj.get("Diagram1"));
-				int cd2ID = Integer.parseInt((String) reqobj.get("Diagram2"));
-				Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
-				Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
-				
-				// to get the .uml file names:
-				String cd1UmlFileName = cd1.getFilePath().substring(
-						cd1.getFilePath().lastIndexOf("/") + 1,
-						cd1.getFilePath().length());
-				String cd2UmlFileName = cd2.getFilePath().substring(
-						cd2.getFilePath().lastIndexOf("/") + 1,
-						cd2.getFilePath().length());
-				
-				// to get the UML path without the file names:
-				String cd1UmlPath = cd1.getFilePath().substring(0,
-						cd1.getFilePath().lastIndexOf("/") + 1);
-				String cd2UmlPath = cd2.getFilePath().substring(0,
-						cd2.getFilePath().lastIndexOf("/") + 1);
-				
-				List<FileInfo> lfi1 = new ArrayList<FileInfo>();
-				List<FileInfo> lfi2 = new ArrayList<FileInfo>();
-				FileInfo fi1_not = new FileInfo(cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
-				FileInfo fi1_uml = new FileInfo(cd1UmlPath, cd1UmlFileName, "");
-				FileInfo fi2_not = new FileInfo(cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
-				FileInfo fi2_uml = new FileInfo(cd2UmlPath, cd2UmlFileName, "");
-				lfi1.add(fi1_not); lfi1.add(fi1_uml);
-				lfi2.add(fi2_not); lfi2.add(fi2_uml);
-				
-				comparer = new XmiClassDiagramComparer(lfi1, lfi2);
-				
+				if(comparer==null){
+					// Initialize comparer using diagram IDs
+					int cd1ID = Integer.parseInt((String) reqobj.get("Diagram1"));
+					int cd2ID = Integer.parseInt((String) reqobj.get("Diagram2"));
+					Diagram cd1 = DiagramDAO.getDiagram(cd1ID);
+					Diagram cd2 = DiagramDAO.getDiagram(cd2ID);
+					
+					// to get the .uml file names:
+					String cd1UmlFileName = cd1.getFilePath().substring(
+							cd1.getFilePath().lastIndexOf("/") + 1,
+							cd1.getFilePath().length());
+					String cd2UmlFileName = cd2.getFilePath().substring(
+							cd2.getFilePath().lastIndexOf("/") + 1,
+							cd2.getFilePath().length());
+					
+					// to get the UML path without the file names:
+					String cd1UmlPath = cd1.getFilePath().substring(0,
+							cd1.getFilePath().lastIndexOf("/") + 1);
+					String cd2UmlPath = cd2.getFilePath().substring(0,
+							cd2.getFilePath().lastIndexOf("/") + 1);
+					
+					List<FileInfo> lfi1 = new ArrayList<FileInfo>();
+					List<FileInfo> lfi2 = new ArrayList<FileInfo>();
+					FileInfo fi1_not = new FileInfo(cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
+					FileInfo fi1_uml = new FileInfo(cd1UmlPath, cd1UmlFileName, "");
+					FileInfo fi2_not = new FileInfo(cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
+					FileInfo fi2_uml = new FileInfo(cd2UmlPath, cd2UmlFileName, "");
+					lfi1.add(fi1_not); lfi1.add(fi1_uml);
+					lfi2.add(fi2_not); lfi2.add(fi2_uml);
+					
+					comparer = new XmiClassDiagramComparer(lfi1, lfi2);
+				}
 				//obj=comparer.action(reqobj); // action() doesn't work
-				obj=comparer.actionTest(reqobj);
+				obj=comparer.action(reqobj);
 				request.setAttribute("response", obj);
 				
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
 				break;		
 			case REQUEST_CONSOLIDATE:
-				obj=comparer.actionTest(reqobj);
+				obj=comparer.action(reqobj);
 				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
+				/*
+				// Now do a Refresh
+				String refreshString= "{\"Request\":\"Refresh\"}";
+				reqobj = (JSONObject) JSONValue.parse(refreshString);
+				obj = comparer.action(reqobj);
+				request.setAttribute("response", obj);
+				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
+				dispatcher.forward(request, response);
+				*/
 				break;	
 			case REQUEST_ADD:
-				obj=comparer.actionTest(reqobj);
+				obj=comparer.action(reqobj);
 				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/refineClass.jsp");
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_BREAK:
-				obj=comparer.actionTest(reqobj);
+				obj=comparer.action(reqobj);
 				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/selectClass.jsp");
 				dispatcher.forward(request, response);
@@ -180,7 +191,7 @@ public class ClassMergeComunicator extends HttpServlet {
 		
 		XmiClassDiagramComparer testComparer = new XmiClassDiagramComparer(lfi1, lfi2);
 		
-		obj = testComparer.actionTest(reqobj);
+		obj = testComparer.action(reqobj);
 		
 		// DEBUG
 		System.out.println(obj.toJSONString());
@@ -188,13 +199,13 @@ public class ClassMergeComunicator extends HttpServlet {
 		// test Compare
 		String reqString2= "{\"Class1\":\"Vehicle\",\"Class2\":\"Vehicle\",\"Request\":\"Compare\"}";
 		reqobj = (JSONObject) JSONValue.parse(reqString2);
-		obj = testComparer.actionTest(reqobj);
+		obj = testComparer.action(reqobj);
 		System.out.println(obj.toJSONString());
 		
 		// test Consolidate
 		String reqString3 = "{\"Request\":\"Consolidate\",\"Class1\":{\"Class\":\"Vehicle\",\"Attributes\":[],\"Operations\":[\"Start()\"]},\"Class2\":{\"Class\":\"Vehicle\",\"Attributes\":[\"<Undefined> Color\"],\"Operations\":[]},\"Same\":{\"Attributes\":[],\"Operations\":[]},\"Name\":\"Vehicle_Vehicle\"}";
 		reqobj = (JSONObject) JSONValue.parse(reqString3);
-		obj = testComparer.actionTest(reqobj);
+		obj = testComparer.action(reqobj);
 		System.out.println(obj.toJSONString());
 	}
 

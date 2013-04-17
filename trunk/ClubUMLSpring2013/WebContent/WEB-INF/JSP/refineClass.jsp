@@ -23,17 +23,16 @@
 		// set Something from Class1
 		req[c1or2.value] = {};
 		req[c1or2.value].Class = sc.value;
-		req[c1or2.value].Elements = {};
-		req[c1or2.value].Elements.Attributes = [];
+		req[c1or2.value].Attributes = [];
 		for(var i=0; i<sca.length; i++) {
 			if(sca[i].checked) {
-				req[c1or2.value].Elements.Attributes.push(sca[i].value);
+				req[c1or2.value].Attributes.push(sca[i].value);
 			}
 		}
-		req[c1or2.value].Elements.Operations = [];
+		req[c1or2.value].Operations = [];
 		for(var i=0; i<scm.length; i++) {
 			if(scm[i].checked) {
-				req[c1or2.value].Elements.Operations.push(scm[i].value);
+				req[c1or2.value].Operations.push(scm[i].value);
 			}
 		}
 		

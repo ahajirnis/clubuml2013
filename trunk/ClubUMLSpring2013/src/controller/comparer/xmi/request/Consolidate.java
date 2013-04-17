@@ -130,7 +130,13 @@ public class Consolidate implements Request {
 				}
 				comparer.getSameClass().add(mergedclass);
 				//comparer.setUniqueClass1(classElement2);
-				response.put("Response", "Success");
+				
+				// Do a Refresh to set the Response
+				JSONObject refreshReq = new JSONObject();
+				refreshReq.put("Request","Refresh");
+				response = comparer.actionTest(refreshReq);
+				
+				//response.put("Response", "Success");
 			}
 		} catch (Exception ex) {
 			// Set up failed response

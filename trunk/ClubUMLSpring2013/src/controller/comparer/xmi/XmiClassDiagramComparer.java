@@ -83,8 +83,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	@Override
 	public JSONObject action(JSONObject jsonObj) {
 
-		String request = (String) jsonObj.get(REQUEST_PACKAGE + KEY_REQUEST);
-		
+		String request = REQUEST_PACKAGE + "." + (String) jsonObj.get(KEY_REQUEST);
+		// controller.comparer.xmi.request. ...
 		// Create request object via Reflection
 		Request requestObj;
 
@@ -175,8 +175,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		arraylist.add("Stop()");
 		op.put("Class2", arraylist);
 
-		jObj.put("Attribute", attr);
-		jObj.put("Operation", op);
+		jObj.put("Attributes", attr);
+		jObj.put("Operations", op);
 		jObj.put("Response", "Success");
 		return jObj;
 	}
