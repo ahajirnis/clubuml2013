@@ -7,6 +7,11 @@
 <link rel="stylesheet" type="text/css" href="CSS/style.css">
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Merge Class</title>
+<style>
+	td {
+		border: 1px solid gray;
+	}
+</style>
 <script>
 	function save() {
 		var sc1 = document.getElementsByName("sc1")[0];
@@ -90,12 +95,12 @@
 
 <table>
 	<tr><td>
-		<input name=sc1 value="${response.Class1 }" />
+		<input disabled name=sc1 value="${response.Class1 }" />
 	</td><td>
-		<input name=sc2 value="${response.Class2 }" />
+		<input disabled name=sc2 value="${response.Class2 }" />
 	</td></tr>
 	<tr><th colspan=2 >
-		DEFINE NEW NAME
+		Define New Name
 	</th></tr>
 	<tr><td colspan=2>
 		<input type=text value="${response.Class1 }_${response.Class2 }" name="newClassName" onfocus="this.select();" />
@@ -108,49 +113,71 @@
 	
 </table>
 <table>
-	<tr><th colspan=3 >ATTRIBUTES</th></tr>
-	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
-	<tr><td>
+	<tr><th colspan=3 >Attributes</th></tr>
+	<tr><td>Left Only<br>
 	<c:forEach items="${response.Attributes.Class1 }" var="entry" >
 		<label><input type=checkbox name="scac1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
-	<td>
+	<td>Same<br>
 	<c:forEach items="${response.Attributes.same }" var="entry" >
 		<label><input type=checkbox name="scas" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>
+	<td>Right Only<br>
 	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
 		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td></tr>
-	<tr><th colspan=3 >METHODS</th></tr>
-	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
-	<tr><td>
+	
+	<!-- Similar Attribute names -->
+	<tr><td></td>
+	<td>Similar<br>
+	<c:forEach items="${response.Attributes.similar }" var="entry" >
+		${entry }
+		<br>
+	</c:forEach>
+	</td>
+	<td></td>
+	</tr>
+	
+	<tr><th colspan=3 >Methods</th></tr>
+	<tr><td>Left Only<br>
 	<c:forEach items="${response.Operations.Class1 }" var="entry" >
 		<label><input type=checkbox name="scmc1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>
+	<td>Same<br>
 	<c:forEach items="${response.Operations.same }" var="entry" >
 		<label><input type=checkbox name="scms" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>
+	<td>Right Only<br>
 	<c:forEach items="${response.Operations.Class2 }" var="entry" >
 		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td></tr>
+	
+	<!-- Similar Operation names -->
+	<tr><td></td>
+	<td>Similar<br>
+	<c:forEach items="${response.Operations.similar }" var="entry" >
+		${entry }
+		<br>
+	</c:forEach>
+	</td>
+	<td></td>
+	</tr>
+	
 </table>
-<table>
+<table border="0">
 	<tr><td id=errorMsg class=hidden ></td></tr>
-	<tr><td><button onclick=save() >SAVE</button></td></tr>
+	<tr><td><button onclick=save() >Save</button></td></tr>
 </table>
 <form id=requestForm class=hidden action="ClassMergeComunicator" method=post >
 	<input name=request type=text value="" />
