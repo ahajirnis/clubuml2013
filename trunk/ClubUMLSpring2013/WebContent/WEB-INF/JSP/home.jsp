@@ -15,6 +15,9 @@
         <script type="text/javascript" src="js/cuf_run.js"></script>
 
 	<style type="text/css">
+		body{
+		background-color:#FFCC66;
+		}
 	    <!--   #navbar ul
 	    {
 		margin: 0;
@@ -43,19 +46,17 @@
     </head>
     <body>
         <div class="main">
-            <div class="header">
-                <div class="header_resize">
+          <div class="header">
+            <div class="header_resize">
                     <div class="logo">
                     </div>
 		    <h1 style="color: white">ClubUML</h1>
-		    <style>
-			body {background-color:#FFCC66;}
-		    </style>
-		    </head>
 		    <div>
+	   	  </div>
+   	  	</div>
 			<hr>
-			<p><font color="white">Hello ${username}!</font></p>
-			<div style="float:right; margin-top: -45px;">
+			<p style="margin-left: 45px"><font color="white">Hello ${username}!</font></p>
+			<div style="float:right; margin-top: -45px;margin-right: 45px;" >
 			    <a href="Display" style="text-decoration: none;"><button>Proceed to Project</button></a>
 			</div>
 		    </div>
@@ -63,19 +64,17 @@
 			<div class="content_resize">
 			    <div class="mainbar">
 				<div class="article">
-				    <h2>About Club</h2>
+				    <h2>About ClubUML 2013</h2>
 				    <div class="clr"></div>
 				   <!--  <p><font color="black>"<span class="date">October 23, 2012</span> &nbsp;|&nbsp;</font></p> -->
 				    <img src="images/Edraw_UML_Diagram-136763.jpg" width="263" height="146" alt="" class="fl" />
 				    <p><font color="black"> <br />
-					ClubUML is the leading open source UML modeling tool and includes support for all standard UML 1.4 diagrams. It runs on any Java platform and is available in ten languages. See the feature list for more details.
-					ClubUML 0.26 and 0.26.2 were downloaded over 80,000 times and are in use all over the world. See the download statistics.
-					ClubUML is distributed under the  Public License (PL) 1.0.
+					This ClubUML project is developed by the CSYE7945 Software Engineering Project class in the Spring 2013 semester.  The purpose of the project is to develop an application which provides a way to compare different versions of UML diagrams in order to decide on a final version of the diagram.  An initial version of the ClubUML software was developed in Fall 2012, so the work this semester consisted of maintenance.  The Spring 2013 version of the software supports uploading UML 2.0 class or sequence diagrams and the ability to merge two class diagrams into a new version, among other enhancements.
 					</font></p>
-				    <p class="spec"><a href="#" class="rm">Read more</a> <a href="#" class="com">Comments (3)</a></p>
 				</div>
 			    </div>
 			</div>
 		    </div>
+	    </div>
 		    </body>
 		    </html>
