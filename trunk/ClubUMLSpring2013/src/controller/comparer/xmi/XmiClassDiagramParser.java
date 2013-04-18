@@ -91,10 +91,10 @@ public class XmiClassDiagramParser {
 	/**
 	 * Used for testing to see the information stored for this parser
 	 */
-	private void TestPrintOutput() {
+	public void TestPrintOutput() {
 
 		// TESTing shows all elements
-		System.out.println("TEST OUTPUT ELEMENTS");
+		System.out.println("Diagram: " + umlFileName);
 		for (XmiBaseElement Class : rootElements) {
 			if (Class instanceof XmiClassElement) {
 

@@ -111,18 +111,18 @@
 	<tr><th colspan=3 >ATTRIBUTES</th></tr>
 	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
-	<c:forEach items="${response.Attribute.Class1 }" var="entry" >
+	<c:forEach items="${response.Attributes.Class1 }" var="entry" >
 		<label><input type=checkbox name="scac1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	<td>
-	<c:forEach items="${response.Attribute.Same }" var="entry" >
+	<c:forEach items="${response.Attributes.same }" var="entry" >
 		<label><input type=checkbox name="scas" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Attribute.Class2 }" var="entry" >
+	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
 		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
@@ -130,19 +130,19 @@
 	<tr><th colspan=3 >METHODS</th></tr>
 	<tr><td>LEFT ONLY</td><td>SAME</td><td>RIGHT ONLY</td></tr>
 	<tr><td>
-	<c:forEach items="${response.Operation.Class1 }" var="entry" >
+	<c:forEach items="${response.Operations.Class1 }" var="entry" >
 		<label><input type=checkbox name="scmc1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Operation.Same }" var="entry" >
+	<c:forEach items="${response.Operations.same }" var="entry" >
 		<label><input type=checkbox name="scms" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
 	<td>
-	<c:forEach items="${response.Operation.Class2 }" var="entry" >
+	<c:forEach items="${response.Operations.Class2 }" var="entry" >
 		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>

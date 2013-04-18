@@ -47,7 +47,7 @@ function sendRequest(mo) {
 	}
 	if(func == "break")
 		if(sameCount == 1 && sc1Count == 0 && sc2Count == 0) {
-			req.Request == "Break";
+			req.Request = "Break";
 			request.value = JSON.stringify(req);
 			requestForm.submit();
 		} else {
@@ -110,19 +110,19 @@ function sendRequest(mo) {
 		</tr>
 		<tr>
 			<td>
-				<c:forEach items="${response.Class1 }" var="entry" >
+				<c:forEach items="${response.Diagram1 }" var="entry" >
 					<label><input type=checkbox name="scd1co" value="${entry }" />${entry }</label>
 				 	<br>
 				</c:forEach>
 			</td>
 			<td>
 				<c:forEach items="${response.Same }" var="entry" >
-					<label><input type=checkbox name="samec" value="${entry }" disabled />${entry }</label>
+					<label><input type=checkbox name="samec" value="${entry }" />${entry }</label>
 				 	<br>
 				</c:forEach>
 			</td>
 			<td>
-				<c:forEach items="${response.Class2 }" var="entry" >
+				<c:forEach items="${response.Diagram2 }" var="entry" >
 					<label><input type=checkbox name="scd2co" value="${entry }" />${entry }</label>
 				 	<br>
 				</c:forEach>

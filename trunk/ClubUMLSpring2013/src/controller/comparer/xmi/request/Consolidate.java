@@ -91,7 +91,7 @@ public class Consolidate implements Request {
 						String class2Name = (String)class2_info.get(JSON_REQ_CONSOLIDATE_CLASS_NAME);			
 						XmiClassElement classElement2 = Utility.getClassByName(comparer.getUniqueClass2(), class2Name);
 						
-						mergedclass.setClass1(classElement2);
+						mergedclass.setClass2(classElement2);
 						mergedclass.setNewName(class2Name);
 						
 						// Get the list of attributes
