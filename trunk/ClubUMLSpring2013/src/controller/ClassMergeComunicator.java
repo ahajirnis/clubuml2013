@@ -118,7 +118,7 @@ public class ClassMergeComunicator extends HttpServlet {
 			String notationFilePath2 = cd2.getNotationFilePath().replaceAll("\\\\", "/");
 		
 			
-			FileInfo fi1_not = new FileInfo(contextPath, cd1.getNotationFileName(), "");
+			FileInfo fi1_not = new FileInfo(contextPath + cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
 			FileInfo fi1_uml = new FileInfo(contextPath + cd1UmlPath, cd1UmlFileName, "");
 			FileInfo fi2_not = new FileInfo(contextPath + cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
 			FileInfo fi2_uml = new FileInfo(contextPath + cd2UmlPath, cd2UmlFileName, "");
