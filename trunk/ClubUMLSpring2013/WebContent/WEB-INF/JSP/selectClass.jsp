@@ -62,7 +62,7 @@ function sendRequest(mo) {
 			errorMsg.innerHTML = "Merge Function Failed!"
 		}
 	if(func == "add") 
-		if(sameCount + sc1Count + sc2Count == 1) {
+		if(sameCount + sc1Count + sc2Count == 1 && sameCount == 0) {
 			req.Request = "Add";
 			request.value = JSON.stringify(req);
 			requestForm.submit();
@@ -85,15 +85,15 @@ function sendRequest(mo) {
 <body>
 	<!-- The data source name is "response" -->
 	<form>
-	<!-- 
+
 	<table>
 		<tr><th>${response.Diagram1 }</th><th>${response.Diagram2}</th></tr>
 		<tr style="text-align: center; " >
-			<td><img src="${response.Diagram1 }" alt="response1Pic" /></td>
-			<td><img src="${response.Diagram2 }" alt="response2Pic" /></td>
+			<td><img src="${DiagramPath1 }" alt="response1Pic" /></td>
+			<td><img src="${DiagramPath2 }" alt="response2Pic" /></td>
 		</tr>
 	</table>
-	 -->
+
 	
 		<!-- 
 		<tr>
@@ -133,7 +133,7 @@ function sendRequest(mo) {
 		<tr><td id=errorMsg ></td></tr>
 		</table>
 	</form>
-	<form id=requestForm class=hidden action="ClassMergeComunicator" method=post>
+	<form id=requestForm style="display: none;" action="ClassMergeComunicator" method=post>
 		<input name=request type=text value="" readonly onclick=sendRequest() />
 	</form>
 	<table>
