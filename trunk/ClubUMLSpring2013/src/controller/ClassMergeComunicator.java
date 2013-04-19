@@ -189,7 +189,7 @@ public class ClassMergeComunicator extends HttpServlet {
 				obj=comparer.action(reqobj);
 				System.out.println("next response: " + obj.toString());
 				request.setAttribute("response", obj);
-				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/relationClass.jsp");
+				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/manageRelation.jsp");
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_BREAK:
