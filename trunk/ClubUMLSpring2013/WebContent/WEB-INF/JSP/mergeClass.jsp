@@ -4,14 +4,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="CSS/style.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="merge.css">
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Merge Class</title>
-<style>
-	td {
-		border: 1px solid gray;
-	}
-</style>
 <script>
 	function save() {
 		var sc1 = document.getElementsByName("sc1")[0];
@@ -95,9 +91,9 @@
 
 <table>
 	<tr><td>
-		<input disabled name=sc1 value="${response.Class1 }" />
+		<input Type=Hidden name=sc1 value="${response.Class1 }" />
 	</td><td>
-		<input disabled name=sc2 value="${response.Class2 }" />
+		<input Type=Hidden name=sc2 value="${response.Class2 }" />
 	</td></tr>
 	<tr><th colspan=2 >
 		Define New Name
@@ -114,18 +110,18 @@
 </table>
 <table>
 	<tr><th colspan=3 >Attributes</th></tr>
-	<tr><td>Left Only<br>
+	<tr><td valign="top"><strong>Left Only<br></strong>
 	<c:forEach items="${response.Attributes.Class1 }" var="entry" >
 		<label><input type=checkbox name="scac1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
-	<td>Same<br>
+	<td valign="top"><strong>Same</strong><br>
 	<c:forEach items="${response.Attributes.same }" var="entry" >
 		<label><input type=checkbox name="scas" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>Right Only<br>
+	<td valign="top"><strong>Right Only</strong><br>
 	<c:forEach items="${response.Attributes.Class2 }" var="entry" >
 		<label><input type=checkbox name="scac2" value="${entry }" />${entry }</label>
 		<br>
@@ -133,30 +129,29 @@
 	</td></tr>
 	
 	<!-- Similar Attribute names -->
-	<tr><td></td>
-	<td>Similar<br>
+	<tr>
+	<td colspan=3><strong>Similar</strong><br>
 	<c:forEach items="${response.Attributes.similar }" var="entry" >
 		${entry }
 		<br>
 	</c:forEach>
 	</td>
-	<td></td>
 	</tr>
 	
 	<tr><th colspan=3 >Methods</th></tr>
-	<tr><td>Left Only<br>
+	<tr><td valign="top"><strong>Left Only</strong><br>
 	<c:forEach items="${response.Operations.Class1 }" var="entry" >
 		<label><input type=checkbox name="scmc1" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>Same<br>
+	<td valign="top"><strong>Same</strong><br>
 	<c:forEach items="${response.Operations.same }" var="entry" >
 		<label><input type=checkbox name="scms" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td>
-	<td>Right Only<br>
+	<td valign="top"><strong>Right Only</strong><br>
 	<c:forEach items="${response.Operations.Class2 }" var="entry" >
 		<label><input type=checkbox name="scmc2" value="${entry }" />${entry }</label>
 		<br>
@@ -164,18 +159,17 @@
 	</td></tr>
 	
 	<!-- Similar Operation names -->
-	<tr><td></td>
-	<td>Similar<br>
+	<tr>
+	<td colspan=3><strong>Similar</strong><br>
 	<c:forEach items="${response.Operations.similar }" var="entry" >
 		${entry }
 		<br>
 	</c:forEach>
 	</td>
-	<td></td>
 	</tr>
 	
 </table>
-<table border="0">
+<table style="border: 0">
 	<tr><td id=errorMsg class=hidden ></td></tr>
 	<tr><td><button onclick=save() >Save</button></td></tr>
 </table>

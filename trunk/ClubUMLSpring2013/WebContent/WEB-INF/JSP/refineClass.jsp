@@ -4,7 +4,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="CSS/style.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="merge.css">
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Refine Class</title>
 <script>
@@ -64,23 +65,23 @@
 
 <table>
 	<tr><td>
-		<input id=c1or2 value="${cn }" />
-		<input name=sc value="${response[cn] }" />
+		<input Type=Hidden id=c1or2 value="${cn }" />
+		<input Type=Hidden name=sc value="${response[cn] }" />
 	</td></tr>
 	<tr><th>
-		DEFINE NEW NAME
+		Define New Name
 	</th></tr>
 	<tr><td>
 		<input type=text value="${response[cn] }" name="newClassName" onclick="this.select();" />
 	</td><tr>
-	<tr><th>ATTRIBUTES</th></tr>
+	<tr><th>Attributes</th></tr>
 	<tr><td>
 	<c:forEach items="${response.Attributes }" var="entry" >
 		<label><input type=checkbox name="sca" value="${entry }" />${entry }</label>
 		<br>
 	</c:forEach>
 	</td></tr>
-	<tr><th>METHODS</th></tr>
+	<tr><th>Methods</th></tr>
 	<tr><td>
 	<c:forEach items="${response.Operations }" var="entry" >
 		<label><input type=checkbox name="scm" value="${entry }" />${entry }</label>
@@ -88,7 +89,7 @@
 	</c:forEach>
 	</td></tr>
 	<tr><td id=errorMsg class=hidden ></td></tr>
-	<tr><td><button onclick=save() >SAVE</button></td></tr>
+	<tr><td><button onclick=save() >Save</button></td></tr>
 </table>
 <form id=requestForm class=hidden action="ClassMergeComunicator" method=post >
 	<input name=request type=text value="" />

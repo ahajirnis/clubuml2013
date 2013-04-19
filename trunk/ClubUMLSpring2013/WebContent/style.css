@@ -197,7 +197,7 @@ ul.ex_menu li a:hover {
     padding:16px 0 0 0;
 }
 .content .mainbar .comment img.userpic {
-    border:1px solid #dedede;
+    border:1px solid #EEEBE7;
     margin:10px 16px 0 0;
     padding:0;
     float:left;
@@ -329,7 +329,7 @@ ol li .send {
 	-moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background-color: #dedede;
+    background-color: #EEEBE7;
     width: 550px;
     height: 650px;
     margin: 20px;
@@ -354,7 +354,7 @@ ol li .send {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background-color: #dedede;
+    background-color: #EEEBE7;
     width: 460px;
     margin-top: 20px;
     margin-right: 50px;
@@ -367,7 +367,7 @@ ol li .send {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background-color: #dedede;
+    background-color: #EEEBE7;
     width: 460px;
     margin-top: 20px;
     margin-right: 50px;
@@ -380,7 +380,7 @@ ol li .send {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background-color: #dedede;
+    background-color: #EEEBE7;
     width: 480px;
     height: 480px;
     margin-top: 20px;
@@ -407,7 +407,7 @@ ol li .send {
 .file1, .file2{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    background-color: #dedede;
+    background-color: #EEEBE7;
     width: 500px;
     height: 575px;
     -moz-box-shadow: 0 0 1px 1px #888;
