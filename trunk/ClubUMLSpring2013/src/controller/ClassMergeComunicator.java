@@ -46,6 +46,7 @@ public class ClassMergeComunicator extends HttpServlet {
 	private final static String REQUEST_ADD = "Add";
 	private final static String REQUEST_BREAK = "Break";
 	private final static String REQUEST_COMPARE = "Compare";
+	private final static String REQUEST_NEXT = "Next";
 	
 	// Comparer object
 	private final static String COMPARE_OBJECT = "CompareObject";
@@ -172,6 +173,13 @@ public class ClassMergeComunicator extends HttpServlet {
 				System.out.println("add response: " + obj.toString());
 				request.setAttribute("response", obj);
 				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/refineClass.jsp");
+				dispatcher.forward(request, response);
+				break;
+			case REQUEST_NEXT:
+				obj=comparer.action(reqobj);
+				System.out.println("next response: " + obj.toString());
+				request.setAttribute("response", obj);
+				dispatcher = request.getRequestDispatcher("/WEB-INF/JSP/relationClass.jsp");
 				dispatcher.forward(request, response);
 				break;
 			case REQUEST_BREAK:
