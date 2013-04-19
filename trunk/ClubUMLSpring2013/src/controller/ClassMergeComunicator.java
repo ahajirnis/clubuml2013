@@ -113,7 +113,12 @@ public class ClassMergeComunicator extends HttpServlet {
 			
 			List<FileInfo> lfi1 = new ArrayList<FileInfo>();
 			List<FileInfo> lfi2 = new ArrayList<FileInfo>();
-			FileInfo fi1_not = new FileInfo(contextPath + cd1.getNotationFilePath(), cd1.getNotationFileName(), "");
+			
+			String notationFilePath1 = cd1.getNotationFilePath().replaceAll("\\\\", "/");
+			String notationFilePath2 = cd2.getNotationFilePath().replaceAll("\\\\", "/");
+		
+			
+			FileInfo fi1_not = new FileInfo(contextPath, cd1.getNotationFileName(), "");
 			FileInfo fi1_uml = new FileInfo(contextPath + cd1UmlPath, cd1UmlFileName, "");
 			FileInfo fi2_not = new FileInfo(contextPath + cd2.getNotationFilePath(), cd2.getNotationFileName(), "");
 			FileInfo fi2_uml = new FileInfo(contextPath + cd2UmlPath, cd2UmlFileName, "");
@@ -122,11 +127,16 @@ public class ClassMergeComunicator extends HttpServlet {
 			
 			// instantiate and store the comparer in the session
 			comparer = new XmiClassDiagramComparer(lfi1, lfi2);
-
+			System.out.println("contextPath " + contextPath);
+			System.out.println("FilePath " + cd1.getNotationFilePath().replaceAll("\\\\", "/"));
+			System.out.println("FileName " + cd1.getDiagramName().replaceAll("\\\\", "/"));
 			session.setAttribute(COMPARE_OBJECT, comparer);
 			session.setMaxInactiveInterval(INACTIVE_INTERVAL);	// 10 minutes
-			session.setAttribute(DIAGRAM1_IMAGE, contextPath + cd1.getNotationFilePath() + cd1.getDiagramName());
-			session.setAttribute(DIAGRAM2_IMAGE, contextPath + cd2.getNotationFilePath() + cd1.getDiagramName());
+			
+			String diagramImage1 = cd1.getDiagramName().replaceAll("\\\\", "/");
+			String diagramImage2 = cd2.getDiagramName().replaceAll("\\\\", "/");
+			session.setAttribute(DIAGRAM1_IMAGE, notationFilePath1 + diagramImage1);
+			session.setAttribute(DIAGRAM2_IMAGE, notationFilePath2 + diagramImage2);
 		}
 		
 		// Get diagram IDs from checked boxes
