@@ -41,13 +41,33 @@
 			alert("Please select 1 diagram for download");
 			return false;
 		}
+		
 		if (type == "compareButton") {
-			if ($(".myCheckBox:checked").length == 2) {
+			var check = document.getElementsByName("check");
+			var checked = [];
+			for(var i=0; i<check.length; i++) {
+				if(check[i].checked) {
+					checked.push(check[i]);
+				}
+			}
+			// Check for 2 Ecore; XMI not supported
+			var bothValid = true;
+			if (checked.length == 2) {
+				if (checked[0].id == "sequence" || checked[1].id == "sequence") {
+					bothValid = false;
+				}
+				if (checked[0].id == "class" || checked[1].id == "class") {
+					bothValid = false;
+				}
+			}
+			if (checked.length == 2 && bothValid) {
+				// DisplayDiagram looks for ID numbers in the checked.value fields
 				return true;
 			}
-			alert("Please select 2 diagrams to compare");
+			alert("Please select 2 Ecore diagrams to compare");
 			return false;
 		}
+		
 		if (type == "displayButton") {
 			if ($(".myCheckBox:checked").length == 1) {
 				return true;
@@ -55,6 +75,7 @@
 			alert("Please select 1 diagram to display");
 			return false;
 		}
+		
 		// merge function
 		if (type == "mergeButton") {
 			var req = document.getElementById("req");
@@ -66,20 +87,27 @@
 					checked.push(check[i]);
 				}
 			}
+			// Check for 2 XMI class; Ecore or sequence not supported
+			var bothValid = true;
 			if (checked.length == 2) {
+				if (checked[0].id == "sequence" || checked[1].id == "sequence") {
+					bothValid = false;
+				}
+				if (checked[0].id == "Ecore" || checked[1].id == "Ecore") {
+					bothValid = false;
+				}
+			}
+			if (checked.length == 2 && bothValid) {
 				var reqO = {};
 				reqO.Request = "Refresh";
 				reqO.Diagram1 = checked[0].value;
 				reqO.Diagram2 = checked[1].value;
 				req.value = JSON.stringify(reqO);
 				
-				// DEBUG - show diagram IDs
-				//alert(checked[0].value + " " + checked[1].value);
-				
 				form.submit();
 				return false;
 			}
-			alert("Please select 2 diagram to merge");
+			alert("Please select 2 XMI Class diagrams to merge.");
 			return false;
 		}
 		// end
@@ -164,9 +192,13 @@
 				onsubmit="return checkFields()">
 				<input type="submit" id="displayButton" value="Display" name="submit" />
 				<input type="submit" id="downloadButton" value="Download" name="submit" />
-				<input type="submit" id="compareButton" value="Go to compare" name="submit" <c:if test="${type=='sequence'}">disabled</c:if> />
+				<input type="submit" id="compareButton" value="Go to compare" name="submit"
+					<c:if test="${type=='sequence'}">disabled</c:if>
+					<c:if test="${type=='class'}">disabled</c:if>/>
 				<!-- Merge -->
-				<input type="submit" id="mergeButton" value="Go To Merge" name="submit" <c:if test="${type=='sequence'}">disabled</c:if> />
+				<input type="submit" id="mergeButton" value="Go To Merge" name="submit"
+					<c:if test="${type=='sequence'}">disabled</c:if>
+					<c:if test="${type=='Ecore'}">disabled</c:if>/>
 				<!-- End Merge -->
 				<table>
 					<tr>
@@ -181,7 +213,7 @@
 					<c:forEach items="${requestScope.diagrams}" var="diagram">
 						<tr>
 							<td><input class="myCheckBox" type="checkbox" name="check"
-								value="${diagram.diagramId}" /></td>
+								value="${diagram.diagramId}" id="${diagram.diagramType}"/></td>
 							<td>${diagram.diagramName}</td>
 							<td>${diagram.createdTime}</td>
 							<td>${diagram.diagramType}</td>
