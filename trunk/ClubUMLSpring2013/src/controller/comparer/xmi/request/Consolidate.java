@@ -64,8 +64,12 @@ public class Consolidate implements Request {
 							for (int i =0; i < attrList1.size(); i++) {
 								Object Attrval = attrList1.get(i);
 								
+								if (Attrval == null) {
+									continue;
+								}
+								
 								XmiAttributeElement  elem = Utility.getAttributebyName(classElement1,Attrval.toString());
-								attrList1.add(elem);
+								attrlist.add(elem);
 							}
 							mergedclass.setAttributes(attrlist);
 						}
@@ -77,6 +81,11 @@ public class Consolidate implements Request {
 							ArrayList<XmiOperationElement> operList = new ArrayList<XmiOperationElement> ();
 							for (int i =0; i < operlist1.size(); i++) {
 								Object operval  = operlist1.get(i);
+								
+								if (operval == null) {
+									continue;
+								}
+								
 								XmiOperationElement elem = Utility.getOperationbyName(classElement1,operval.toString());
 								operList.add(elem);
 							}
@@ -100,6 +109,11 @@ public class Consolidate implements Request {
 							ArrayList <XmiAttributeElement> attrlist2 = new ArrayList<XmiAttributeElement> (); 
 							for (int i =0; i < jSonAttrlist2.size(); i++) {
 								Object Attrval = jSonAttrlist2.get(i);
+								
+								if (Attrval == null) {
+									continue;
+								}
+								
 								XmiAttributeElement  elem = Utility.getAttributebyName(classElement2,Attrval.toString());
 								attrlist2.add(elem);
 							}
@@ -111,7 +125,12 @@ public class Consolidate implements Request {
 							ArrayList<XmiOperationElement> operList2 = new ArrayList<XmiOperationElement> ();				
 							// Get the list of attributes
 							for (int i =0; i < jSonOperlist2.size(); i++) {
-								Object operval = jSonOperlist2.get(i);					
+								Object operval = jSonOperlist2.get(i);	
+								
+								if (operval == null) {
+									continue;
+								}
+								
 								// Get the element information
 								XmiOperationElement elem = Utility.getOperationbyName(classElement2,operval.toString());
 								// add the element to the list 
