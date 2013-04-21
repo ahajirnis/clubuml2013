@@ -330,9 +330,10 @@ ol li .send {
     -webkit-border-radius: 5px;
     border-radius: 5px;
     background-color: #EEEBE7;
-    width: 550px;
+    width: 530px;
     height: 650px;
     margin: 20px;
+    padding: 10px;
     margin-right: 10px;
     float: left;
     -moz-box-shadow: 0 0 1px 1px #888;
@@ -419,10 +420,7 @@ ol li .send {
     float:right;
 }
 .file1 img, .file2 img{
-    width: 70%;
-    height: 70%;
-    padding-left: 70px;
-    padding-top: 70px;
+    padding: 25px;
 }
 .file1 form, .file2 form{
     padding-left: 50px;

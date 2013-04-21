@@ -31,7 +31,48 @@
 		$("#mergeButton").click(function() {
 			type = this.id.toString();
 		});
-		// end
+		
+		// resize image proportionally
+		$('img').each(function() {
+			var maxWidth = 530;
+	        var maxHeight = 530;
+	        
+	        var ratio = 0;  // Used for aspect ratio
+	        var width = $(this).width();    // Current image width
+	        var height = $(this).height();  // Current image height
+			
+	        /* Make height/width at least the max size to begin with */
+	        // Check if the current width is smaller than max
+	        if(width < maxWidth){
+	            ratio = maxWidth / width;   // get ratio for scaling image
+	            height = height * ratio;    // Reset height to match scaled image
+	            width = width * ratio;    // Reset width to match scaled image
+	        }
+	        // Check if current height is smaller than min
+	        if(height < maxHeight){
+	            ratio = maxHeight / height; // get ratio for scaling image
+	            height = height * ratio;    // Reset height to match scaled image
+	            width = width * ratio;    // Reset width to match scaled image
+	        }
+	        
+	        /* Then reduce height/width to fit the max */
+	        // Check if the current width is larger than the max
+	        if(width > maxWidth){
+	            ratio = maxWidth / width;   // get ratio for scaling image
+	            height = height * ratio;    // Reset height to match scaled image
+	            width = width * ratio;    // Reset width to match scaled image
+	        }
+	        // Check if current height is larger than max
+	        if(height > maxHeight){
+	            ratio = maxHeight / height; // get ratio for scaling image
+	            height = height * ratio;    // Reset height to match scaled image
+	            width = width * ratio;    // Reset width to match scaled image
+	        }
+	        
+	        // Set CSS
+	        $(this).css("height", height);   // Set new height
+	        $(this).css("width", width);    // Scale width based on ratio
+	    });
 	});
 	function checkFields() {
 		if (type == "downloadButton") {
@@ -147,9 +188,9 @@
 	
 	<div id="diagramBox">
 		<c:if test="${requestScope.diagramId1 != null}">
-			<img src="${requestScope.firstPath}" width="100%" height="450px" />
+			<img src="${requestScope.firstPath}"/>
 		</c:if>
-		<b>Comments : </b>
+		<br><b>Comments : </b>
 		<c:if test="${requestScope.comments != null}">
 			<div id="commentBox">
 				<table id="myTable">
