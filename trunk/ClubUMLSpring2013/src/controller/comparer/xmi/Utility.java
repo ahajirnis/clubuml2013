@@ -282,4 +282,43 @@ public final class Utility {
 		}
 		return false;
 	}
+	
+	/**
+	 * check if the class exist in the arrayList of XmiMergedClass 
+	 * @param List<XmiMergedClass>
+	 * @param classId
+	 * @param specificClass - specify 1 or 2 to check within that respective class, else check both classes
+	 * @return true if classId exist in the arrayList of XmiMergedClass
+	 * 		   false if classId not exist in the arrayList of XmiMergedClass 
+	 */
+	public static boolean checkExistXmiMergedClassById(List<XmiMergedClass> array,
+			String classId, int specificClass) {		
+		for (XmiMergedClass classElement : array) {
+			
+			XmiClassElement class1 = null;
+			XmiClassElement class2 = null;
+			
+			if (specificClass == 1) {
+				 class1 = classElement.getClass1();
+			} else if (specificClass == 2) {
+				class2 = classElement.getClass2();
+			} else {
+				class1 = classElement.getClass1();
+				class2 = classElement.getClass2();
+			}
+			
+			if (class1 != null) {
+				if (class1.getId().equals(classId)) {
+					return true;
+				}
+			}
+			
+			if (class2 != null) {
+				if (class2.getId().equals(classId)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

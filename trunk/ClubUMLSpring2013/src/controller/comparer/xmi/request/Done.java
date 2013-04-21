@@ -22,45 +22,80 @@ public class Done implements Request {
 	public JSONObject request(JSONObject jsonObj,
 			XmiClassDiagramComparer comparer) {
 		read(jsonObj,comparer);
-		jsonObj.put(TITLE_RESPONSE, "Success");
-		return jsonObj;
+		
+		JSONObject response = new JSONObject();
+		
+		response.put(TITLE_RESPONSE, "Success");
+		return response;
 	}
 	private void read (JSONObject jsonObj, XmiClassDiagramComparer comparer )
 	{
 		HashMap classInfo=(HashMap)jsonObj.get(TITLE_DIAGRAM_1);
 		ArrayList<String> idList=(ArrayList<String>)classInfo.get(TITLE_GENERALIZAITIONS);
-		for(String id: idList)
-			activateGeneralization(id,comparer.getSameClass());
+		
+		if (idList != null) {
+			for(String id: idList){
+				System.out.println("TEST1 - Display generalization ID " + id);
+				activateGeneralization(id,comparer.getSameClass());
+			}
+		}
+		
 		classInfo=(HashMap)jsonObj.get(TITLE_DIAGRAM_2);
 		idList=(ArrayList<String>)classInfo.get(TITLE_GENERALIZAITIONS);
-		for(String id: idList)
-			activateGeneralization(id,comparer.getSameClass());
-		classInfo=(HashMap)jsonObj.get(TITLE_DIAGRAM_1);
+		if (idList != null) {
+			for(String id: idList) {
+				System.out.println("TEST2 - Display generalization ID " + id);
+				activateGeneralization(id,comparer.getSameClass());
+			}
+		}
+		
+		/*classInfo=(HashMap)jsonObj.get(TITLE_DIAGRAM_1);
 		idList=(ArrayList<String>)classInfo.get(TITLE_ASSOCIATIONS);
 		for(String id: idList)
 			activateAssociation(id,comparer.getSameClass());
 		classInfo=(HashMap)jsonObj.get(TITLE_DIAGRAM_2);
 		idList=(ArrayList<String>)classInfo.get(TITLE_ASSOCIATIONS);
 		for(String id: idList)
-			activateAssociation(id,comparer.getSameClass());
-	
-	
+			activateAssociation(id,comparer.getSameClass());*/
 	}
+	
 	private void activateGeneralization(String id, ArrayList<XmiMergedClass> mergedList)
 	{
 		for(XmiMergedClass mergedClass: mergedList){
-			for(XmiGeneralizationElement generalization
-					:mergedClass.getClass1().getGeneralization())
-				if(generalization.getId().equals(id))
-					mergedClass.getGeneralizations().add(generalization);					
-		}
-		for(XmiMergedClass mergedClass: mergedList){
-			for(XmiGeneralizationElement generalization
-					:mergedClass.getClass2().getGeneralization())
-				if(generalization.getId().equals(id))
-					mergedClass.getGeneralizations2().add(generalization);
+			
+			ArrayList<XmiGeneralizationElement> genList = new ArrayList<XmiGeneralizationElement>();
+			ArrayList<XmiGeneralizationElement> genList2 = new ArrayList<XmiGeneralizationElement>();
+			
+			if (mergedClass.getClass1() != null) {			
+				if (mergedClass.getClass1().getGeneralization() != null) {
+					for(XmiGeneralizationElement generalization : mergedClass.getClass1().getGeneralization()) {
+						if(generalization.getId().equals(id)) {
+							//genList.add(generalization);
+							if (!mergedClass.getGeneralizations().contains(generalization)) {
+								mergedClass.getGeneralizations().add(generalization);
+							}
+						}
+					}
+				}
+				//mergedClass.setGeneralizations(genList);
+			}
+			
+			if (mergedClass.getClass2() != null) {			
+				if (mergedClass.getClass2().getGeneralization() != null) {
+					for(XmiGeneralizationElement generalization : mergedClass.getClass2().getGeneralization()) {
+						if(generalization.getId().equals(id)){
+							//genList2.add(generalization);
+							if (!mergedClass.getGeneralizations2().contains(generalization)) {
+								mergedClass.getGeneralizations2().add(generalization);
+							}
+						}
+					}
+				}
+				//mergedClass.setGeneralizations2(genList2);
+			}
 		}
 	}
+	
 	private void activateAssociation(String id, ArrayList<XmiMergedClass> mergedList){
 		for(XmiMergedClass mergedClass: mergedList){
 			for(XmiMemberEndElement member
@@ -74,9 +109,7 @@ public class Done implements Request {
 					if(member.getAssociationId().equals(id))
 						mergedClass.getAssociations2().add(member.getAssociation());
 			}
-			
-		
-		
+
 	}
 	
 	

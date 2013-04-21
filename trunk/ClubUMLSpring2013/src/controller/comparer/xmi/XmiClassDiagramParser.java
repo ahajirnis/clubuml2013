@@ -86,6 +86,7 @@ public class XmiClassDiagramParser {
 
 		this.process();
 		this.postProcess();
+		TestPrintOutput();
 	}
 
 	/**
@@ -97,23 +98,24 @@ public class XmiClassDiagramParser {
 		System.out.println("Diagram: " + umlFileName);
 		for (XmiBaseElement Class : rootElements) {
 			if (Class instanceof XmiClassElement) {
-
-				for (XmiAttributeElement elelment : ((XmiClassElement) Class)
+				System.out.println("Class " + Class.toString());
+				
+				for (XmiAttributeElement element : ((XmiClassElement) Class)
 						.getAttributes()) {
-					System.out.println("Attribute " + elelment.toString());
+					System.out.println("Attribute " + element.toString());
 				}
 				for (XmiOperationElement element : ((XmiClassElement) Class)
 						.getOperations()) {
 					System.out.println("Operation " + element.toString());
 				}
-				for (XmiClassElement elelment : ((XmiClassElement) Class)
+				for (XmiClassElement element : ((XmiClassElement) Class)
 						.getNestedClass()) {
-					System.out.println("Nested: " + elelment.toString());
+					System.out.println("Nested: " + element.toString());
 				}
 
-				for (XmiGeneralizationElement elelment : ((XmiClassElement) Class)
+				for (XmiGeneralizationElement element : ((XmiClassElement) Class)
 						.getGeneralization()) {
-					System.out.println("Generalization " + elelment.toString());
+					System.out.println("Generalization " + element.toString());
 				}
 			} else if (Class instanceof XmiTypeElement) {
 				System.out.println("Primitive " + Class.toString());

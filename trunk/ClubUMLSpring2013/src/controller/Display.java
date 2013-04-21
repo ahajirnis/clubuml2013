@@ -31,6 +31,9 @@ import repository.UserDAO;
  */
 public class Display extends HttpServlet {
 
+	// Comparer object
+		private final static String COMPARE_OBJECT = "CompareObject";
+		
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -73,6 +76,12 @@ public class Display extends HttpServlet {
 	    }
 	}
 	*/
+    	
+    	// Always clear the comparer object when we're on the display page
+    	// in case the user wants to perform a different merge.
+    	HttpSession session = request.getSession();
+    	session.setAttribute(COMPARE_OBJECT, null);
+    	
     //Modified by Xuesong Meng
     	try{
     	ArrayList<domain.Diagram> diagrams = DiagramDAO.getDiagramList(2);

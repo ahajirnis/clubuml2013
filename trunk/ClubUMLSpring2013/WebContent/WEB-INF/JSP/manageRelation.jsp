@@ -43,8 +43,8 @@
 		function commit() {
 			var d1g = document.getElementsByName("d1g");
 			var d1a = document.getElementsByName("d1a");
-			var d2g = document.getElementsByName("d1g");
-			var d2a = document.getElementsByName("d1a");
+			var d2g = document.getElementsByName("d2g");
+			var d2a = document.getElementsByName("d2a");
 			var requestForm = document.getElementById("requestForm");
 			var req = document.getElementsByName("request")[0];
 			
@@ -67,11 +67,11 @@
 			}
 			for(var i=0; i<d2g.length; i++) {
 				if(d2g[i].checked) 
-					reqO.Diagram2.Generalizations.push(d1g[i].value);
+					reqO.Diagram2.Generalizations.push(d2g[i].value);
 			}
 			for(var i=0; i<d2a.length; i++) {
 				if(d2a[i].checked) 
-					reqO.Diagram2.Associations.push(d1a[i].value);
+					reqO.Diagram2.Associations.push(d2a[i].value);
 			}
 			req.value = JSON.stringify(reqO);
 			requestForm.submit();

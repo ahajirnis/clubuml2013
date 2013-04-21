@@ -9,6 +9,7 @@ import java.util.Queue;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -37,6 +38,7 @@ public class XmiMergeClassNotationProcessor {
 	private final static String ATTRIBUTE_XMI_ID = "xmi:id";
 	private final static String ATTRIBUTE_HREF = "href";
 	private final static String ATTRIBUTE_TARGET = "target";
+	private final static String ATTRIBUTE_SOURCE = "source";
 	
 	private final static String TYPE_NOTATION_DECORATIONONDE = "notation:DecorationNode";
 	private final static String TYPE_NOTATION_BASICCOMPARTMENT = "notation:BasicCompartment";
@@ -52,7 +54,8 @@ public class XmiMergeClassNotationProcessor {
 	private String notationId;
 	
 	private HashMap<String, String> mapElementToChildren = new HashMap<String, String>();
-	private HashMap<String, String> mapGeneralToParent = new HashMap<String, String>();
+	private HashMap<String, String> mapClass2Ids = new HashMap<String, String>();
+	private HashMap<String, String> mapParentToSource = new HashMap<String, String>();
 	
 	private Queue<XmiNotationElement> elements;
 	
@@ -64,13 +67,25 @@ public class XmiMergeClassNotationProcessor {
 	private Document umlDoc;
 	private Element umlRootElement;
 	
-	public XmiMergeClassNotationProcessor(Queue<XmiNotationElement> elements, HashMap<String, String> replaceClass2Id, String fileName, String umlId, String notationName, String notationId) {
+	
+	public XmiMergeClassNotationProcessor(NotationData notationData) {
+		this(notationData.getElements(), 
+			notationData.getReplaceClass2Id(), 
+			notationData.getMapParentToSource(), 
+			notationData.getFileName(), 
+			notationData.getUmlId(), 
+			notationData.getNotationName(), 
+			notationData.getNotationId());
+	}
+	
+	private XmiMergeClassNotationProcessor(Queue<XmiNotationElement> elements, HashMap<String, String> replaceClass2Id, HashMap<String, String> mapParentToSource, String fileName, String umlId, String notationName, String notationId) {
 		this.elements = elements;
 		this.umlFileId = umlId;
 		this.newFileName = fileName;
 		this.notationName = notationName;
 		this.notationId = notationId;
-		this.mapGeneralToParent = replaceClass2Id;
+		this.mapClass2Ids = replaceClass2Id;
+		this.mapParentToSource = mapParentToSource;
 		
 		try {
 			Initialize();
@@ -144,9 +159,9 @@ public class XmiMergeClassNotationProcessor {
 		
 		Element parentElement = generateElement(parentXmiElement, doc);
 		
-		// Store mapping information
+		// Store mapping information for target tag. Store the uml element ID to the notation children Id
 		mapElementToChildren.put(element.getId(), parentElement.getAttribute(ATTRIBUTE_XMI_ID));
-		
+			
 		for (XmiElement xmiElement : parentXmiElement.getChildElemList()) {
 			String tag = xmiElement.getElementName();
 			
@@ -190,9 +205,16 @@ public class XmiMergeClassNotationProcessor {
 		// Check if we need to override Target attribute if it doesn't exist
 		String target = parentElement.getAttribute(ATTRIBUTE_TARGET);
 		if (!mapElementToChildren.containsValue(target)) {		
-			String intendedElement = mapGeneralToParent.get(element.getId());			
+			String intendedElement = mapClass2Ids.get(element.getId());			
 			parentElement.setAttribute(ATTRIBUTE_TARGET, mapElementToChildren.get(intendedElement));
 		}
+		
+	
+		// Check if we need to override Source attribute
+		if (mapParentToSource.containsKey(element.getId())) {
+			String intendedSource = mapParentToSource.get(element.getId());		
+			parentElement.setAttribute(ATTRIBUTE_SOURCE, mapElementToChildren.get(intendedSource));
+		} 
 		
 		Element elementTag = doc.createElement(TAG_ELEMENT);
 		for (Attribute attribute : xmiElement.getAttrib()) {
@@ -288,7 +310,12 @@ public class XmiMergeClassNotationProcessor {
 		Element element = doc.createElement(xmiElement.getElementName());
 		
 		for (Attribute attribute : xmiElement.getAttrib()) {
-			element.setAttribute(attribute.getName(), attribute.getValue());
+			
+			if (attribute.getName().equals(ATTRIBUTE_XMI_ID) && mapClass2Ids.containsKey(attribute.getValue())) {
+				element.setAttribute(attribute.getName(), mapClass2Ids.get(attribute.getValue()));
+			} else {
+				element.setAttribute(attribute.getName(), attribute.getValue());
+			}
 		}
 		
 		return element;
@@ -327,7 +354,7 @@ public class XmiMergeClassNotationProcessor {
 		return element;
 	}
 	
-	public void GenerateFile(String fileName) {
+	public File GenerateFile(String fileName) {
 		// write the content into xml file
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();
@@ -336,17 +363,22 @@ public class XmiMergeClassNotationProcessor {
 			transformer = transformerFactory.newTransformer();
 			
 			DOMSource source = new DOMSource(umlDoc);
-
-			StreamResult result = new StreamResult(new File("C:\\temp\\" + fileName + ".notation"));
-
+			
+			File file = new File("C:\\temp\\" + fileName + ".notation");
+			StreamResult result = new StreamResult(file);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
 
 			System.out.println("notation file created!");
+			
+			return file;
 			
 		} catch (TransformerException e) {
 			System.out.println("Failed notation file!");
 			e.printStackTrace();
 		}
+		
+		return null;
 
 	}
 }

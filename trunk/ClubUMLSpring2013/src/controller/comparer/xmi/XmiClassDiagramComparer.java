@@ -94,7 +94,8 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		} catch (Exception e) {
 			JSONObject failResponse = new JSONObject();
 			failResponse.put("Response", "Fail");
-			failResponse.put("Message", e.toString());
+			failResponse.put("Message", e.getMessage());
+			e.printStackTrace();
 			return failResponse;
 		}
 
@@ -307,4 +308,65 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 		}
 	}
 
+
+	/**
+	 * Used for testing to see the information stored
+	 */
+	public static void TestPrintOutput(String fileName, ArrayList<XmiMergedClass> mergedList) {
+
+		// TESTing shows all elements
+		System.out.println("Diagram: " + fileName);
+		
+		for (XmiMergedClass mergedClass : mergedList) {
+			
+			if (mergedClass.getClass1() != null) {
+				System.out.println("Class " + mergedClass.getClass1().toString());
+			}
+				
+			if (mergedClass.getAttributes() != null) {
+				for (XmiAttributeElement element : mergedClass.getAttributes()) {
+					System.out.println("Attribute1 " + element.toString());
+				}
+			}	
+			
+			if (mergedClass.getAttributes2() != null) {
+				for (XmiAttributeElement element : mergedClass.getAttributes2()) {
+					System.out.println("Attribute2 " + element.toString());
+				}
+			}
+				
+			if (mergedClass.getOperations() != null) {
+				for (XmiOperationElement element : mergedClass.getOperations()) {
+					System.out.println("Operation1 " + element.toString());
+				}
+			}
+			
+			if (mergedClass.getOperations2() != null) {
+				for (XmiOperationElement element : mergedClass.getOperations2()) {
+					System.out.println("Operation2 " + element.toString());
+				}
+			}
+			
+			if (mergedClass.getGeneralizations() != null) {
+				for (XmiGeneralizationElement element : mergedClass.getGeneralizations()) {
+					System.out.println("Generalization1 " + element.toString());
+				}
+			}
+			
+			if (mergedClass.getGeneralizations2() != null) {
+				for (XmiGeneralizationElement element : mergedClass.getGeneralizations2()) {
+					System.out.println("Generalization2 " + element.toString());
+				}
+			}	
+			/*for (XmiAssociationElement association : associationElements) {
+				System.out.println("Association " + association.toString());
+				
+				for (XmiMemberEndElement memberEnd : association.getMemberEnds()) {
+					System.out.println("Member End " + memberEnd.toString());
+				}
+			}*/
+			
+		}
+	}
+	
 }

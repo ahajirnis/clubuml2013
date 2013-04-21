@@ -27,7 +27,7 @@ public class XmiMergedClass {
 	// Class 2 elements to keep in final class
 	private ArrayList<XmiAttributeElement> attributes2 = new ArrayList<XmiAttributeElement>();
 	private ArrayList<XmiOperationElement> operations2 = new ArrayList<XmiOperationElement>();
-	private ArrayList<XmiGeneralizationElement> generalizations2;
+	private ArrayList<XmiGeneralizationElement> generalizations2 = new ArrayList<XmiGeneralizationElement>();
 	private ArrayList<XmiClassElement> nestedClasses2 = new ArrayList<XmiClassElement>();
 	private ArrayList<XmiAssociationElement> associations2 = new ArrayList<XmiAssociationElement>();
 	
@@ -50,12 +50,9 @@ public class XmiMergedClass {
 		
 		this.operations1 = class1.getOperations();
 		
-		this.generalizations1 = class1.getGeneralization();
-		
 		this.nestedClasses1 = class1.getNestedClass();
 		
 		this.newName = class1.getName();
-		// TODO: Associations
 	}
 	
 	/**

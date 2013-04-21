@@ -5,6 +5,7 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -93,7 +94,7 @@ public class XmiMergeClassDiProcessor {
 		childrenxsi.appendChild(children);
 	}
 	
-	public void GenerateFile(String fileName) {
+	public File GenerateFile(String fileName) {
 		// write the content into xml file
 		TransformerFactory transformerFactory = TransformerFactory
 				.newInstance();
@@ -102,19 +103,20 @@ public class XmiMergeClassDiProcessor {
 		try {
 			transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(umlDoc);
-
-			StreamResult result = new StreamResult(new File("C:\\temp\\" + fileName + ".di"));
-
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
-
+			File file = new File("C:\\temp\\" + fileName + ".di");
+			StreamResult result = new StreamResult(file);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
 
 			System.out.println("Di file created!");
+			
+			return file;
 		} catch (TransformerException e) {
 			System.out.println("Failed Di file");
 			e.printStackTrace();
 		}
+		
+		return null;
 
 	}
 }

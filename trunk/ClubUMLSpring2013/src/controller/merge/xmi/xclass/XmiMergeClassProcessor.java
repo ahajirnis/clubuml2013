@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -18,7 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import uml2parser.XmiElement;
-import controller.comparer.xmi.Utility;
 import controller.comparer.xmi.XmiAttributeElement;
 import controller.comparer.xmi.XmiBaseElement;
 import controller.comparer.xmi.XmiClassDiagramComparer;
@@ -89,9 +89,13 @@ public class XmiMergeClassProcessor {
 
 	private HashMap<String, String> replaceClass2Id = new HashMap<String, String>();
 	private HashMap<String, String> mapGeneralToParent = new HashMap<String, String>();
+	private HashMap<String, String> mapParentToSource = new HashMap<String, String>();
+	
+	private NotationData notationData;
 	
 	private XmiClassDiagramComparer comparer;
 
+	
 	public void Process(XmiClassDiagramComparer comparer) {
 
 		this.comparer = comparer;
@@ -108,22 +112,30 @@ public class XmiMergeClassProcessor {
 			createClass(mergedClass, umlDoc, umlRootElement);
 		}
 		setupFileInformation();
-		GenerateFile(fileName);
+		//GenerateFile(fileName);
 
+		// Create notation data
 		for (XmiNotationElement element : notationGeneral) {
 			notationElements.addLast(element);
 		}
 		
-		// Create Notation file
-		XmiMergeClassNotationProcessor notationFile = new XmiMergeClassNotationProcessor(
-				notationElements, mapGeneralToParent, fileName, fileId, fileNotationName,
+		notationData = new NotationData(
+				notationElements, mapGeneralToParent, mapParentToSource, fileName, fileId, fileNotationName,
 				fileNotationId);
-		notationFile.GenerateFile(fileName);
+		
+		
+		// Create Notation file
+		
+
+		/*XmiMergeClassNotationProcessor notationFile = new XmiMergeClassNotationProcessor(
+				notationElements, mapGeneralToParent, mapParentToSource, fileName, fileId, fileNotationName,
+				fileNotationId);
+		notationFile.GenerateFile(fileName);*/
 
 		// Create Di file
-		XmiMergeClassDiProcessor diFile = new XmiMergeClassDiProcessor();
+		/*XmiMergeClassDiProcessor diFile = new XmiMergeClassDiProcessor();
 		diFile.addEmfPageIdentifier(fileNotationName, fileNotationId);
-		diFile.GenerateFile(fileName);
+		diFile.GenerateFile(fileName);*/
 	}
 
 	/**
@@ -297,13 +309,13 @@ public class XmiMergeClassProcessor {
 
 			for (XmiGeneralizationElement generalization : mergedClass
 					.getGeneralizations()) {
-				appendGeneralization(generalization, doc, classElement);
+				appendGeneralization(generalization, doc, classElement, classId);
 
 				// Add a notation element for notation file creation
 				notationGeneral.addLast(new XmiNotationElement(generalization
 						.getId(), generalization.getId(), comparer
 						.getClassDiagram1().getNotationFile(),
-						XmiNotationElement.TYPE_OPERATION));
+						XmiNotationElement.TYPE_GENERALIZATION));
 			}
 		}
 
@@ -318,7 +330,7 @@ public class XmiMergeClassProcessor {
 			}
 
 			for (XmiGeneralizationElement generalization : gen) {
-				appendGeneralization(generalization, doc, classElement);
+				appendGeneralization(generalization, doc, classElement, classId);
 							
 				// Add a notation element for notation file creation
 				notationGeneral.addLast(new XmiNotationElement(generalization
@@ -512,7 +524,7 @@ public class XmiMergeClassProcessor {
 	 * @param rootElement
 	 */
 	private void appendGeneralization(XmiGeneralizationElement generalization,
-			Document doc, Element rootElement) {
+			Document doc, Element rootElement, String classId) {
 
 		// Base element
 		Element operationElement = doc
@@ -534,32 +546,49 @@ public class XmiMergeClassProcessor {
 				parentId);
 		
 		mapGeneralToParent.put(generalization.getId(), parentId);
+		mapParentToSource.put(generalization.getId(), classId);
 
 	}
 
+	public String getFileName() {
+		return this.fileName;
+	}
+	
+	public String getNotationFileName() {
+		return this.fileNotationName;
+	}
+	
+	public String getNotationFileId() {
+		return this.fileNotationId;
+	}
+	
+	public NotationData getNotationData() {
+		return this.notationData;
+	}
+	
 	/**
 	 * Generate the uml file
 	 * 
 	 * @param fileName
 	 */
-	private void GenerateFile(String fileName) {
+	public File GenerateFile(String fileName) {
 		try {
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(umlDoc);
-
-			StreamResult result = new StreamResult(new File("C:\\temp\\"
-					+ fileName + ".uml"));
+			File file = new File("C:\\temp\\" + fileName + ".uml");
+			StreamResult result = new StreamResult(file);
 			System.out.println("uml file created!");
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.transform(source, result);
+			
+			return file;
 		} catch (TransformerException e) {
 			System.out.println("Failed uml file");
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 }

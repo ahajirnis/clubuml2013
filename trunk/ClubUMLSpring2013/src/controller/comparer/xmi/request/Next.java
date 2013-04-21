@@ -60,15 +60,16 @@ public class Next implements Request {
 		listOfAssociation1 = accociationStructure(comparer.getClassDiagram1(), comparer.getSameClass());
 		listOfAssociation2 = accociationStructure(comparer.getClassDiagram2(), comparer.getSameClass());		
 		checkSameElement(listOfAssociation1, listOfAssociation2);
-		
+
 		listOfGeneralization1 = generalizationStructure(comparer.getClassDiagram1(), comparer.getSameClass());
 		listOfGeneralization2 = generalizationStructure(comparer.getClassDiagram2(), comparer.getSameClass());
 		checkSameElement(listOfGeneralization1, listOfGeneralization2);	
-			
-		diagram1.put(ASSOCIATION, listOfAssociation1);
+
 		diagram1.put(GENERALIZATION, listOfGeneralization1);
-		diagram2.put(ASSOCIATION, listOfAssociation2);
+		diagram1.put(ASSOCIATION, listOfAssociation1);
+
 		diagram2.put(GENERALIZATION, listOfGeneralization2);
+		diagram2.put(ASSOCIATION, listOfAssociation2);
 
 		obj.put(TITLE_RESPONSE, "Success");
 		obj.put(TITLE_DIAGRAM1, diagram1);
@@ -119,95 +120,159 @@ public class Next implements Request {
 	
 			    class1 = Utility.getClassById(classDiagram.getClassElements(), end1.getTypeName());
 			    class2 = Utility.getClassById(classDiagram.getClassElements(), end2.getTypeName());
+			    
+			    // For any reason the class doesn't exist, skip this association
+			    // as it will not work.
+			    if (class1 == null || class2 == null) {
+			    	continue;
+			    }
+			    
 			    aggregate1 = end1.getAggregation();
 			    aggregate2 = end2.getAggregation();
 			    class1Name = class1.getName();
 			    class2Name = class2.getName();
 			    String strAssociation;
-			    String elementText;
-
+ 
+			    System.out.println("Classes: " + class1Name + " - " + class2Name);
 			    //check if the class exists in the arrayList of XmiMergedClass 
-				if(Utility.checkExistXmiMergedClass(sameClass, class1Name)
-						&& Utility.checkExistXmiMergedClass(sameClass, class2Name)) {
-					JSONObject elementAggr1 = new JSONObject();
+				if(Utility.checkExistXmiMergedClassById(sameClass, class1.getId(), 1)
+						&& Utility.checkExistXmiMergedClassById(sameClass, class2.getId(), 2)) {
+
 					strAssociation = aggregationValue(aggregate1);
-					elementText = class2Name + strAssociation + class1Name ;
-					elementAggr1.put(ELEMENT_ID, end1.getId());
-					elementAggr1.put(ELEMENT_TEXT, elementText);
-				    listOfAssociation.add(elementAggr1);
-				    
-				    JSONObject elementAggr2 = new JSONObject();
+					String elementText = class2Name + strAssociation + class1Name + ". ";
+
 				    strAssociation = aggregationValue(aggregate2);
-					elementText = class1Name + strAssociation + class2Name ;
-					elementAggr2.put(ELEMENT_ID, end2.getId());
-					elementAggr2.put(ELEMENT_TEXT, elementText);
-				    listOfAssociation.add(elementAggr2);
-				    
+					elementText = elementText + "<br> " + class1Name + strAssociation + class2Name + ". ";
+
 			        if (association.getNavigable().contains(end1.getId())) {
-			        	JSONObject element1 = new JSONObject();
-			        	elementText = class1Name + " is navigable from " + class2Name;
-			        	element1.put(ELEMENT_ID, end1.getId());
-			        	element1.put(ELEMENT_TEXT, elementText);
-						listOfAssociation.add(element1);
+			        	elementText = elementText + "<br> " + class1Name + " is navigable from " + class2Name + ". ";
 			        }
+			        
 			        if (association.getNavigable().contains(end2.getId())) {
-			        	JSONObject element1 = new JSONObject();
-			        	elementText = class2Name + " is navigable from " + class1Name;
-			        	element1.put(ELEMENT_ID, end2.getId());
-			        	element1.put(ELEMENT_TEXT, elementText);
-						listOfAssociation.add(element1);
+			        	elementText = elementText + "<br> " + class2Name + " is navigable from " + class1Name + ". ";
 			        }
+			        
+			        JSONObject elementAggr = new JSONObject();
+					elementAggr.put(ELEMENT_ID, class1.getId());
+					elementAggr.put(ELEMENT_TEXT, elementText);
+				    listOfAssociation.add(elementAggr);
 				}
 		    } else if (association.getMemberEnds().size() == 1) {
-		    	XmiMemberEndElement end1 = association.getMemberEnds().get(0);
-	
-			    class1 = Utility.getClassById(classDiagram.getClassElements(), end1.getTypeName());
-			    aggregate1 = end1.getAggregation();
+		    	// Related to classifier, but not supported yet
+		    	XmiMemberEndElement end = association.getMemberEnds().get(0);
+
+			    class1 = Utility.getClassById(classDiagram.getClassElements(), end.getTypeName());
+
+			    aggregate1 = end.getAggregation();
 			    class1Name = class1.getName();
+
 			    String strAssociation;
 			    String elementText;
 
-			    if(!class2Name.isEmpty()) {
+			    if(!class1Name.isEmpty()) {
 				    //check if the class exists in the arrayList of XmiMergedClass 
-					if(Utility.checkExistXmiMergedClass(sameClass, class1Name)
-						&& Utility.checkExistXmiMergedClass(sameClass, class2Name)) {	
-						JSONObject elementAggr1 = new JSONObject();
+					if(Utility.checkExistXmiMergedClass(sameClass, class1Name)) {	
+						
 						strAssociation = aggregationValue(aggregate1);
-						elementText = class2Name + strAssociation + class1Name;
-						elementAggr1.put(ELEMENT_ID, end1.getId());
+						elementText = class1Name + strAssociation + class1Name + ".";
+
+						if (association.getNavigable().contains(end.getId())) {
+							elementText = "<br> " + elementText + class1Name + " is navigable from " + class1Name + ". ";
+				        }
+						
+						JSONObject elementAggr1 = new JSONObject();
+						elementAggr1.put(ELEMENT_ID, class1.getId());
 						elementAggr1.put(ELEMENT_TEXT, elementText);
 						listOfAssociation.add(elementAggr1);
-						if (association.getNavigable().contains(end1.getId())) {
-							JSONObject element1 = new JSONObject();
-							elementText = class1Name + " is navigable from " + class2Name;
-				        	element1.put(ELEMENT_ID, end1.getId());
-				        	element1.put(ELEMENT_TEXT, elementText);
-							listOfAssociation.add(element1);
-				        }
 					}
 			    }
 		    } 
-		    
 		}	
 		return listOfAssociation;
 	}
 	
 	private static JSONArray generalizationStructure(XmiClassDiagramParser classDiagram,ArrayList<XmiMergedClass> sameClass) {
 		JSONArray listOfGeneralization = new JSONArray();
-	
+		
 		for(int i=0 ; i < sameClass.size() ; i++) {
 			XmiMergedClass mergedClass = sameClass.get(i);
 			if (mergedClass.getClass1() != null) {
-				String parentClass;
-				String childClass;
-				String elementText; 
+
 				//GeneralizationList
 				for(XmiGeneralizationElement general : mergedClass.getClass1().getGeneralization()){
-					childClass = mergedClass.getClass1().getName();
-					parentClass = Utility.getClassNameById((ArrayList<XmiClassElement>) classDiagram.getClassElements(), general.getParent());
-					elementText = childClass + " inherits " + parentClass;
+					String childClass = mergedClass.getClass1().getName();
+					String parentClass = Utility.getClassNameById((ArrayList<XmiClassElement>) classDiagram.getClassElements(), general.getParent());
+					String elementText = childClass + " inherits " + parentClass;
+
+					XmiClassElement parentElement = Utility.getClassById(classDiagram.getClassElements(), general.getParent());	
+					
+					// skip to next element if parent element doesn't exist
+					if (parentElement == null) {
+						continue;
+					}
+					
 					//check if parent exist in the arrayList of XmiMergedClass 
-					if(Utility.checkExistXmiMergedClass(sameClass, parentClass)) {
+					if(Utility.checkExistXmiMergedClassById(sameClass, parentElement.getId(), 1)) {
+						System.out.println("Add Gen1: " + elementText);
+						JSONObject element = new JSONObject();
+						element.put(ELEMENT_ID, general.getId());
+						element.put(ELEMENT_TEXT, elementText);
+						listOfGeneralization.add(element);
+					}	
+				}
+			}
+			
+			if (mergedClass.getClass2() != null) {
+
+				for(XmiGeneralizationElement general : mergedClass.getClass2().getGeneralization()){
+					String childClass = mergedClass.getClass2().getName();
+					String parentClass = Utility.getClassNameById((ArrayList<XmiClassElement>) classDiagram.getClassElements(), general.getParent());
+					String elementText = childClass + " inherits " + parentClass;
+	
+					XmiClassElement parentElement = Utility.getClassById(classDiagram.getClassElements(), general.getParent());
+					
+					// skip to next element if parent element doesn't exist
+					if (parentElement == null) {
+						continue;
+					}
+					
+					//check if parent exist in the arrayList of XmiMergedClass 
+					if(Utility.checkExistXmiMergedClassById(sameClass, parentElement.getId(), 2)) {
+						System.out.println("Add Gen2: " + elementText);
+						JSONObject element = new JSONObject();
+						element.put(ELEMENT_ID, general.getId());
+						element.put(ELEMENT_TEXT, elementText);
+						listOfGeneralization.add(element);
+					}	
+				}
+			}
+		}
+		return listOfGeneralization;
+	}
+	
+	private static JSONArray generalizationStructure2(XmiClassDiagramParser classDiagram,ArrayList<XmiMergedClass> sameClass) {
+		JSONArray listOfGeneralization = new JSONArray();
+		
+		for(int i=0 ; i < sameClass.size() ; i++) {
+			XmiMergedClass mergedClass = sameClass.get(i);
+
+			if (mergedClass.getClass2() != null) {
+
+				for(XmiGeneralizationElement general : mergedClass.getClass2().getGeneralization()){
+					String childClass = mergedClass.getClass2().getName();
+					String parentClass = Utility.getClassNameById((ArrayList<XmiClassElement>) classDiagram.getClassElements(), general.getParent());
+					String elementText = childClass + " inherits " + parentClass;
+	
+					XmiClassElement parentElement = Utility.getClassById(classDiagram.getClassElements(), general.getParent());
+					
+					// skip to next element if parent element doesn't exist
+					if (parentElement == null) {
+						continue;
+					}
+					
+					//check if parent exist in the arrayList of XmiMergedClass 
+					if(Utility.checkExistXmiMergedClassById(sameClass, parentElement.getId(), 2)) {
+						System.out.println("Add Gen2: " + elementText);
 						JSONObject element = new JSONObject();
 						element.put(ELEMENT_ID, general.getId());
 						element.put(ELEMENT_TEXT, elementText);
