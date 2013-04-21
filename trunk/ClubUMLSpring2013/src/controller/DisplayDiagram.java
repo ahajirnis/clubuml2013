@@ -147,9 +147,11 @@ public class DisplayDiagram extends HttpServlet {
 
 	request.setAttribute("diagramId1", diagramId1);
 	request.setAttribute("diagramId2", diagramId2);
-	request.setAttribute("path1", "uploads/" + DiagramDAO.getDiagram(diagramId1).getDiagramName());
-	request.setAttribute("path2", "uploads/" + DiagramDAO.getDiagram(diagramId2).getDiagramName());
-
+	//request.setAttribute("path1", "uploads/" + DiagramDAO.getDiagram(diagramId1).getDiagramName());
+	//request.setAttribute("path2", "uploads/" + DiagramDAO.getDiagram(diagramId2).getDiagramName());
+	request.setAttribute("path1", DiagramDAO.getDiagram(diagramId1).getFilePath() + ".png");
+	request.setAttribute("path2", DiagramDAO.getDiagram(diagramId2).getFilePath() + ".png");
+	
 	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/JSP/compare.jsp");
 	dispatcher.forward(request, response);
 

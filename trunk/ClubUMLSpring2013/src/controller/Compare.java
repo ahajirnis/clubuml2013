@@ -73,10 +73,8 @@ public class Compare extends HttpServlet {
 			this.saveReport(path);
 			// this.showPdf(path, request, response);
 			request.setAttribute("reportPath", path);
-			request.setAttribute("path1",
-					"uploads/" + diagram1.getDiagramName());
-			request.setAttribute("path2",
-					"uploads/" + diagram2.getDiagramName());
+			request.setAttribute("path1", diagram1.getFilePath() + ".png");
+			request.setAttribute("path2", diagram2.getFilePath() + ".png");
 			request.setAttribute("val1", diagram1.getDiagramId());
 			request.setAttribute("val2", diagram2.getDiagramId());
 			RequestDispatcher dispatcher = request

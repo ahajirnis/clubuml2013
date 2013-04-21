@@ -49,8 +49,10 @@ public class Promote extends HttpServlet {
 	String comment = request.getParameter("comment");
 
 	HttpSession session = request.getSession(true);
-	String userId = session.getAttribute("userId").toString();
-
+	//String userId = session.getAttribute("userId").toString();
+	// TODO debug userId
+	String userId = "1";
+	
 	//Save the comment
 	Comment commentObj = new Comment();
 	commentObj.setReportId(imageId);

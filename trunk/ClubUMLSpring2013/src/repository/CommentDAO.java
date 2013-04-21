@@ -29,11 +29,11 @@ public class CommentDAO {
 	ResultSet rs;
 	try {
 	    Connection conn = DbManager.getConnection();
-	    String sql = "INSERT INTO comment(userId , content , writenTime , reportId) VALUES(?,?,NOW(),?);";
+	    String sql = "INSERT INTO comment(userId, reportId, content) VALUES(?,?,?);";
 	    PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 	    pstmt.setInt(1, comment.getUserId());
-	    pstmt.setString(2, comment.getContent());
-	    pstmt.setInt(3, comment.getReportId());
+	    pstmt.setInt(2, comment.getReportId());
+	    pstmt.setString(3, comment.getContent());
 
 	    pstmt.executeUpdate();
 
