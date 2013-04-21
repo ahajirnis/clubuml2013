@@ -124,6 +124,13 @@ function sendRequest(mo) {
 				</c:forEach>
 			</td>
 		</tr>
+		<tr>
+			<td colspan=3>Similarly named classes:<br>
+				<c:forEach items="${response.Similar }" var="entry" >
+				 	${entry }<br>
+				</c:forEach>
+			</td>
+		</tr>
 	</table>
 	<table>
 		<tr><td id=errorMsg ></td></tr>

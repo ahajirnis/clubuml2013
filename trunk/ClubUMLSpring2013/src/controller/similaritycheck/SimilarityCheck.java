@@ -31,6 +31,12 @@ public class SimilarityCheck {
 	 */
 	public boolean doSimilarityCheck(/*String elementName1, String elementName2*/){
 		
+		// If the two Strings are exactly the same,
+		// they are not "similar" (would be redundant)
+		if (elementName1.equals(elementName2)) {
+			return false;
+		}
+		
 		//If there is only a lower/Uppercase problem,
 		//we don't need to do other checks any more
 		if(LowerUpperCheck.isSimilarWord(elementName1, elementName2)){
