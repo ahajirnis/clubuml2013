@@ -393,8 +393,12 @@ public class XmiMergeClassProcessor {
 		attributeElement.setAttribute(PAPYRUS_XMI_ATTRIBUTE_TYPE,
 				element.getUmlType());
 		attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_ID, element.getId());
-		attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_VALUE,
-				element.getValue());
+		if (element.getValue() != null) {
+			if (!element.getValue().isEmpty()) {
+				attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_VALUE,
+					element.getValue());
+			}
+		}
 	}
 
 	private void appendUpperValue(XmiValueElement element, Document doc,
@@ -405,8 +409,13 @@ public class XmiMergeClassProcessor {
 		attributeElement.setAttribute(PAPYRUS_XMI_ATTRIBUTE_TYPE,
 				element.getUmlType());
 		attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_ID, element.getId());
-		attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_VALUE,
-				element.getValue());
+		
+		if (element.getValue() != null) {
+			if (!element.getValue().isEmpty()) {
+				attributeElement.setAttribute(PAPYRUS_ATTRIBUTE_VALUE,
+					element.getValue());
+			}
+		}
 	}
 
 	private void appendDefaultValue(XmiValueElement element, Document doc,
