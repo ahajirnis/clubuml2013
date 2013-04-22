@@ -18,13 +18,16 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import uml2parser.ModelFileInfo;
 import uml2parser.XmiElement;
+import controller.comparer.xmi.XmiAssociationElement;
 import controller.comparer.xmi.XmiAttributeElement;
 import controller.comparer.xmi.XmiBaseElement;
 import controller.comparer.xmi.XmiClassDiagramComparer;
 import controller.comparer.xmi.XmiClassDiagramParser;
 import controller.comparer.xmi.XmiClassElement;
 import controller.comparer.xmi.XmiGeneralizationElement;
+import controller.comparer.xmi.XmiMemberEndElement;
 import controller.comparer.xmi.XmiOperationElement;
 import controller.comparer.xmi.XmiParameterElement;
 import controller.comparer.xmi.XmiValueElement;
@@ -39,7 +42,7 @@ public class XmiMergeClassProcessor {
 	private final static String PAPYRUS_PROPERTY_ELEM = "ownedAttribute";
 	private final static String PAPYRUS_PARAMETER_ELEM = "ownedParameter";
 	private final static String PAPYRUS_GENERALIZATION_ELEM = "generalization";
-	private final static String PAPYRUS_MEMVBER_END = "ownedEnd";
+	private final static String PAPYRUS_MEMBER_END = "ownedEnd";
 	private final static String PAPYRUS_LOWER_VALUE = "lowerValue";
 	private final static String PAPYRUS_UPPER_VALUE = "upperValue";
 	private final static String PAPYRUS_DEFAULT_VALUE = "defaultValue";
@@ -63,7 +66,6 @@ public class XmiMergeClassProcessor {
 	private final static String PAPYRUS_GENERALIZATION_DIRECTION = "general";
 	private final static String PAPYRUS_ATTRIBUTE_ASSOCIATION = "association";
 	private final static String PAPYRUS_ATTRIBUTE_VALUE = "value";
-	private final static String PAPYRUS_MEMBER_END = "memberEnd";
 	private final static String PAPYRUS_AGGREGATION = "aggregation";
 	private final static String PAPYRUS_XSI_NIL = "xsi:nil";
 	private final static String PAPYRUS_ATTRIBUTE_GENERAL = "general";
@@ -111,9 +113,13 @@ public class XmiMergeClassProcessor {
 		for (XmiMergedClass mergedClass : mergedList) {
 			createClass(mergedClass, umlDoc, umlRootElement);
 		}
+		
+		for (XmiMergedAssociation mergedAssociation : comparer.getAssociationUml()) {
+			createAssociation(mergedAssociation, umlDoc, umlRootElement);
+		}
+		
 		setupFileInformation();
-		//GenerateFile(fileName);
-
+		
 		// Create notation data
 		for (XmiNotationElement element : notationGeneral) {
 			notationElements.addLast(element);
@@ -122,20 +128,6 @@ public class XmiMergeClassProcessor {
 		notationData = new NotationData(
 				notationElements, mapGeneralToParent, mapParentToSource, fileName, fileId, fileNotationName,
 				fileNotationId);
-		
-		
-		// Create Notation file
-		
-
-		/*XmiMergeClassNotationProcessor notationFile = new XmiMergeClassNotationProcessor(
-				notationElements, mapGeneralToParent, mapParentToSource, fileName, fileId, fileNotationName,
-				fileNotationId);
-		notationFile.GenerateFile(fileName);*/
-
-		// Create Di file
-		/*XmiMergeClassDiProcessor diFile = new XmiMergeClassDiProcessor();
-		diFile.addEmfPageIdentifier(fileNotationName, fileNotationId);
-		diFile.GenerateFile(fileName);*/
 	}
 
 	/**
@@ -519,7 +511,7 @@ public class XmiMergeClassProcessor {
 	/**
 	 * Append operation node
 	 * 
-	 * @param operation
+	 * @param generalization
 	 * @param doc
 	 * @param rootElement
 	 */
@@ -550,6 +542,105 @@ public class XmiMergeClassProcessor {
 
 	}
 
+	
+	
+	/**
+	 * create association node
+	 * 
+	 * @param generalization
+	 * @param doc
+	 * @param rootElement
+	 */
+	private void createAssociation(XmiMergedAssociation mergedAssociation,
+			Document doc, Element rootElement) {
+
+		XmiAssociationElement association = mergedAssociation.getAssociationElement();
+		String class1Id = mergedAssociation.getClass1Id();
+		String class2Id = mergedAssociation.getClass2Id();
+		String class1Name = mergedAssociation.getClass1Name();
+		String class2Name = mergedAssociation.getClass2Name();
+		
+		ModelFileInfo diagram;
+		
+		if (mergedAssociation.getDiagramnum() == 1) {
+			diagram = comparer.getClassDiagram1().getNotationFile();
+		} else {
+			diagram = comparer.getClassDiagram2().getNotationFile();
+		}
+		
+		// Base element
+		Element associationElement = doc.createElement(PAPYRUS_PACKAGED_ELEM);
+		rootElement.appendChild(associationElement);
+
+		String source = null;
+		String target = null;
+		// Association only set up for non-classifier which has 2 member ends
+		if (association.getMemberEnds().size() == 2) {
+			appendOwnedEnd(association.getMemberEnds().get(0), doc, associationElement, class1Id, class1Name);
+			appendOwnedEnd(association.getMemberEnds().get(1), doc, associationElement, class2Id, class2Name);
+			
+			source = association.getMemberEnds().get(0).getId();
+			target = association.getMemberEnds().get(1).getId();
+		}
+		
+		associationElement.setAttribute(PAPYRUS_XMI_ATTRIBUTE_TYPE,
+				PAPYRUS_PACKAGE_TYPE_ASSOCIATION);
+		associationElement.setAttribute(PAPYRUS_ATTRIBUTE_ID, association.getId());
+		associationElement.setAttribute(PAPYRUS_ATTRIBUTE_NAME, association.getName());
+		
+		if (source != null && target != null) {
+			associationElement.setAttribute(PAPYRUS_MEMBER_END, source + " " + target);
+		}
+		
+		XmiNotationElement notationElement  = new XmiNotationElement(association.getId(),
+				association.getId(), diagram, XmiNotationElement.TYPE_ASSOCIATION);
+		
+		notationElement.setSource(class1Id);
+		notationElement.setTarget(class2Id);
+		
+		notationElements.addLast(notationElement);
+	}
+	
+	/**
+	 * Append OwnedEnd node
+	 * 
+	 * @param element
+	 * @param doc
+	 * @param rootElement
+	 * @param typeId of the class at the end of the association
+	 * @param name is referring to the end of the association
+	 */
+	private void appendOwnedEnd(XmiMemberEndElement element, Document doc,
+			Element rootElement, String typeId, String name) {
+
+		Element ownedEndElement = doc.createElement(PAPYRUS_MEMBER_END);
+		rootElement.appendChild(ownedEndElement);
+		
+		ownedEndElement.setAttribute(PAPYRUS_ATTRIBUTE_ID, element.getId());
+		ownedEndElement.setAttribute(PAPYRUS_ATTRIBUTE_TYPE,
+				typeId);
+		ownedEndElement.setAttribute(PAPYRUS_ATTRIBUTE_NAME,
+				name);
+		ownedEndElement.setAttribute(PAPYRUS_ATTRIBUTE_ASSOCIATION,
+				element.getAssociationId());
+		
+		if (element.getAggregation() != null) {
+			if (!element.getAggregation().toString().isEmpty()) {
+				ownedEndElement.setAttribute(PAPYRUS_AGGREGATION,
+						element.getAggregation().name().toLowerCase());
+			}
+		}
+		
+		if (element.getLowerValue() != null) {
+			appendLowerValue(element.getLowerValue(), doc, ownedEndElement);
+		}
+
+		if (element.getUpperValue() != null) {
+			appendUpperValue(element.getUpperValue(), doc, ownedEndElement);
+		}
+	}
+	
+	
 	public String getFileName() {
 		return this.fileName;
 	}

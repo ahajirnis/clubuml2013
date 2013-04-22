@@ -94,7 +94,7 @@ public class XmiMergeClassNotationProcessor {
 				createNode(elements.poll(), umlDoc, umlRootElement);
 			}
 			umlRootElement.appendChild(createUmlElement(umlDoc));
-	
+			
 		} catch (ParserConfigurationException  e) {
 			e.printStackTrace();
 		}
@@ -142,6 +142,8 @@ public class XmiMergeClassNotationProcessor {
 		
 		if (element.getType() == XmiNotationElement.TYPE_GENERALIZATION) {
 			createRelationNode(element, doc, rootElement);
+		}else if (element.getType() == XmiNotationElement.TYPE_ASSOCIATION) {
+			createAssociationNode(element, doc, rootElement);
 		} else {
 			createClassNode(element, doc, rootElement);
 		}
@@ -229,6 +231,35 @@ public class XmiMergeClassNotationProcessor {
 		rootElement.appendChild(parentElement);
 	}
 	
+	// Generate children tag elements
+	private void createAssociationNode(XmiNotationElement element, Document doc, Element rootElement) {
+				
+		ModelFileInfo notation = element.getNotation();
+		
+		String href = notation.getFileNameNoExtension() + ".uml#" + element.getId();
+	
+		// Build class
+		XmiElement xmiElement = notation.getXmiElementFromHref(href);
+		
+		Element parentElement = generateElementAndChildren(xmiElement.getParentElem(), doc, TAG_ELEMENT);
+		
+		parentElement.setAttribute(ATTRIBUTE_TARGET, mapElementToChildren.get(element.getTarget()));
+		parentElement.setAttribute(ATTRIBUTE_SOURCE, mapElementToChildren.get(element.getSource()));
+				
+		Element elementTag = doc.createElement(TAG_ELEMENT);
+			
+		for (Attribute attribute : xmiElement.getAttrib()) {
+			if (attribute.getName().equals(ATTRIBUTE_HREF)) {
+				elementTag.setAttribute(attribute.getName(), ClassMergeUtility.buildHref(element, newFileName));
+			} else {
+				elementTag.setAttribute(attribute.getName(), attribute.getValue());
+			}
+		}
+		
+		parentElement.appendChild(elementTag);
+		rootElement.appendChild(parentElement);
+	}
+		
 	// Generate children tag elements
 	private Element generateChildren(XmiElement xmiElement, Document doc, XmiNotationElement notationElement) {
 			

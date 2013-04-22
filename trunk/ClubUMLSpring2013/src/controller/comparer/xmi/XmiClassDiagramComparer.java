@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 
 import controller.compare.ComparerIntf;
 import controller.comparer.xmi.request.Request;
+import controller.merge.xmi.xclass.XmiMergedAssociation;
 import controller.merge.xmi.xclass.XmiMergedClass;
 import controller.upload.FileInfo;
 import controller.upload.UploadProcessorFactory;
@@ -37,6 +38,9 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 	// Classes unique to diagram 2
 	private ArrayList<XmiClassElement> uniqueClass2 = new ArrayList<XmiClassElement>();
 
+	// Associations used by merge process to generate association elements
+	private ArrayList<XmiMergedAssociation> associationUml = new ArrayList<XmiMergedAssociation>();
+	
 	/**
 	 * Constructor
 	 * 
@@ -358,15 +362,33 @@ public class XmiClassDiagramComparer implements ComparerIntf {
 					System.out.println("Generalization2 " + element.toString());
 				}
 			}	
-			/*for (XmiAssociationElement association : associationElements) {
-				System.out.println("Association " + association.toString());
-				
-				for (XmiMemberEndElement memberEnd : association.getMemberEnds()) {
-					System.out.println("Member End " + memberEnd.toString());
-				}
-			}*/
 			
+			if (mergedClass.getAssociations() != null) {
+				for (XmiAssociationElement element : mergedClass.getAssociations()) {
+					System.out.println("Association " + element.toString());
+				}
+			}	
+			
+			if (mergedClass.getAssociations2() != null) {
+				for (XmiAssociationElement element : mergedClass.getAssociations2()) {
+					System.out.println("Association2 " + element.toString());
+				}
+			}	
 		}
+	}
+
+	/**
+	 * @return the associationUml
+	 */
+	public ArrayList<XmiMergedAssociation> getAssociationUml() {
+		return associationUml;
+	}
+
+	/**
+	 * @param associationUml the associationUml to set
+	 */
+	public void setAssociationUml(ArrayList<XmiMergedAssociation> associationUml) {
+		this.associationUml = associationUml;
 	}
 	
 }

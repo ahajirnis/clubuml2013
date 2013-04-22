@@ -103,7 +103,9 @@ public final class Utility {
 	 */
 	public static XmiClassElement getClassById(List<XmiClassElement> array,
 			String id) {
+		
 		for (XmiClassElement element : array) {
+			
 			if (element.getId().equals(id)) {
 				return element;
 			}
@@ -288,10 +290,9 @@ public final class Utility {
 	 * @param List<XmiMergedClass>
 	 * @param classId
 	 * @param specificClass - specify 1 or 2 to check within that respective class, else check both classes
-	 * @return true if classId exist in the arrayList of XmiMergedClass
-	 * 		   false if classId not exist in the arrayList of XmiMergedClass 
+	 * @return if found then return XmiMergedClass, else null
 	 */
-	public static boolean checkExistXmiMergedClassById(List<XmiMergedClass> array,
+	public static XmiMergedClass getXmiMergedClassByClassId(List<XmiMergedClass> array,
 			String classId, int specificClass) {		
 		for (XmiMergedClass classElement : array) {
 			
@@ -309,16 +310,17 @@ public final class Utility {
 			
 			if (class1 != null) {
 				if (class1.getId().equals(classId)) {
-					return true;
+					return classElement;
 				}
 			}
 			
 			if (class2 != null) {
 				if (class2.getId().equals(classId)) {
-					return true;
+					return classElement;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
+
 }

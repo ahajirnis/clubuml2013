@@ -44,8 +44,6 @@ public class XmiMergeClassUpload {
 
 			this.context = context;
 
-			//destinationDir = new File(context.getRealPath(DESTINATION_DIR_PATH));
-
 			libDir = new File(context.getRealPath(LIB_DIR_PATH));
 			
 			fileList = new ArrayList<FileInfo>();
@@ -54,7 +52,7 @@ public class XmiMergeClassUpload {
 			System.out.println("UML Name: " + filename);
 
 			try {
-				destinationDir = createDir(id)	;											// file
+				destinationDir = createDir(id);
 
 				new File(destinationDir, filename);		
 				String absolutePath = destinationDir + "\\";
@@ -70,8 +68,6 @@ public class XmiMergeClassUpload {
 				fileList.add(new FileInfo(absolutePath, umlFile.getName(), libPath));
 				fileList.add(new FileInfo(absolutePath, notationFile.getName(), libPath));
 				fileList.add(new FileInfo(absolutePath, diFile.getName(), libPath));
-				System.out.println("File: " + absolutePath + " " + filename + " " + libPath);
-				System.out.println(umlFile.getName() + " - " +  notationFile.getName() + " - " + diFile.getName());
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

@@ -205,7 +205,7 @@ public class ClassMergeComunicator extends HttpServlet {
 				System.out.println("done response: " + obj.toString());
 				request.setAttribute("response", obj);
 				
-				//XmiClassDiagramComparer.TestPrintOutput("MERGED CLASS INFORMATION", comparer.getSameClass());
+				XmiClassDiagramComparer.TestPrintOutput("MERGED CLASS INFORMATION", comparer.getSameClass());
 				
 				// Generate uml, notation and di files
 				XmiMergeClassProcessor umlProcessor = new XmiMergeClassProcessor();
