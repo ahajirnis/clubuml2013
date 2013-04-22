@@ -34,10 +34,21 @@
 				req.Class1.Attributes.push(scac1[i].value);
 			}
 		}
+		for(var i=0; i<scas.length; i++) {
+			if(scas[i].checked) {
+				req.Class1.Attributes.push(scas[i].value);
+			}
+		}
+		
 		req.Class1.Operations = [];
 		for(var i=0; i<scmc1.length; i++) {
 			if(scmc1[i].checked) {
 				req.Class1.Operations.push(scmc1[i].value);
+			}
+		}
+		for(var i=0; i<scms.length; i++) {
+			if(scms[i].checked) {
+				req.Class1.Operations.push(scms[i].value);
 			}
 		}
 		
@@ -57,20 +68,8 @@
 			}
 		}
 		
-		// set Something from Same
-		req.Same = {};
-		req.Same.Attributes = [];
-		for(var i=0; i<scas.length; i++) {
-			if(scas[i].checked) {
-				req.Same.Attributes.push(scas[i].value);
-			}
-		}
-		req.Same.Operations = [];
-		for(var i=0; i<scms.length; i++) {
-			if(scms[i].checked) {
-				req.Same.Operations.push(scms[i].value);
-			}
-		}
+
+
 		// add new name to req
 		req.Name = newName.value;
 		// file this JSON String to message and submit the form

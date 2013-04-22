@@ -218,7 +218,7 @@ public class ClassMergeComunicator extends HttpServlet {
 				System.out.println("Notation File: " + notationFile.getAbsoluteFile());
 				
 				XmiMergeClassDiProcessor diProcessor = new XmiMergeClassDiProcessor();
-				diProcessor.addEmfPageIdentifier(umlProcessor.getNotationFileName(), umlProcessor.getNotationFileId());
+				diProcessor.addEmfPageIdentifier(umlProcessor.getFileName(), umlProcessor.getNotationFileId());
 				File diFile = diProcessor.GenerateFile(umlProcessor.getFileName());
 				System.out.println("Di File: " + diFile.getAbsoluteFile());
 				

@@ -123,7 +123,7 @@ public class XmiMergeClassNotationProcessor {
 		umlRootElement.setAttribute("measurementUnit",
 				"Pixel");
 		
-		umlRootElement.setAttribute("name", this.notationName);
+		umlRootElement.setAttribute("name", this.newFileName);
 		umlRootElement.setAttribute("xmi:id", this.notationId);
 
 		umlDoc.appendChild(umlRootElement);
