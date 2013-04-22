@@ -207,9 +207,11 @@ public class UmlUploadProcessor implements UploadProcessor {
 		String className = null;
 		String AssocType = null;
 		String AssocClass = null;
-		int upperVal = 1;
-		int lowerVal = 1;
+		String upperVal = "1";
+		String lowerVal = "1";
 		String AssocName = null; 
+		String AssocupperVal = "1";
+		String AssocLowerVal  = "1";
 	}
 	
 	/**
@@ -287,6 +289,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 				out.write("import java.util.Date;\n");
 				out.write("import java.util.*; \n");
 				out.write("import java.io.*; \n");
+				
 			    List<UML2AssocClass> assocClassList = new ArrayList<UML2AssocClass>();
 				// iterate thru an array list of classes
 				for (int i = 0 ; i < assocList.size(); i++) {
@@ -313,11 +316,29 @@ public class UmlUploadProcessor implements UploadProcessor {
 								} else if (aggrVal.equals("composite")) {
 									assoc.AssocType = "@composed";
 								}
+								List<XmiElement> valList = ownedElem.getChildElemList();
+								for (XmiElement val:valList) {
+									if (val.getElementName().equals("lowerValue")){
+										assoc.AssocLowerVal = val.getAttributeValue("value");
+									}
+									else if (val.getElementName().equals("upperValue")) {
+										assoc.AssocupperVal = val.getAttributeValue("value");
+									}
+								}								
 								
 							} else if (assoc.className == null){
 								XmiElement xmi = modelUmlInfo.getXmiElementFromId(ownedElem.getAttributeValue("type"));
 								assoc.className =  xmi.getAttributeValue("name");
 								//Log.LogCreate().Info("className = " + assoc.className);
+								List<XmiElement> valList = ownedElem.getChildElemList();
+								for (XmiElement val:valList) {
+									if (val.getElementName().equals("lowerValue")){
+										assoc.lowerVal = val.getAttributeValue("value");
+									}
+									else if (val.getElementName().equals("upperValue")) {
+										assoc.upperVal = val.getAttributeValue("value");
+									}
+								}	
 								
 							}
 							if (k == childlist.size() && assoc.AssocType == null) {
@@ -326,6 +347,15 @@ public class UmlUploadProcessor implements UploadProcessor {
 								XmiElement xmi = modelUmlInfo.getXmiElementFromId(ownedElem.getAttributeValue("type"));
 								assoc.AssocClass = xmi.getAttributeValue("name");
 								//Log.LogCreate().Info(" NULL AssocClass = " + assoc.AssocClass);
+								List<XmiElement> valList = ownedElem.getChildElemList();
+								for (XmiElement val:valList) {
+									if (val.getElementName().equals("lowerValue")){
+										assoc.AssocLowerVal = val.getAttributeValue("value");
+									}
+									else if (val.getElementName().equals("upperValue")) {
+										assoc.AssocupperVal = val.getAttributeValue("value");
+									}
+								}	
 							}
 								
 						}
@@ -354,9 +384,29 @@ public class UmlUploadProcessor implements UploadProcessor {
 						}
 					}
 					out.write("/**\n");	
+					
+					
+					out.write("* @opt types\n");
+					out.write("* @opt attributes\n");
+					out.write("* @opt operations\n"); 
+					
 					for (UML2AssocClass assoc:assocClassList) {
-						if (assoc.className.equals(className)) {						
-							out.write("* " + assoc.AssocType + " * " + assoc.AssocName +  " * " + assoc.AssocClass +  "\n"  );
+						if (assoc.className.equals(className)) {
+
+							String assocString = "";
+							if (assoc.lowerVal == null)  {							    	 
+								assocString = "* " + assoc.AssocType + " "  + assoc.upperVal + " " + assoc.AssocName; 
+							} else {
+								assocString = "* " + assoc.AssocType + " "  + assoc.lowerVal + ".." + assoc.upperVal + " " + assoc.AssocName; 
+							}
+							
+							if (assoc.AssocLowerVal == null) {
+								assocString += " " + assoc.AssocupperVal + " " +  assoc.AssocClass +  "\n";
+							} else {
+								assocString += " " + assoc.AssocLowerVal+ ".." + assoc.AssocupperVal +  " " + assoc.AssocClass +  "\n";
+							}
+							out.write(assocString);
+							//out.write("* " + assoc.AssocType + " " + assoc.lowerVal + " " + assoc.AssocName +  " " +     assoc.AssocClass +  "\n");
 						}
 					}
 					for (int j = 0; j < childlist.size(); j++ ) {
@@ -370,8 +420,25 @@ public class UmlUploadProcessor implements UploadProcessor {
 								//Log.LogCreate().Info("Assoc  " + childElem.getAttributeValue("name"));
 								String assocName = childElem.getAttributeValue("name");
 								XmiElement assocClass = modelUmlInfo.getXmiElementFromId(childElem.getAttributeValue("type"));
-								// need to get lower and upper value
-								out.write("* @assoc * " + assocName  + " * " + assocClass.getAttributeValue("name") + "\n");
+								List<XmiElement> valList = childElem.getChildElemList();
+								String lowerValue = "*", upperValue  = "*";
+								for (XmiElement val:valList) {
+									if (val.getElementName().equals("lowerValue")){
+										lowerValue = val.getAttributeValue("value");
+									}
+									else if (val.getElementName().equals("upperValue")) {
+										upperValue = val.getAttributeValue("value");
+									}
+								}
+								String assocString = "";
+							    if (lowerValue == null) {
+							    	 
+							    	assocString = "* @assoc "  + upperValue + " " + assocName  + " * "  + assocClass.getAttributeValue("name") + "\n"; 
+							    } else {
+							    	 assocString = "* @assoc "  + lowerValue + ".." + upperValue + " " + assocName  + " * "  + assocClass.getAttributeValue("name") + "\n"; 
+							    }
+							    					    
+								out.write(assocString);
 								
 							}					
 						}
@@ -491,19 +558,6 @@ public class UmlUploadProcessor implements UploadProcessor {
 	}
 
 	
-	public class Uml2ClassDef {
-	
-		String classname; 
-		ArrayList <XmiElement> list;
-		public Uml2ClassDef(String className) {
-			this.classname = className;
-		}
-		
-		public void AddAssoc(String className, int lowerVal, int upperVal) {
-			
-		}
-		
-	}
 	
 	public class Uml2SequenceDiagramUploadProcessor extends SequencePngFile{
 		public void process() {
