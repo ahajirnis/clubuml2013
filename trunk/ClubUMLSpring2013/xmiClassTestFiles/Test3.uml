@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_O-powKtEEeKXb85arqXaLA" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_TRAOwKtEEeKXb85arqXaLA" name="Vehicle">
+    <ownedAttribute xmi:id="_Yv12AKtEEeKXb85arqXaLA" name="Wheels"/>
+    <ownedAttribute xmi:id="_bTEnwKtEEeKXb85arqXaLA" name="currentSpeed" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bxvgwKtEEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bxwH0KtEEeKXb85arqXaLA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_bxwu4KtEEeKXb85arqXaLA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_c8eOgKtEEeKXb85arqXaLA" name="passenger" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_dN8ZAKtEEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_dN8ZAatEEeKXb85arqXaLA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_dN9AEKtEEeKXb85arqXaLA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Ti53EKtEEeKXb85arqXaLA" name="Automobile">
+    <generalization xmi:id="_imOFQKtEEeKXb85arqXaLA" general="_TRAOwKtEEeKXb85arqXaLA"/>
+    <ownedOperation xmi:id="_e7e44KtEEeKXb85arqXaLA" name="openDoor"/>
+    <ownedOperation xmi:id="_gK-x4KtEEeKXb85arqXaLA" name="toggleDoorState"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_TxpdsKtEEeKXb85arqXaLA" name="TestVehicle"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_UFoJoKtEEeKXb85arqXaLA" name="Bike">
+    <generalization xmi:id="_jKDLEKtEEeKXb85arqXaLA" general="_TRAOwKtEEeKXb85arqXaLA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_UbTesKtEEeKXb85arqXaLA" name="Bus">
+    <generalization xmi:id="_j25qAKtEEeKXb85arqXaLA" general="_TRAOwKtEEeKXb85arqXaLA"/>
+  </packagedElement>
+</uml:Model>

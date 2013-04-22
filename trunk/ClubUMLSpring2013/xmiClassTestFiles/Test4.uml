@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_r8gfMKtEEeKXb85arqXaLA" name="model">
+  <packagedElement xmi:type="uml:Class" xmi:id="_zhpEkKtEEeKXb85arqXaLA" name="Vehicle">
+    <ownedAttribute xmi:id="_R6wYEKtFEeKXb85arqXaLA" name="wheels" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_STXFUKtFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_STXsYKtFEeKXb85arqXaLA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_STYTcKtFEeKXb85arqXaLA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_TzSnAKtFEeKXb85arqXaLA" name="curretnSpeed" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_UFbf4KtFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_UFbf4atFEeKXb85arqXaLA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_UFcG8KtFEeKXb85arqXaLA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_Ve3_EKtFEeKXb85arqXaLA" name="passengers" visibility="public">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_VtqpAKtFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_VtrQEKtFEeKXb85arqXaLA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_Vtr3IKtFEeKXb85arqXaLA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_1OFYQKtEEeKXb85arqXaLA" name="Bicycle"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_2gv6AKtEEeKXb85arqXaLA" name="Driver"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_44Fk0KtEEeKXb85arqXaLA" name="Car">
+    <generalization xmi:id="_87dToKtEEeKXb85arqXaLA" general="_zhpEkKtEEeKXb85arqXaLA"/>
+    <ownedOperation xmi:id="_apDk8KtFEeKXb85arqXaLA" name="openDoor"/>
+    <ownedOperation xmi:id="_cJk8gKtFEeKXb85arqXaLA" name="closeDoor"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_60xT8KtEEeKXb85arqXaLA" name="Bus">
+    <generalization xmi:id="_9gmBAKtEEeKXb85arqXaLA" general="_zhpEkKtEEeKXb85arqXaLA"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_AIcNAKtFEeKXb85arqXaLA" name="bicycle_vehicle" memberEnd="_AIcNAatFEeKXb85arqXaLA _AIbl8KtFEeKXb85arqXaLA">
+    <ownedEnd xmi:id="_AIcNAatFEeKXb85arqXaLA" name="bicycle" type="_1OFYQKtEEeKXb85arqXaLA" association="_AIcNAKtFEeKXb85arqXaLA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AIcNAqtFEeKXb85arqXaLA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AIcNA6tFEeKXb85arqXaLA" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_AIbl8KtFEeKXb85arqXaLA" name="vehicle" type="_zhpEkKtEEeKXb85arqXaLA" association="_AIcNAKtFEeKXb85arqXaLA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_AIbl8atFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_AIbl8qtFEeKXb85arqXaLA" value="*"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_HDsu8KtFEeKXb85arqXaLA" name="vehicle_driver" memberEnd="_HDsu8atFEeKXb85arqXaLA _HDsH4KtFEeKXb85arqXaLA">
+    <ownedEnd xmi:id="_HDsu8atFEeKXb85arqXaLA" name="vehicle" type="_zhpEkKtEEeKXb85arqXaLA" association="_HDsu8KtFEeKXb85arqXaLA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HDsu8qtFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HDsu86tFEeKXb85arqXaLA" value="1"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_HDsH4KtFEeKXb85arqXaLA" name="driver" type="_2gv6AKtEEeKXb85arqXaLA" association="_HDsu8KtFEeKXb85arqXaLA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HDsH4atFEeKXb85arqXaLA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_HDsH4qtFEeKXb85arqXaLA" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+</uml:Model>
