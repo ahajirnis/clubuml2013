@@ -257,7 +257,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 							}
 							if (attrlist.get(k).getName().equals("xmi:type") && attrlist.get(k).getValue().equals("uml:Association")) {
 								assoclist.add(packagedElemList.get(i));
-								//Log.LogCreate().Info("Valid Assoc name = " +  packagedElemList.get(i).getAttributeValue("name"));
+								Log.LogCreate().Info("Valid Assoc name = " +  packagedElemList.get(i).getAttributeValue("name"));
 							}
 						}
 						
@@ -299,7 +299,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 					} else {
 						UML2AssocClass assoc = new UML2AssocClass();
 						assoc.AssocName = assocList.get(i).getAttributeValue("name");
-						//Log.LogCreate().Info("assocname = " + assoc.AssocName);
+						Log.LogCreate().Info("assocname = " + assoc.AssocName);
 						// check if aggregration type is present
 						int k =0;
 						for (XmiElement ownedElem: childlist) {
@@ -308,7 +308,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 							String aggrVal  = ownedElem.getAttributeValue("aggregation");
 							
 							if (aggrVal != null) {
-								//Log.LogCreate().Info("aggrVal = " + aggrVal);
+								Log.LogCreate().Info("aggrVal = " + aggrVal);
 								XmiElement xmi = modelUmlInfo.getXmiElementFromId(ownedElem.getAttributeValue("type"));
 								assoc.AssocClass = xmi.getAttributeValue("name");
 								if (aggrVal.equals("shared")) {
@@ -329,7 +329,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 							} else if (assoc.className == null){
 								XmiElement xmi = modelUmlInfo.getXmiElementFromId(ownedElem.getAttributeValue("type"));
 								assoc.className =  xmi.getAttributeValue("name");
-								//Log.LogCreate().Info("className = " + assoc.className);
+								Log.LogCreate().Info("className = " + assoc.className);
 								List<XmiElement> valList = ownedElem.getChildElemList();
 								for (XmiElement val:valList) {
 									if (val.getElementName().equals("lowerValue")){
@@ -346,7 +346,7 @@ public class UmlUploadProcessor implements UploadProcessor {
 								assoc.AssocType = "@assoc";
 								XmiElement xmi = modelUmlInfo.getXmiElementFromId(ownedElem.getAttributeValue("type"));
 								assoc.AssocClass = xmi.getAttributeValue("name");
-								//Log.LogCreate().Info(" NULL AssocClass = " + assoc.AssocClass);
+								Log.LogCreate().Info(" NULL AssocClass = " + assoc.AssocClass);
 								List<XmiElement> valList = ownedElem.getChildElemList();
 								for (XmiElement val:valList) {
 									if (val.getElementName().equals("lowerValue")){
@@ -366,9 +366,10 @@ public class UmlUploadProcessor implements UploadProcessor {
 
 					XmiElement cls = classList.get(i);
 					List<XmiElement> childlist = cls.getChildElemList();
-
+					String tempClassName = "";
 					String className = "";
 					className = cls.getAttributeValue("name");
+					tempClassName  = className;
 					// To determine if we have any generalizaton
 					for (int j = 0; j < childlist.size(); j++) {
 						// Check if there is any element named "generalizaion
@@ -391,7 +392,8 @@ public class UmlUploadProcessor implements UploadProcessor {
 					out.write("* @opt operations\n"); 
 					
 					for (UML2AssocClass assoc:assocClassList) {
-						if (assoc.className.equals(className)) {
+						Log.LogCreate().Info("assocname = " + assoc.className  + " " + className);
+						if (assoc.className.equals(tempClassName)) {
 
 							String assocString = "";
 							if (assoc.lowerVal == null)  {							    	 
